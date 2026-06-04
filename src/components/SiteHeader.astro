@@ -1,0 +1,103 @@
+---
+interface Props {
+  storeUrl: string;
+}
+
+const { storeUrl } = Astro.props;
+
+const links = [
+  { href: '/lectures/', label: 'Lectures' },
+  { href: '/search/', label: 'Search' },
+  { href: '/download/', label: 'Download App' },
+  { href: '/about/', label: 'About' },
+  { href: '/kitab-al-tawheed/', label: 'Kitab al-Tawheed' },
+  { href: '/tawheed/', label: 'Tawheed' },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-white/10 bg-[#0F0F10]/95 backdrop-blur-sm">
+  <div class="mx-auto max-w-5xl flex items-center justify-between gap-2 px-4 py-3 min-w-0">
+    <a
+      href="/"
+      class="text-[#C9A84C] font-semibold text-sm tracking-wide hover:opacity-80 transition-opacity min-w-0 shrink"
+    >
+      <span class="md:hidden">Kitab al-Tawheed</span>
+      <span class="hidden md:inline">Sharah Kitab al-Tawheed</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-4 lg:gap-5 text-sm text-[#A09880] shrink-0" aria-label="Main">
+      {links.slice(0, 4).map(({ href, label }) => (
+        <a href={href} class="hover:text-[#F0EDE4] transition-colors whitespace-nowrap">{label}</a>
+      ))}
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener"
+        class="bg-[#C9A84C] text-black font-semibold px-3 py-1.5 rounded-lg text-xs hover:bg-[#D4B55C] transition-colors whitespace-nowrap"
+      >
+        Get App ↓
+      </a>
+    </nav>
+
+    <div class="flex md:hidden items-center gap-2 shrink-0">
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener"
+        class="bg-[#C9A84C] text-black font-semibold px-3 py-2 rounded-lg text-xs hover:bg-[#D4B55C] transition-colors"
+      >
+        App
+      </a>
+      <button
+        type="button"
+        id="site-nav-toggle"
+        class="p-2 -mr-1 rounded-lg border border-white/15 text-[#F0EDE4] hover:bg-white/5"
+        aria-expanded="false"
+        aria-controls="site-nav-panel"
+        aria-label="Open menu"
+      >
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="site-nav-panel" class="hidden md:hidden border-t border-white/10 bg-[#0F0F10]" aria-label="Mobile menu">
+    <nav class="mx-auto max-w-5xl px-4 py-3 flex flex-col gap-1 text-sm">
+      {links.map(({ href, label }) => (
+        <a href={href} class="py-2.5 text-[#A09880] hover:text-[#C9A84C] border-b border-white/5 last:border-0">
+          {label}
+        </a>
+      ))}
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener"
+        class="mt-2 text-center bg-[#C9A84C] text-black font-bold py-3 rounded-xl hover:bg-[#D4B55C]"
+      >
+        Get App on Google Play
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('site-nav-toggle');
+  const panel = document.getElementById('site-nav-panel');
+  if (toggle && panel) {
+    toggle.addEventListener('click', () => {
+      const willOpen = panel.classList.contains('hidden');
+      panel.classList.toggle('hidden');
+      toggle.setAttribute('aria-expanded', String(willOpen));
+      toggle.setAttribute('aria-label', willOpen ? 'Close menu' : 'Open menu');
+    });
+    panel.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        panel.classList.add('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
+      });
+    });
+  }
+</script>

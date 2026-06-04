@@ -1,14 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getCatalog, getAppConfig, formatDuration, en, chapterSlug } from '../../lib/catalog';
+import I18nTitle from '../../components/I18nTitle.astro';
+import { getCatalog, getAppConfig, formatDuration, chapterSlug, bookCoverOgUrl } from '../../lib/catalog';
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 ---
 
-<Layout title="All Lectures — Sharah Kitab al-Tawheed" appConfig={appConfig}
-  description="Browse all 50 lectures from Sharah Kitab al-Tawheed — 15 classes by Shaikh Abdullah Nasir Rahmani Hafizahullah. Free online Urdu audio.">
+<Layout
+  title="All Lectures — Sharah Kitab al-Tawheed"
+  appConfig={appConfig}
+  description="Browse all 50 lectures from Sharah Kitab al-Tawheed — 15 classes by Shaikh Abdullah Nasir Rahmani Hafizahullah. Free online Urdu audio."
+  ogImage={bookCoverOgUrl()}
+>
 
-  <div class="mx-auto max-w-4xl px-4 py-10">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">
     <nav class="text-xs text-[#6B6458] mb-6">
       <a href="/" class="hover:text-[#C9A84C]">Home</a> → Lectures
     </nav>
@@ -28,7 +33,12 @@ const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
                 {String(chapter.number).padStart(2,'0')}
               </span>
               <div>
-                <p class="font-semibold group-hover:text-[#C9A84C] transition-colors">{en(chapter.title)}</p>
+                <I18nTitle
+                  field={chapter.title}
+                  as="p"
+                  class="font-semibold group-hover:text-[#C9A84C] transition-colors"
+                  urduClass="text-xs text-[#6B6458] mt-0.5"
+                />
                 <p class="text-xs text-[#6B6458]">{chapter.lectureCount} {chapter.lectureCount === 1 ? 'part' : 'parts'} · {formatDuration(totalSecs)}</p>
               </div>
             </div>

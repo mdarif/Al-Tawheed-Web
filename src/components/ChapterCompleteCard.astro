@@ -1,0 +1,44 @@
+---
+import type { Chapter } from '../lib/catalog';
+import { en } from '../lib/catalog';
+
+interface Props {
+  chapter: Chapter;
+  nextChapter?: Chapter;
+  nextChapterHref?: string;
+  playStoreUrl: string;
+}
+
+const { chapter, nextChapter, nextChapterHref, playStoreUrl } = Astro.props;
+---
+
+<div class="mt-8 bg-[#1E1A0F] border border-[#C9A84C]/30 rounded-2xl p-6">
+  <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2">Class complete</p>
+  <h2 class="text-xl font-bold mb-2">You finished {en(chapter.title)}</h2>
+  <p class="text-sm text-[#A09880] mb-5">
+    Track progress, study class-by-class, and listen offline in the Android app.
+  </p>
+  <div class="flex flex-col sm:flex-row gap-3">
+    {nextChapter && nextChapterHref && (
+      <a
+        href={nextChapterHref}
+        class="flex-1 text-center bg-[#C9A84C] text-black font-bold px-5 py-3 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors"
+      >
+        Continue to {en(nextChapter.title)} →
+      </a>
+    )}
+    <a
+      href={playStoreUrl}
+      target="_blank"
+      rel="noopener"
+      class={`text-center border border-[#C9A84C]/40 text-[#C9A84C] font-semibold px-5 py-3 rounded-xl text-sm hover:bg-[#C9A84C]/10 transition-colors ${nextChapter ? 'flex-1' : 'inline-block w-full sm:w-auto'}`}
+    >
+      Get the app
+    </a>
+  </div>
+  {!nextChapter && (
+    <p class="text-xs text-[#6B6458] mt-4 text-center">
+      Mubarak — you have completed all 15 classes. Review any lecture from <a href="/lectures/" class="text-[#C9A84C] hover:underline">the list</a>.
+    </p>
+  )}
+</div>

@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Search from 'astro-pagefind/components/Search.astro';
+import { getAppConfig } from '../lib/catalog';
+
+const appConfig = await getAppConfig();
+const q = Astro.url.searchParams.get('q') ?? undefined;
+---
+
+<Layout
+  title="Search Lectures — Sharah Kitab al-Tawheed"
+  description="Search all 50 Urdu lectures from Sharah Kitab al-Tawheed by class, title, or topic."
+  appConfig={appConfig}
+>
+  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
+    <nav class="text-xs text-[#6B6458] mb-6">
+      <a href="/" class="hover:text-[#C9A84C]">Home</a> → Search
+    </nav>
+    <h1 class="text-3xl font-bold mb-2">Search lectures</h1>
+    <p class="text-[#A09880] mb-8 text-sm">
+      Find any of the 50 parts across 15 classes. Try “class 05”, “shirk”, or “tawheed”.
+    </p>
+    <Search
+      id="site-search"
+      className="pagefind-ui tawheed-pagefind"
+      query={q}
+      uiOptions={{ showImages: false, showSubResults: true }}
+    />
+  </article>
+</Layout>

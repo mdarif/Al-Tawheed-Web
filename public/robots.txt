@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kitabattawheed.com/sitemap-index.xml
+
+# AI / LLM crawlers
+# https://kitabattawheed.com/llms.txt

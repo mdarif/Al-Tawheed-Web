@@ -1,0 +1,17 @@
+---
+import type { I18nField } from '../lib/catalog';
+import { en, urduSubtitle } from '../lib/catalog';
+
+interface Props {
+  field: string | I18nField;
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'span';
+  class?: string;
+  urduClass?: string;
+}
+
+const { field, as: Tag = 'p', class: className = '', urduClass = 'text-[#A09880] text-sm mt-0.5' } = Astro.props;
+const ur = urduSubtitle(field);
+---
+
+<Tag class={className}>{en(field)}</Tag>
+{ur && <p class={urduClass} dir="rtl" lang="ur">{ur}</p>}

@@ -1,46 +1,50 @@
-# Astro Starter Kit: Basics
+# Kitab at-Tawheed Web
 
-```sh
-npm create astro@latest -- --template basics
+Static site for [kitabattawheed.com](https://kitabattawheed.com) — SEO-friendly lecture pages and app download funnel for the **Sharah Kitab al-Tawheed** Android app.
+
+## Stack
+
+- [Astro](https://astro.build) 6 (static site generation)
+- Tailwind CSS 4
+- Content from `https://al-tawheed-content.pages.dev/tawheed/` (`catalog.json`, `app-config.json`) — same CDN as the Flutter app
+
+## Develop
+
+```bash
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Requires network access for `npm run build` (fetches catalog at build time).
 
-## 🚀 Project Structure
+## Build
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```bash
+npm run build
+npm run preview
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+Output: `dist/` (deployed to Cloudflare Pages). Search index (`pagefind/`) is generated automatically via `astro-pagefind`.
 
-## 🧞 Commands
+## Deploy
 
-All commands are run from the root of the project, from a terminal:
+**Production:** push to `main` → GitHub Actions builds and deploys to Cloudflare Pages.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+One-time setup: add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as GitHub secrets. Full steps, custom domain, and Search Console sitemap: **[docs/DEPLOY.md](docs/DEPLOY.md)**.
 
-## 👀 Want to learn more?
+```bash
+npm run deploy   # local build + wrangler deploy (after wrangler login)
+```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+For local search in dev, run `npm run build` once (creates `dist/pagefind/`), then `npm run dev`. Or use `npm run dev:full` to build and start together. Open `/search/` — not `/pagefind/pagefind.js` directly.
+
+## Guides & SEO pages
+
+- `/search/` — Pagefind lecture search
+- `/kitab-al-tawheed/`, `/tawheed/`, `/sheikh-rahmani/` — topic guides with FAQ schema
+- `/llms.txt` — site summary for AI crawlers
+
+## Related repos
+
+- [Al-Tawheed](https://github.com/) — Flutter Android app
+- Al-Tawheed-Content — CDN JSON and cover assets

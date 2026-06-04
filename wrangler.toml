@@ -1,0 +1,6 @@
+# Cloudflare Pages — deploy with: npm run deploy
+# See docs/DEPLOY.md for GitHub Actions secrets and custom domain setup.
+
+name = "kitabattawheed"
+compatibility_date = "2026-06-01"
+pages_build_output_dir = "./dist"

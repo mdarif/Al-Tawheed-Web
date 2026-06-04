@@ -6,14 +6,21 @@ export interface I18nField {
   ar?: string;
 }
 
+/** Matches Flutter [AppLanguage] content resolution keys. */
+export type ContentLocale = 'en' | 'ur' | 'roman';
+
 export interface Book {
   id: string;
   title: I18nField;
+  titleArabic?: string;
+  author?: string;
   speaker: I18nField;
+  speakerShortName?: string;
   totalDurationSeconds: number;
   lectureCount: number;
   coverImageUrl: string;
   language: string;
+  catalogUpdatedAt?: string;
 }
 
 export interface Chapter {
@@ -57,6 +64,19 @@ export interface AppConfig {
   about: { appName: string; lecturer: string; lectureCount: number; totalDuration: string };
 }
 
+export const SITE_URL = 'https://kitabattawheed.com';
+
+/** Local cover — CDN `cover.jpg` is not deployed yet (404). Same art as Flutter `assets/tawheed.png`. */
+export const BOOK_COVER_SRC = '/book-cover.png';
+
+export function bookCoverSrc(_book?: Book): string {
+  return BOOK_COVER_SRC;
+}
+
+export function bookCoverOgUrl(): string {
+  return new URL(BOOK_COVER_SRC, SITE_URL).toString();
+}
+
 const CONTENT_BASE = 'https://al-tawheed-content.pages.dev/tawheed';
 
 export async function getCatalog(): Promise<Catalog> {
@@ -81,11 +101,40 @@ export function formatDuration(seconds: number): string {
   return `${s}s`;
 }
 
-/** Resolve an i18n field to its English string */
+function asI18n(field: string | I18nField | undefined): I18nField | null {
+  if (!field) return null;
+  if (typeof field === 'string') return { en: field };
+  return field;
+}
+
+/**
+ * Resolve multilingual content (same fallback chain as Flutter LanguageProvider).
+ * roman → ur → en; ur → en; en is terminal.
+ */
+export function resolve(
+  field: string | I18nField | undefined,
+  locale: ContentLocale = 'en',
+): string {
+  const map = asI18n(field);
+  if (!map) return '';
+
+  const primary = map[locale];
+  if (primary?.trim()) return primary;
+
+  if (locale === 'roman' && map.ur?.trim()) return map.ur;
+  return map.en ?? '';
+}
+
+/** English string for SEO meta, JSON-LD, and primary headings. */
 export function en(field: string | I18nField | undefined): string {
-  if (!field) return '';
-  if (typeof field === 'string') return field;
-  return field.en ?? '';
+  return resolve(field, 'en');
+}
+
+/** Urdu subtitle when present (for bilingual UI under English titles). */
+export function urduSubtitle(field: string | I18nField | undefined): string | undefined {
+  const map = asI18n(field);
+  const ur = map?.ur?.trim();
+  return ur || undefined;
 }
 
 /** Slug from chapter id: "class-01" → "class-01" (already a slug) */
@@ -96,4 +145,21 @@ export function chapterSlug(chapterId: string): string {
 /** Slug from lecture id: "lec-001" → "part-01" using the lecture number */
 export function lectureSlug(lecture: Lecture): string {
   return `part-${String(lecture.number).padStart(2, '0')}`;
+}
+
+export function playStoreUrl(appConfig: AppConfig): string {
+  return (
+    appConfig.links.playStore ??
+    'https://play.google.com/store/apps/details?id=com.almarfa.tawheed'
+  );
+}
+
+export function nextChapter(catalog: Catalog, chapter: Chapter): Chapter | undefined {
+  return catalog.chapters.find((c) => c.number === chapter.number + 1);
+}
+
+export function firstLectureInChapter(catalog: Catalog, chapterId: string): Lecture | undefined {
+  return catalog.lectures
+    .filter((l) => l.chapterId === chapterId)
+    .sort((a, b) => a.number - b.number)[0];
 }

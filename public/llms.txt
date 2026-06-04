@@ -1,0 +1,33 @@
+# Sharah Kitab al-Tawheed — kitabattawheed.com
+
+> Free Urdu audio explanation of Kitab al-Tawheed by Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah. 50 lectures across 15 classes (~27 hours). Stream online or use the Android app for offline listening and Study Mode.
+
+## Primary content
+
+- Home: https://kitabattawheed.com/
+- All lectures: https://kitabattawheed.com/lectures/
+- Search: https://kitabattawheed.com/search/
+- Download Android app: https://kitabattawheed.com/download/
+- About the series: https://kitabattawheed.com/about/
+
+## Topic guides
+
+- What is Kitab al-Tawheed: https://kitabattawheed.com/kitab-al-tawheed/
+- What is Tawheed in Islam: https://kitabattawheed.com/tawheed/
+- Sheikh Abdullah Nasir Rahmani: https://kitabattawheed.com/sheikh-rahmani/
+
+## Catalog
+
+- 15 classes (class-01 through class-15), 50 audio parts
+- Lecture URLs: https://kitabattawheed.com/lectures/{class-id}/{part-slug}/
+- RSS feed: https://kitabattawheed.com/feed.xml
+- Content metadata: https://al-tawheed-content.pages.dev/tawheed/catalog.json
+
+## App
+
+- Google Play: com.almarfa.tawheed (Sharah Kitab al-Tawheed)
+- Features: offline downloads, progress tracking, Study Mode, background playback, Urdu / Roman Urdu UI
+
+## Contact
+
+See app-config on CDN or the About page for support email.

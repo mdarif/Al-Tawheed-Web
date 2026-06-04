@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FaqSection from '../components/FaqSection.astro';
+import { getCatalog, getAppConfig, bookCoverOgUrl } from '../lib/catalog';
+
+const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+
+const faq = [
+  {
+    question: 'What is Tawheed in Islam?',
+    answer:
+      'Tawheed means affirming that Allah alone is worthy of worship and alone possesses the names and attributes of divinity. It is the foundation of Islam — la ilaha illallah (there is no god but Allah).',
+  },
+  {
+    question: 'What are the types of Tawheed?',
+    answer:
+      'Scholars commonly explain three categories: Tawheed ar-Rububiyyah (Lordship — Allah alone creates and sustains), Tawheed al-Uluhiyyah (worship — acts of devotion are for Allah alone), and Tawheed al-Asma was-Sifat (names and attributes — affirming what Allah revealed about Himself without distortion).',
+  },
+  {
+    question: 'What is shirk?',
+    answer:
+      'Shirk is associating partners with Allah in worship or attributes that belong only to Him. Kitab al-Tawheed warns against major and minor shirk so Muslims can protect their faith.',
+  },
+  {
+    question: 'Where can I learn Tawheed in Urdu?',
+    answer: `Listen to the free sharah of Kitab al-Tawheed on this site — ${catalog.book.lectureCount} lectures by Shaikh Abdullah Nasir Rahmani, or use the Android app for offline study.`,
+  },
+];
+---
+
+<Layout
+  title="What is Tawheed in Islam? — Types of Tawheed | Urdu Lectures"
+  description="Learn what Tawheed means, the three types of Tawheed, and shirk — with free Urdu lectures from Sharah Kitab al-Tawheed."
+  appConfig={appConfig}
+  ogImage={bookCoverOgUrl()}
+>
+  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
+    <nav class="text-xs text-[#6B6458] mb-6">
+      <a href="/" class="hover:text-[#C9A84C]">Home</a> → Tawheed
+    </nav>
+
+    <h1 class="text-3xl font-bold mb-4">What is Tawheed in Islam?</h1>
+    <p class="text-2xl text-[#C9A84C] mb-6" dir="rtl" lang="ar">التوحيد</p>
+
+    <p class="text-[#A09880] leading-relaxed mb-4">
+      <strong class="text-[#F0EDE4]">Tawheed</strong> (monotheism) is the message of every Prophet: worship Allah alone, obey Him, and do not associate partners with Him. It is not merely a label but a complete way of life — in prayer, intention, love, fear, hope, and reliance.
+    </p>
+
+    <section class="mb-8">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Three types of Tawheed</h2>
+      <ul class="space-y-4 text-[#A09880] text-sm">
+        <li class="bg-[#1A1A1C] border border-white/10 rounded-xl p-4">
+          <strong class="text-[#F0EDE4]">Tawheed ar-Rububiyyah</strong> — Recognising that Allah alone is the Creator, Provider, and Controller of all affairs.
+        </li>
+        <li class="bg-[#1A1A1C] border border-white/10 rounded-xl p-4">
+          <strong class="text-[#F0EDE4]">Tawheed al-Uluhiyyah</strong> — Directing all worship — prayer, supplication, sacrifice, vows — to Allah alone.
+        </li>
+        <li class="bg-[#1A1A1C] border border-white/10 rounded-xl p-4">
+          <strong class="text-[#F0EDE4]">Tawheed al-Asma was-Sifat</strong> — Affirming Allah’s names and attributes as revealed, without likening Him to creation or denying His attributes.
+        </li>
+      </ul>
+    </section>
+
+    <p class="text-[#A09880] leading-relaxed mb-8">
+      <a href="/kitab-al-tawheed/" class="text-[#C9A84C] hover:underline">Kitab al-Tawheed</a> is the classic text on this subject. The sharah on this site walks through it lesson by lesson in Urdu.
+    </p>
+
+    <a href="/lectures/" class="inline-block bg-[#C9A84C] text-black font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#D4B55C] mb-8">
+      Listen to all lectures →
+    </a>
+
+    <FaqSection items={faq} />
+  </article>
+</Layout>
