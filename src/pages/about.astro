@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCatalog, getAppConfig, en, playStoreUrl, bookCoverOgUrl } from '../lib/catalog';
+import { getCatalog, getAppConfig, en, playStoreUrl } from '../lib/catalog';
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
@@ -11,7 +11,6 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
   title="About — Sharah Kitab al-Tawheed"
   appConfig={appConfig}
   description="About the Sharah Kitab al-Tawheed audio series by Shaikh Abdullah Nasir Rahmani — 50 Urdu lectures on Islamic monotheism."
-  ogImage={bookCoverOgUrl(catalog.book)}
 >
 
   <div class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">

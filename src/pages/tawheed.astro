@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import FaqSection from '../components/FaqSection.astro';
-import { getCatalog, getAppConfig, bookCoverOgUrl } from '../lib/catalog';
+import { getCatalog, getAppConfig } from '../lib/catalog';
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 
@@ -32,7 +32,6 @@ const faq = [
   title="What is Tawheed in Islam? — Types of Tawheed | Urdu Lectures"
   description="Learn what Tawheed means, the three types of Tawheed, and shirk — with free Urdu lectures from Sharah Kitab al-Tawheed."
   appConfig={appConfig}
-  ogImage={bookCoverOgUrl(catalog.book)}
 >
   <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
     <nav class="text-xs text-[#6B6458] mb-6">
