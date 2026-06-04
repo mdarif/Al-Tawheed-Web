@@ -1,10 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Search from 'astro-pagefind/components/Search.astro';
+import PagefindConfig from 'astro-pagefind/components/PagefindConfig.astro';
 import { getAppConfig } from '../lib/catalog';
 
 const appConfig = await getAppConfig();
-const q = Astro.url.searchParams.get('q') ?? undefined;
+const q = Astro.url.searchParams.get('q')?.trim() ?? '';
 ---
 
 <Layout
@@ -12,7 +12,7 @@ const q = Astro.url.searchParams.get('q') ?? undefined;
   description="Search all 50 Urdu lectures from Sharah Kitab al-Tawheed by class, title, or topic."
   appConfig={appConfig}
 >
-  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
+  <article class="search-page mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-ignore>
     <nav class="text-xs text-[#6B6458] mb-6">
       <a href="/" class="hover:text-[#C9A84C]">Home</a> → Search
     </nav>
@@ -20,11 +20,38 @@ const q = Astro.url.searchParams.get('q') ?? undefined;
     <p class="text-[#A09880] mb-8 text-sm">
       Find any of the 50 parts across 15 classes. Try “class 05”, “shirk”, or “tawheed”.
     </p>
-    <Search
-      id="site-search"
-      className="pagefind-ui tawheed-pagefind"
-      query={q}
-      uiOptions={{ showImages: false, showSubResults: true }}
-    />
+
+    <div class="tawheed-search" data-pf-theme="dark">
+      <PagefindConfig />
+      <pagefind-input
+        class="tawheed-pagefind-input"
+        debounce="200"
+        autofocus
+        placeholder="Search lectures…"
+      ></pagefind-input>
+      <pagefind-summary class="tawheed-pagefind-summary"></pagefind-summary>
+      <pagefind-results
+        class="tawheed-pagefind-results"
+        show-sub-results
+        max-results="24"
+      ></pagefind-results>
+    </div>
   </article>
 </Layout>
+
+{q && (
+  <script define:vars={{ q }}>
+    async function applyInitialQuery() {
+      await customElements.whenDefined('pagefind-input');
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      const host = document.querySelector('pagefind-input');
+      const input = host?.querySelector('.pf-input');
+      if (input instanceof HTMLInputElement) {
+        input.value = q;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.focus();
+      }
+    }
+    applyInitialQuery();
+  </script>
+)}

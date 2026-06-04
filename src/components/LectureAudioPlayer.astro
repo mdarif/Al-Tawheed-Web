@@ -1,5 +1,5 @@
 ---
-import { formatDuration, bookCoverSrc } from '../lib/catalog';
+import { formatDuration } from '../lib/catalog';
 
 interface Props {
   lectureId: string;
@@ -9,6 +9,7 @@ interface Props {
   durationSeconds: number;
   speaker: string;
   playStoreUrl: string;
+  coverImageUrl: string;
 }
 
 const {
@@ -19,8 +20,9 @@ const {
   durationSeconds,
   speaker,
   playStoreUrl,
+  coverImageUrl,
 } = Astro.props;
-const coverSrc = bookCoverSrc();
+const coverSrc = coverImageUrl;
 ---
 
 <div class="bg-[#1A1A1C] border border-white/10 rounded-2xl p-4 sm:p-5 mb-6 min-w-0" data-lecture-player data-play-store-url={playStoreUrl}>

@@ -35,7 +35,7 @@ export const GET: APIRoute = async () => {
     <language>ur</language>
     <lastBuildDate>${new Date(updated).toUTCString()}</lastBuildDate>
     <image>
-      <url>${escapeXml(bookCoverOgUrl())}</url>
+      <url>${escapeXml(bookCoverOgUrl(catalog.book))}</url>
       <title>${escapeXml(en(catalog.book.title))}</title>
       <link>${SITE_URL}/</link>
     </image>

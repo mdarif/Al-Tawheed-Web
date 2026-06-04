@@ -4,8 +4,8 @@ import { getCatalog, getAppConfig, en, playStoreUrl, bookCoverSrc, bookCoverOgUr
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
-const coverSrc = bookCoverSrc();
-const coverOg = bookCoverOgUrl();
+const coverSrc = bookCoverSrc(catalog.book);
+const coverOg = bookCoverOgUrl(catalog.book);
 const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 
 const screenshots = [

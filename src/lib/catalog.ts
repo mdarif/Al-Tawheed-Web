@@ -66,18 +66,23 @@ export interface AppConfig {
 
 export const SITE_URL = 'https://kitabattawheed.com';
 
-/** Local cover — CDN `cover.jpg` is not deployed yet (404). Same art as Flutter `assets/tawheed.png`. */
+const CONTENT_BASE = 'https://al-tawheed-content.pages.dev/tawheed';
+
+/** CDN book cover (same art as Flutter `assets/tawheed.png`). */
+export const CDN_COVER_URL = `${CONTENT_BASE}/images/cover.jpg`;
+
+/** Fallback if catalog/CDN is unavailable at build time. */
 export const BOOK_COVER_SRC = '/book-cover.png';
 
-export function bookCoverSrc(_book?: Book): string {
-  return BOOK_COVER_SRC;
+export function bookCoverSrc(book?: Book): string {
+  return book?.coverImageUrl ?? CDN_COVER_URL;
 }
 
-export function bookCoverOgUrl(): string {
-  return new URL(BOOK_COVER_SRC, SITE_URL).toString();
+export function bookCoverOgUrl(book?: Book): string {
+  const src = bookCoverSrc(book);
+  if (src.startsWith('http')) return src;
+  return new URL(src, SITE_URL).toString();
 }
-
-const CONTENT_BASE = 'https://al-tawheed-content.pages.dev/tawheed';
 
 export async function getCatalog(): Promise<Catalog> {
   const res = await fetch(`${CONTENT_BASE}/catalog.json`);
