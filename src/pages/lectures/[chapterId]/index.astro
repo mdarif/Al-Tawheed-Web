@@ -1,0 +1,67 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCatalog, getAppConfig, formatDuration, en, chapterSlug, lectureSlug } from '../../../lib/catalog';
+
+export async function getStaticPaths() {
+  const catalog = await getCatalog();
+  return catalog.chapters.map(chapter => ({
+    params: { chapterId: chapterSlug(chapter.id) },
+    props: { chapterId: chapter.id },
+  }));
+}
+
+const { chapterId } = Astro.props;
+const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const chapter = catalog.chapters.find(c => c.id === chapterId)!;
+const lectures = catalog.lectures.filter(l => l.chapterId === chapterId);
+const totalSecs = lectures.reduce((s, l) => s + l.durationSeconds, 0);
+const playStoreUrl = appConfig.links.playStore ?? 'https://play.google.com/store/apps/details?id=com.almarfa.tawheed';
+---
+
+<Layout
+  title={`${en(chapter.title)} — Sharah Kitab al-Tawheed`}
+  description={`${lectures.length} audio parts from ${en(chapter.title)} — Sharah Kitab al-Tawheed by Shaikh Rahmani. ${formatDuration(totalSecs)} total.`}
+  appConfig={appConfig}
+>
+  <div class="mx-auto max-w-4xl px-4 py-10">
+    <nav class="text-xs text-[#6B6458] mb-6">
+      <a href="/" class="hover:text-[#C9A84C]">Home</a> →
+      <a href="/lectures/" class="hover:text-[#C9A84C]">Lectures</a> →
+      {en(chapter.title)}
+    </nav>
+
+    <div class="mb-8">
+      <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-1">Class {String(chapter.number).padStart(2,'0')}</p>
+      <h1 class="text-3xl font-bold mb-2">{en(chapter.title)}</h1>
+      <p class="text-[#A09880]">{lectures.length} {lectures.length === 1 ? 'part' : 'parts'} · {formatDuration(totalSecs)}</p>
+    </div>
+
+    <div class="space-y-2 mb-10">
+      {lectures.map((lecture) => (
+        <a href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(lecture)}/`}
+          class="group flex items-center justify-between bg-[#1A1A1C] border border-white/10 rounded-xl px-5 py-4 hover:border-[#C9A84C]/40 hover:bg-[#1E1E20] transition-all">
+          <div class="flex items-center gap-4">
+            <span class="w-8 h-8 flex items-center justify-center bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-bold rounded-lg shrink-0">
+              {String(lecture.number).padStart(2,'0')}
+            </span>
+            <div>
+              <p class="font-semibold text-sm group-hover:text-[#C9A84C] transition-colors">{en(lecture.title)}</p>
+              <p class="text-xs text-[#6B6458]">{formatDuration(lecture.durationSeconds)}</p>
+            </div>
+          </div>
+          <span class="text-[#C9A84C] text-xs border border-[#C9A84C]/30 rounded-full px-2 py-0.5 group-hover:bg-[#C9A84C]/10 transition-colors">▶ Play</span>
+        </a>
+      ))}
+    </div>
+
+    <!-- App CTA after lecture list -->
+    <div class="bg-[#1E1A0F] border border-[#C9A84C]/30 rounded-xl p-5 text-center">
+      <p class="font-semibold mb-1">Want offline access?</p>
+      <p class="text-sm text-[#A09880] mb-4">Download the free Android app — listen without internet, track your progress, enable Study Mode.</p>
+      <a href={playStoreUrl} target="_blank" rel="noopener"
+        class="inline-block bg-[#C9A84C] text-black font-bold px-6 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C] transition-colors">
+        Download Free — Google Play
+      </a>
+    </div>
+  </div>
+</Layout>

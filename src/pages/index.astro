@@ -1,0 +1,179 @@
+---
+import Layout from "../layouts/Layout.astro";
+import {
+  getCatalog,
+  getAppConfig,
+  formatDuration,
+  en,
+  chapterSlug,
+} from "../lib/catalog";
+
+const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const playStoreUrl =
+  appConfig.links.playStore ??
+  "https://play.google.com/store/apps/details?id=com.almarfa.tawheed";
+const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
+---
+
+<Layout
+  title="Sharah Kitab al-Tawheed — 50 Urdu Audio Lectures | Free"
+  description={`Complete audio series on Kitab al-Tawheed by Shaikh Abdullah Nasir Rahmani. ${catalog.book.lectureCount} Urdu lectures, ${totalHours}+ hours. Free online and offline on Android.`}
+  appConfig={appConfig}
+>
+  <!-- Hero -->
+  <section class="mx-auto max-w-5xl px-4 pt-14 pb-10 text-center">
+    <p
+      class="text-[#C9A84C] text-sm font-semibold tracking-widest uppercase mb-4"
+    >
+      Free Islamic Audio
+    </p>
+    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-3">
+      Sharah Kitab al-Tawheed
+    </h1>
+    <p class="text-2xl text-[#C9A84C] font-medium mb-2" dir="rtl" lang="ur">
+      شرح کتاب التوحید
+    </p>
+    <p class="text-[#A09880] text-lg mb-8">
+      {catalog.book.lectureCount} lectures · {totalHours}h audio · By {
+        en(catalog.book.speaker)
+      }
+    </p>
+
+    <div
+      class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8"
+    >
+      <a
+        href={playStoreUrl}
+        target="_blank"
+        rel="noopener"
+        class="w-full sm:w-auto bg-[#C9A84C] text-black font-bold px-8 py-4 rounded-xl text-base hover:bg-[#D4B55C] transition-colors"
+      >
+        📱 Download Free on Google Play
+      </a>
+      <a
+        href="/lectures/"
+        class="w-full sm:w-auto border border-white/20 font-semibold px-8 py-4 rounded-xl text-base hover:bg-white/5 transition-colors"
+      >
+        Browse All Lectures →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-xl mx-auto mt-2">
+      {
+        [
+          { icon: "⬇️", label: "Offline Downloads" },
+          { icon: "🎵", label: "Background Playback" },
+          { icon: "📊", label: "Progress Tracking" },
+          { icon: "📚", label: "Study Mode" },
+          { icon: "🌐", label: "Urdu interface" },
+          { icon: "🎁", label: "Free forever" },
+        ].map(({ icon, label }) => (
+          <div class="flex items-center gap-2.5 bg-[#1A1A1C] border border-white/10 rounded-xl px-3 py-2.5 hover:border-[#C9A84C]/40 transition-colors">
+            <span class="text-lg leading-none">{icon}</span>
+            <span class="text-xs font-semibold text-[#D4C9A8]">{label}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Chapter grid -->
+  <section class="mx-auto max-w-5xl px-4 py-8">
+    <h2 class="text-xl font-bold mb-6 text-[#C9A84C]">All 15 Classes</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      {
+        catalog.chapters.map((chapter) => {
+          const parts = catalog.lectures.filter(
+            (l) => l.chapterId === chapter.id,
+          );
+          const totalSecs = parts.reduce((s, l) => s + l.durationSeconds, 0);
+          return (
+            <a
+              href={`/lectures/${chapterSlug(chapter.id)}/`}
+              class="group block bg-[#1A1A1C] border border-white/10 rounded-xl p-4 hover:border-[#C9A84C]/40 hover:bg-[#1E1E20] transition-all"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <span class="text-[#C9A84C] text-xs font-bold">
+                  Class {String(chapter.number).padStart(2, "0")}
+                </span>
+                <span class="text-[#6B6458] text-xs">
+                  {chapter.lectureCount}{" "}
+                  {chapter.lectureCount === 1 ? "part" : "parts"}
+                </span>
+              </div>
+              <p class="text-sm font-semibold group-hover:text-[#C9A84C] transition-colors">
+                {en(chapter.title)}
+              </p>
+              <p class="text-xs text-[#6B6458] mt-1">
+                {formatDuration(totalSecs)}
+              </p>
+            </a>
+          );
+        })
+      }
+    </div>
+  </section>
+
+  <!-- Web vs App comparison -->
+  <section class="mx-auto max-w-3xl px-4 py-12">
+    <h2 class="text-xl font-bold text-center mb-8">Web vs Android App</h2>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div class="bg-[#1A1A1C] border border-white/10 rounded-xl p-5">
+        <h3 class="font-semibold mb-3 text-[#A09880]">🌐 This website</h3>
+        <ul class="text-sm space-y-2 text-[#A09880]">
+          <li>✓ Stream all 50 lectures</li>
+          <li>✓ No account needed</li>
+          <li class="text-[#4A4440]">✗ Requires internet</li>
+          <li class="text-[#4A4440]">✗ No progress saved</li>
+          <li class="text-[#4A4440]">✗ No Study Mode</li>
+          <li class="text-[#4A4440]">✗ No background play</li>
+        </ul>
+      </div>
+      <div
+        class="bg-[#1E1A0F] border border-[#C9A84C]/30 rounded-xl p-5 relative"
+      >
+        <span
+          class="absolute -top-2.5 left-4 text-[10px] bg-[#C9A84C] text-black font-bold px-2 py-0.5 rounded-full"
+          >RECOMMENDED</span
+        >
+        <h3 class="font-semibold mb-3 text-[#C9A84C]">📱 Android App</h3>
+        <ul class="text-sm space-y-2">
+          <li>✓ All 50 lectures</li>
+          <li>✓ <strong>Offline downloads</strong></li>
+          <li>✓ <strong>Progress tracking</strong></li>
+          <li>✓ <strong>Study Mode</strong></li>
+          <li>✓ <strong>Background playback</strong></li>
+          <li>✓ <strong>Urdu / Roman Urdu UI</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center mt-6">
+      <a
+        href={playStoreUrl}
+        target="_blank"
+        rel="noopener"
+        class="inline-block bg-[#C9A84C] text-black font-bold px-8 py-3 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors"
+      >
+        Download Free — Google Play
+      </a>
+    </div>
+  </section>
+
+  <!-- About snippet -->
+  <section class="mx-auto max-w-3xl px-4 py-8 border-t border-white/10">
+    <h2 class="text-xl font-bold mb-4">About This Series</h2>
+    <p class="text-[#A09880] leading-relaxed mb-3">
+      <strong class="text-[#F0EDE4]">Kitab al-Tawheed</strong> is a foundational text
+      on Islamic monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab
+      ibn Sulayman al-Tamimi Al Najdi. This complete Urdu explanation by
+      <strong class="text-[#F0EDE4]"
+        >Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah</strong
+      > covers all {catalog.book.lectureCount} lectures across 15 classes — over {
+        totalHours
+      } hours of benefit.
+    </p>
+    <a href="/about/" class="text-[#C9A84C] text-sm hover:underline"
+      >Read more →</a
+    >
+  </section>
+</Layout>
