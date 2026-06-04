@@ -1,11 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCatalog, getAppConfig, en, playStoreUrl, bookCoverSrc, bookCoverOgUrl } from '../lib/catalog';
+import { getCatalog, getAppConfig, en, playStoreUrl, bookCoverSrc } from '../lib/catalog';
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
 const coverSrc = bookCoverSrc(catalog.book);
-const coverOg = bookCoverOgUrl(catalog.book);
 const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 
 const screenshots = [
@@ -29,7 +28,6 @@ const features = [
   title="Download App — Sharah Kitab al-Tawheed | Free Android"
   description={`Download the free Android app for Sharah Kitab al-Tawheed — ${catalog.book.lectureCount} lectures, offline mode, Study Mode, and progress tracking.`}
   appConfig={appConfig}
-  ogImage={coverOg}
 >
   <div class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">
     <nav class="text-xs text-[#6B6458] mb-6">

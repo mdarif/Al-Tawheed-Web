@@ -80,17 +80,18 @@ const articleTags = ["Tawheed", "Islamic Studies", "Quran", "Sunnah", en(chapter
   title={ogTitle}
   description={ogDescription}
   appConfig={appConfig}
-  ogImage={bookCoverOgUrl(catalog.book)}
   ogImageAlt={`${en(lecture.title)} — Sharh Kitab At-Tawheed`}
   ogType="article"
   articleTags={articleTags}
 >
   <script
+    is:inline
     type="application/ld+json"
     set:html={JSON.stringify(jsonLd)}
     slot="head"
   />
   <script
+    is:inline
     type="application/ld+json"
     set:html={JSON.stringify({
       "@context": "https://schema.org",

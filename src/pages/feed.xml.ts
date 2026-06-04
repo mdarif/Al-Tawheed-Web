@@ -5,7 +5,6 @@ import {
   en,
   chapterSlug,
   lectureSlug,
-  bookCoverOgUrl,
 } from '../lib/catalog';
 
 export const GET: APIRoute = async () => {
@@ -35,7 +34,7 @@ export const GET: APIRoute = async () => {
     <language>ur</language>
     <lastBuildDate>${new Date(updated).toUTCString()}</lastBuildDate>
     <image>
-      <url>${escapeXml(bookCoverOgUrl(catalog.book))}</url>
+      <url>${SITE_URL}/og-image.png</url>
       <title>${escapeXml(en(catalog.book.title))}</title>
       <link>${SITE_URL}/</link>
     </image>
