@@ -1,8 +1,8 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import I18nTitle from '../../../components/I18nTitle.astro';
-import LectureAudioPlayer from '../../../components/LectureAudioPlayer.astro';
-import ChapterCompleteCard from '../../../components/ChapterCompleteCard.astro';
+import Layout from "../../../layouts/Layout.astro";
+import I18nTitle from "../../../components/I18nTitle.astro";
+import LectureAudioPlayer from "../../../components/LectureAudioPlayer.astro";
+import ChapterCompleteCard from "../../../components/ChapterCompleteCard.astro";
 import {
   getCatalog,
   getAppConfig,
@@ -14,14 +14,17 @@ import {
   bookCoverOgUrl,
   nextChapter,
   firstLectureInChapter,
-} from '../../../lib/catalog';
+} from "../../../lib/catalog";
 
 export async function getStaticPaths() {
   const catalog = await getCatalog();
-  return catalog.lectures.map(lecture => {
-    const chapter = catalog.chapters.find(c => c.id === lecture.chapterId)!;
+  return catalog.lectures.map((lecture) => {
+    const chapter = catalog.chapters.find((c) => c.id === lecture.chapterId)!;
     return {
-      params: { chapterId: chapterSlug(chapter.id), lectureSlug: lectureSlug(lecture) },
+      params: {
+        chapterId: chapterSlug(chapter.id),
+        lectureSlug: lectureSlug(lecture),
+      },
       props: { lectureId: lecture.id, chapterId: chapter.id },
     };
   });
@@ -29,10 +32,12 @@ export async function getStaticPaths() {
 
 const { lectureId, chapterId } = Astro.props;
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
-const lecture = catalog.lectures.find(l => l.id === lectureId)!;
-const chapter = catalog.chapters.find(c => c.id === chapterId)!;
-const allChapterLectures = catalog.lectures.filter(l => l.chapterId === chapterId);
-const currentIdx = allChapterLectures.findIndex(l => l.id === lectureId);
+const lecture = catalog.lectures.find((l) => l.id === lectureId)!;
+const chapter = catalog.chapters.find((c) => c.id === chapterId)!;
+const allChapterLectures = catalog.lectures.filter(
+  (l) => l.chapterId === chapterId,
+);
+const currentIdx = allChapterLectures.findIndex((l) => l.id === lectureId);
 const prev = allChapterLectures[currentIdx - 1];
 const next = allChapterLectures[currentIdx + 1];
 const storeUrl = playStoreUrl(appConfig);
@@ -51,57 +56,113 @@ const followingChapterHref = followingChapter
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AudioObject",
-  "name": en(lecture.title),
-  "description": `${en(lecture.title)} from Sharah Kitab al-Tawheed by Shaikh Abdullah Nasir Rahmani`,
-  "duration": `PT${Math.floor(lecture.durationSeconds/60)}M${lecture.durationSeconds%60}S`,
-  "encodingFormat": "audio/mpeg",
-  "contentUrl": lecture.audioUrl,
-  "thumbnailUrl": bookCoverOgUrl(catalog.book),
-  "inLanguage": "ur",
-  "isPartOf": {
+  name: en(lecture.title),
+  description: `${en(lecture.title)} from Sharah Kitab al-Tawheed by Shaikh Abdullah Nasir Rahmani Hafizaullah`,
+  duration: `PT${Math.floor(lecture.durationSeconds / 60)}M${lecture.durationSeconds % 60}S`,
+  encodingFormat: "audio/mpeg",
+  contentUrl: lecture.audioUrl,
+  thumbnailUrl: bookCoverOgUrl(catalog.book),
+  inLanguage: "ur",
+  isPartOf: {
     "@type": "Course",
-    "name": en(catalog.book.title),
-    "description": "Complete audio series on Kitab al-Tawheed"
-  }
+    name: en(catalog.book.title),
+    description: "Complete audio series on Kitab al-Tawheed",
+  },
 };
+
+// Dynamic OG metadata for individual lessons — optimized for social sharing
+const ogTitle = `Part ${String(lecture.number).padStart(2, "0")}: ${en(lecture.title)} — Kitab At-Tawheed`;
+const ogDescription = `${en(lecture.title)} from the complete Sharah by Shaikh Abdullah Nasir Rahmani. ${formatDuration(lecture.durationSeconds)} of free Urdu Islamic education. Listen online free—no app required.`;
+const articleTags = ["Tawheed", "Islamic Studies", "Quran", "Sunnah", en(chapter.title)];
 ---
 
 <Layout
-  title={`${en(lecture.title)} — Sharah Kitab al-Tawheed`}
-  description={`Listen to ${en(lecture.title)} from Sharah Kitab al-Tawheed. ${formatDuration(lecture.durationSeconds)} Urdu audio by Shaikh Abdullah Nasir Rahmani.`}
+  title={ogTitle}
+  description={ogDescription}
   appConfig={appConfig}
   ogImage={bookCoverOgUrl(catalog.book)}
+  ogImageAlt={`${en(lecture.title)} — Sharh Kitab At-Tawheed`}
+  ogType="article"
+  articleTags={articleTags}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
-  <script type="application/ld+json" set:html={JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://kitabattawheed.com/' },
-      { '@type': 'ListItem', position: 2, name: 'Lectures', item: 'https://kitabattawheed.com/lectures/' },
-      { '@type': 'ListItem', position: 3, name: en(chapter.title), item: `https://kitabattawheed.com/lectures/${chapterSlug(chapter.id)}/` },
-      { '@type': 'ListItem', position: 4, name: en(lecture.title), item: `https://kitabattawheed.com${lecturePath}` },
-    ],
-  })} slot="head" />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+    slot="head"
+  />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://kitabattawheed.com/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Lectures",
+          item: "https://kitabattawheed.com/lectures/",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: en(chapter.title),
+          item: `https://kitabattawheed.com/lectures/${chapterSlug(chapter.id)}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
+          name: en(lecture.title),
+          item: `https://kitabattawheed.com${lecturePath}`,
+        },
+      ],
+    })}
+    slot="head"
+  />
 
-  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
-
-    <nav class="text-xs text-[#6B6458] mb-6 break-words leading-relaxed" aria-label="Breadcrumb">
+  <article
+    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0"
+    data-pagefind-body
+  >
+    <nav
+      class="text-xs text-[#6B6458] mb-6 break-words leading-relaxed"
+      aria-label="Breadcrumb"
+    >
       <a href="/" class="hover:text-[#C9A84C]">Home</a>
       <span class="mx-1">→</span>
       <a href="/lectures/" class="hover:text-[#C9A84C]">Lectures</a>
       <span class="mx-1">→</span>
-      <a href={`/lectures/${chapterSlug(chapter.id)}/`} class="hover:text-[#C9A84C]">{en(chapter.title)}</a>
+      <a
+        href={`/lectures/${chapterSlug(chapter.id)}/`}
+        class="hover:text-[#C9A84C]">{en(chapter.title)}</a
+      >
       <span class="mx-1">→</span>
       <span class="text-[#A09880]">{en(lecture.title)}</span>
     </nav>
 
     <div class="mb-6">
-      <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-1">
-        Class {String(chapter.number).padStart(2,'0')} · Part {currentIdx + 1} of {allChapterLectures.length}
+      <p
+        class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-1"
+      >
+        Class {String(chapter.number).padStart(2, "0")} · Part {currentIdx + 1} of
+        {allChapterLectures.length}
       </p>
-      <I18nTitle field={lecture.title} as="h1" class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-balance" urduClass="text-[#C9A84C] text-base sm:text-lg mb-1" />
-      <p class="text-[#A09880] text-sm line-clamp-3">{formatDuration(lecture.durationSeconds)} · By {en(catalog.book.speaker)}</p>
+      <I18nTitle
+        field={lecture.title}
+        as="h1"
+        class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-balance"
+        urduClass="text-[#C9A84C] text-base sm:text-lg mb-1"
+      />
+      <p class="text-[#A09880] text-sm line-clamp-3">
+        {formatDuration(lecture.durationSeconds)} · By {
+          en(catalog.book.speaker)
+        }
+      </p>
     </div>
 
     <LectureAudioPlayer
@@ -115,57 +176,84 @@ const jsonLd = {
       coverImageUrl={catalog.book.coverImageUrl}
     />
 
-    <div class="bg-[#1E1A0F] border border-[#C9A84C]/30 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div
+      class="bg-[#1E1A0F] border border-[#C9A84C]/30 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+    >
       <div class="min-w-0">
         <p class="text-sm font-semibold text-[#C9A84C]">Continue on the app</p>
-        <p class="text-xs text-[#A09880]">Offline · Study Mode · Background play</p>
+        <p class="text-xs text-[#A09880]">
+          Offline · Study Mode · Background play
+        </p>
       </div>
-      <a href={storeUrl} target="_blank" rel="noopener"
-        class="shrink-0 w-full sm:w-auto text-center bg-[#C9A84C] text-black font-bold px-4 py-3 sm:py-2 rounded-lg text-sm sm:text-xs hover:bg-[#D4B55C] transition-colors min-h-[44px] sm:min-h-0 flex items-center justify-center">
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener"
+        class="shrink-0 w-full sm:w-auto text-center bg-[#C9A84C] text-black font-bold px-4 py-3 sm:py-2 rounded-lg text-sm sm:text-xs hover:bg-[#D4B55C] transition-colors min-h-[44px] sm:min-h-0 flex items-center justify-center"
+      >
         Get App
       </a>
     </div>
 
     <div class="flex flex-col sm:flex-row gap-3">
-      {prev && (
-        <a href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(prev)}/`}
-          class="flex-1 bg-[#1A1A1C] border border-white/10 rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all text-left min-w-0">
-          <p class="text-xs text-[#6B6458] mb-1">← Previous</p>
-          <p class="text-sm font-semibold truncate">{en(prev.title)}</p>
-        </a>
-      )}
-      {next && (
-        <a href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(next)}/`}
-          class="flex-1 bg-[#1A1A1C] border border-white/10 rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all sm:text-right min-w-0">
-          <p class="text-xs text-[#6B6458] mb-1">Next →</p>
-          <p class="text-sm font-semibold truncate">{en(next.title)}</p>
-        </a>
-      )}
+      {
+        prev && (
+          <a
+            href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(prev)}/`}
+            class="flex-1 bg-[#1A1A1C] border border-white/10 rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all text-left min-w-0"
+          >
+            <p class="text-xs text-[#6B6458] mb-1">← Previous</p>
+            <p class="text-sm font-semibold truncate">{en(prev.title)}</p>
+          </a>
+        )
+      }
+      {
+        next && (
+          <a
+            href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(next)}/`}
+            class="flex-1 bg-[#1A1A1C] border border-white/10 rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all sm:text-right min-w-0"
+          >
+            <p class="text-xs text-[#6B6458] mb-1">Next →</p>
+            <p class="text-sm font-semibold truncate">{en(next.title)}</p>
+          </a>
+        )
+      }
     </div>
 
-    {!next && (
-      <ChapterCompleteCard
-        chapter={chapter}
-        nextChapter={followingChapter}
-        nextChapterHref={followingChapterHref}
-        playStoreUrl={storeUrl}
-      />
-    )}
+    {
+      !next && (
+        <ChapterCompleteCard
+          chapter={chapter}
+          nextChapter={followingChapter}
+          nextChapterHref={followingChapterHref}
+          playStoreUrl={storeUrl}
+        />
+      )
+    }
 
     <div class="mt-8">
-      <h2 class="text-sm font-bold text-[#A09880] uppercase tracking-widest mb-3">All parts in {en(chapter.title)}</h2>
+      <h2
+        class="text-sm font-bold text-[#A09880] uppercase tracking-widest mb-3"
+      >
+        All parts in {en(chapter.title)}
+      </h2>
       <div class="space-y-1.5">
-        {allChapterLectures.map((l) => (
-          <a href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(l)}/`}
-            class={`flex items-center justify-between px-4 py-2.5 rounded-lg text-sm transition-all gap-3 ${l.id === lecture.id ? 'bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C]' : 'hover:bg-white/5 text-[#A09880]'}`}>
-            <span class="min-w-0">
-              <span class="block truncate">{en(l.title)}</span>
-            </span>
-            <span class="text-xs shrink-0">{formatDuration(l.durationSeconds)}</span>
-          </a>
-        ))}
+        {
+          allChapterLectures.map((l) => (
+            <a
+              href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(l)}/`}
+              class={`flex items-center justify-between px-4 py-2.5 rounded-lg text-sm transition-all gap-3 ${l.id === lecture.id ? "bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C]" : "hover:bg-white/5 text-[#A09880]"}`}
+            >
+              <span class="min-w-0">
+                <span class="block truncate">{en(l.title)}</span>
+              </span>
+              <span class="text-xs shrink-0">
+                {formatDuration(l.durationSeconds)}
+              </span>
+            </a>
+          ))
+        }
       </div>
     </div>
-
   </article>
 </Layout>

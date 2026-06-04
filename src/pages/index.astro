@@ -10,7 +10,6 @@ import {
   en,
   chapterSlug,
   playStoreUrl,
-  bookCoverOgUrl,
 } from "../lib/catalog";
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
@@ -19,13 +18,14 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 ---
 
 <Layout
-  title="Sharah Kitab al-Tawheed — 50 Urdu Audio Lectures | Free"
-  description={`Complete audio series on Kitab al-Tawheed by Shaikh Abdullah Nasir Rahmani. ${catalog.book.lectureCount} Urdu lectures, ${totalHours}+ hours. Free online and offline on Android.`}
+  title="Sharh Kitab At-Tawheed — 50 Free Urdu Audio Lessons"
+  description={`Complete Urdu audio explanation of Kitab At-Tawheed by Shaikh Abdullah Nasir Rahmani. ${catalog.book.lectureCount} lectures, ${totalHours}+ hours — free to stream online or download for Android.`}
   appConfig={appConfig}
-  ogImage={bookCoverOgUrl(catalog.book)}
 >
   <!-- Hero -->
-  <section class="mx-auto max-w-5xl px-4 sm:px-6 pt-10 sm:pt-14 pb-10 text-center">
+  <section
+    class="mx-auto max-w-5xl px-4 sm:px-6 pt-10 sm:pt-14 pb-10 text-center"
+  >
     <p
       class="text-[#C9A84C] text-sm font-semibold tracking-widest uppercase mb-4"
     >
@@ -63,7 +63,10 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     </div>
 
     <p class="text-xs text-[#6B6458] mb-4 max-w-md mx-auto">
-      Features below are available in the <a href="/download/" class="text-[#C9A84C] hover:underline">Android app</a>.
+      Features below are available in the <a
+        href="/download/"
+        class="text-[#C9A84C] hover:underline">Android app</a
+      >.
     </p>
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-xl mx-auto mt-2">
       {
@@ -160,7 +163,9 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         </ul>
       </div>
     </div>
-    <div class="text-center mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+    <div
+      class="text-center mt-6 flex flex-col sm:flex-row gap-3 justify-center"
+    >
       <a
         href={storeUrl}
         target="_blank"

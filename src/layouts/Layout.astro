@@ -3,7 +3,7 @@ import "../styles/global.css";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import type { AppConfig } from "../lib/catalog";
-import { SITE_URL, playStoreUrl, bookCoverOgUrl } from "../lib/catalog";
+import { SITE_URL, playStoreUrl } from "../lib/catalog";
 
 interface Props {
   title: string;
@@ -11,14 +11,37 @@ interface Props {
   appConfig?: AppConfig;
   /** Absolute URL for Open Graph / Twitter preview image */
   ogImage?: string;
+  /** Alt text describing the OG image content (for accessibility + crawlers) */
+  ogImageAlt?: string;
+  /** Open Graph site name (defaults to brand name) */
+  ogSiteName?: string;
+  /** Open Graph content type: 'website' or 'article' */
+  ogType?: string;
+  /** Article tags for content pages */
+  articleTags?: string[];
+  /** Explicit OG image dimensions — only set when you know the exact size */
+  ogImageWidth?: number;
+  ogImageHeight?: number;
 }
 
 const {
   title,
-  description = "Listen to Sharah Kitab al-Tawheed — 50 Urdu audio lectures by Shaikh Abdullah Nasir Rahmani. Free online and on Android.",
+  description = "Complete Urdu audio explanation of Kitab At-Tawheed by Shaikh Abdullah Nasir Rahmani. 50 lectures, 27+ hours — free to stream online or download for Android.",
   appConfig,
-  ogImage = bookCoverOgUrl(),
+  ogImageAlt = "Sharh Kitab At-Tawheed — 50 Free Urdu Audio Lessons, 27+ Hours, Free Android App",
+  ogSiteName = "Kitab At-Tawheed — Free Islamic Audio",
+  ogType = "website",
+  articleTags = [],
+  ogImageWidth,
+  ogImageHeight,
 } = Astro.props;
+
+// Resolve OG image: default to the dedicated social card (known 1200x630).
+// When a caller passes a custom ogImage (e.g. the CDN book cover), we don't
+// know its dimensions, so we suppress the width/height tags unless explicitly provided.
+const resolvedOgImage = Astro.props.ogImage ?? `${SITE_URL}/og-image.png`;
+const resolvedOgImageWidth  = ogImageWidth  ?? (Astro.props.ogImage ? undefined : 1200);
+const resolvedOgImageHeight = ogImageHeight ?? (Astro.props.ogImage ? undefined : 630);
 
 const storeUrl = appConfig
   ? playStoreUrl(appConfig)
@@ -27,11 +50,12 @@ const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).toString();
 const cfAnalyticsToken =
   import.meta.env.PUBLIC_CF_WEB_ANALYTICS_TOKEN?.trim() ?? "";
 const fbAppId = import.meta.env.PUBLIC_FB_APP_ID?.trim() ?? "";
+const twitterCreator = import.meta.env.PUBLIC_TWITTER_CREATOR?.trim() ?? "";
 
 // Ensure OG image is always absolute for social media crawlers
-const absoluteOgImage = ogImage.startsWith("http")
-  ? ogImage
-  : new URL(ogImage, SITE_URL).toString();
+const absoluteOgImage = resolvedOgImage.startsWith("http")
+  ? resolvedOgImage
+  : new URL(resolvedOgImage, SITE_URL).toString();
 ---
 
 <!doctype html>
@@ -51,27 +75,33 @@ const absoluteOgImage = ogImage.startsWith("http")
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={ogSiteName} />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ur_PK" />
     <meta property="og:image" content={absoluteOgImage} />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta
-      property="og:image:alt"
-      content="Sharah Kitab al-Tawheed — book cover"
-    />
+    {resolvedOgImageWidth  && <meta property="og:image:width"  content={String(resolvedOgImageWidth)} />}
+    {resolvedOgImageHeight && <meta property="og:image:height" content={String(resolvedOgImageHeight)} />}
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:image:secure_url" content={absoluteOgImage} />
     {fbAppId && <meta property="fb:app_id" content={fbAppId} />}
+    {ogType === "article" && (
+      <>
+        <meta property="article:section" content="Islamic Education" />
+        {articleTags.map((tag) => (
+          <meta property="article:tag" content={tag} />
+        ))}
+      </>
+    )}
 
-    <!-- Twitter -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={absoluteOgImage} />
-    <meta
-      name="twitter:image:alt"
-      content="Sharah Kitab al-Tawheed — book cover"
-    />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    {twitterCreator && <meta name="twitter:creator" content={twitterCreator} />}
 
     <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -83,6 +113,27 @@ const absoluteOgImage = ogImage.startsWith("http")
       title="Sharah Kitab al-Tawheed"
       href="/feed.xml"
     />
+
+    <!-- JSON-LD Structured Data -->
+    {
+      ogType === "website" && (
+        <script type="application/ld+json" set:html={JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "AudioSeries",
+          "name": "Sharah Kitab At-Tawheed",
+          "description": "Complete Urdu audio explanation of Kitab Al-Tawheed by Shaikh Abdullah Nasir Rahmani Hafizaullah",
+          "url": "https://kitabattawheed.com",
+          "image": `${SITE_URL}/og-image.png`,
+          "creator": {
+            "@type": "Person",
+            "name": "Shaikh Abdullah Nasir Rahmani"
+          },
+          "numberOfEpisodes": 50,
+          "inLanguage": "ur"
+        })}/>
+      )
+    }
+
     <slot name="head" />
   </head>
   <body
