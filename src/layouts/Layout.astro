@@ -1,9 +1,9 @@
 ---
-import '../styles/global.css';
-import SiteHeader from '../components/SiteHeader.astro';
-import SiteFooter from '../components/SiteFooter.astro';
-import type { AppConfig } from '../lib/catalog';
-import { SITE_URL, playStoreUrl, bookCoverOgUrl } from '../lib/catalog';
+import "../styles/global.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import type { AppConfig } from "../lib/catalog";
+import { SITE_URL, playStoreUrl, bookCoverOgUrl } from "../lib/catalog";
 
 interface Props {
   title: string;
@@ -15,66 +15,99 @@ interface Props {
 
 const {
   title,
-  description = 'Listen to Sharah Kitab al-Tawheed — 50 Urdu audio lectures by Shaikh Abdullah Nasir Rahmani. Free online and on Android.',
+  description = "Listen to Sharah Kitab al-Tawheed — 50 Urdu audio lectures by Shaikh Abdullah Nasir Rahmani. Free online and on Android.",
   appConfig,
   ogImage = bookCoverOgUrl(),
 } = Astro.props;
 
-const storeUrl = appConfig ? playStoreUrl(appConfig) : 'https://play.google.com/store/apps/details?id=com.almarfa.tawheed';
+const storeUrl = appConfig
+  ? playStoreUrl(appConfig)
+  : "https://play.google.com/store/apps/details?id=com.almarfa.tawheed";
 const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).toString();
+const cfAnalyticsToken =
+  import.meta.env.PUBLIC_CF_WEB_ANALYTICS_TOKEN?.trim() ?? "";
 ---
+
 <!doctype html>
 <html lang="en" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="generator" content={Astro.generator} />
-  <title>{title}</title>
-  <meta name="description" content={description} />
-  <link rel="canonical" href={canonicalUrl} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content={ogImage} />
-  <meta property="og:image:alt" content="Sharah Kitab al-Tawheed — book cover" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={ogImage} />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="alternate" type="application/rss+xml" title="Sharah Kitab al-Tawheed" href="/feed.xml" />
-  <slot name="head" />
-</head>
-<body class="site-body bg-[#0F0F10] text-[#F0EDE4] font-sans antialiased min-h-dvh flex flex-col">
-
-  <SiteHeader storeUrl={storeUrl} />
-
-  <main class="flex-1 w-full min-w-0 main-with-mobile-cta">
-    <slot />
-  </main>
-
-  <div
-    class="mobile-cta-bar fixed bottom-0 inset-x-0 z-40 md:hidden bg-[#1A1A1C]/95 border-t border-white/10 backdrop-blur-sm"
-    aria-hidden="false"
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta
+      property="og:image:alt"
+      content="Sharah Kitab al-Tawheed — book cover"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Sharah Kitab al-Tawheed"
+      href="/feed.xml"
+    />
+    <slot name="head" />
+  </head>
+  <body
+    class="site-body bg-[#0F0F10] text-[#F0EDE4] font-sans antialiased min-h-dvh flex flex-col"
   >
-    <div class="flex items-center justify-between gap-3 px-4 py-3 max-w-5xl mx-auto min-w-0">
-      <div class="min-w-0 flex-1">
-        <p class="text-xs font-semibold truncate">Listen offline — Free app</p>
-        <p class="text-[10px] text-[#A09880] truncate">Progress · Background play</p>
-      </div>
-      <a
-        href={storeUrl}
-        target="_blank"
-        rel="noopener"
-        class="shrink-0 bg-[#C9A84C] text-black font-bold px-4 py-2.5 rounded-lg text-xs hover:bg-[#D4B55C] transition-colors"
+    <SiteHeader storeUrl={storeUrl} />
+
+    <main class="flex-1 w-full min-w-0 main-with-mobile-cta">
+      <slot />
+    </main>
+
+    <div
+      class="mobile-cta-bar fixed bottom-0 inset-x-0 z-40 md:hidden bg-[#1A1A1C]/95 border-t border-white/10 backdrop-blur-sm"
+      aria-hidden="false"
+    >
+      <div
+        class="flex items-center justify-between gap-3 px-4 py-3 max-w-5xl mx-auto min-w-0"
       >
-        Google Play
-      </a>
+        <div class="min-w-0 flex-1">
+          <p class="text-xs font-semibold truncate">
+            Listen offline — Free app
+          </p>
+          <p class="text-[10px] text-[#A09880] truncate">
+            Progress · Background play
+          </p>
+        </div>
+        <a
+          href={storeUrl}
+          target="_blank"
+          rel="noopener"
+          class="shrink-0 bg-[#C9A84C] text-black font-bold px-4 py-2.5 rounded-lg text-xs hover:bg-[#D4B55C] transition-colors"
+        >
+          Google Play
+        </a>
+      </div>
     </div>
-  </div>
 
-  <SiteFooter storeUrl={storeUrl} />
+    <SiteFooter storeUrl={storeUrl} />
 
-</body>
+    {
+      cfAnalyticsToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: cfAnalyticsToken })}
+        />
+      )
+    }
+  </body>
 </html>

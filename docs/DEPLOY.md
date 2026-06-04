@@ -62,6 +62,39 @@ npm run deploy
 
 ---
 
+## Cloudflare Web Analytics
+
+Privacy-friendly pageview stats (no Google Analytics, no cookies). Matches [ADR-004](https://github.com/mdarif/Al-Tawheed/blob/main/docs/website-architecture.md).
+
+### 1. Get the beacon token
+
+1. [Cloudflare Dashboard](https://dash.cloudflare.com) → **Analytics & Logs** → **Web Analytics**.
+2. Add **kitabattawheed.com** (or select the site if already listed).
+3. Copy the **token** from the install snippet (`data-cf-beacon` → `"token": "…"`).
+
+### 2. Set on Cloudflare Pages (production build)
+
+**Workers & Pages** → **kitabattawheed** (web project) → **Settings** → **Environment variables**:
+
+| Name | Value | Environment |
+|------|--------|-------------|
+| `PUBLIC_CF_WEB_ANALYTICS_TOKEN` | Token from step 1 | Production |
+
+Redeploy after saving (or push a commit). Astro inlines `PUBLIC_*` vars at **build** time.
+
+### 3. Local dev (optional)
+
+```bash
+cp .env.example .env
+# paste token into PUBLIC_CF_WEB_ANALYTICS_TOKEN=
+```
+
+Without the variable, the beacon is omitted in dev and preview builds.
+
+View reports: **Web Analytics** in the Cloudflare dashboard (visits, pages, referrers, countries).
+
+---
+
 ## Custom domain checklist
 
 - [ ] `kitabattawheed.com` attached to Pages project (SSL active)

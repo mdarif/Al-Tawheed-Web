@@ -30,7 +30,7 @@ Output: `dist/` (deployed to Cloudflare Pages). Search index (`pagefind/`) is ge
 
 **Production:** push to `main` → GitHub Actions builds and deploys to Cloudflare Pages.
 
-One-time setup: add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as GitHub secrets. Full steps, custom domain, and Search Console sitemap: **[docs/DEPLOY.md](docs/DEPLOY.md)**.
+One-time setup: custom domain, **Cloudflare Web Analytics** token (`PUBLIC_CF_WEB_ANALYTICS_TOKEN`), and Search Console sitemap: **[docs/DEPLOY.md](docs/DEPLOY.md)**.
 
 ```bash
 npm run deploy   # local build + wrangler deploy (after wrangler login)
