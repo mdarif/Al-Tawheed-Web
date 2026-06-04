@@ -29,8 +29,8 @@ const cfAnalyticsToken =
 const fbAppId = import.meta.env.PUBLIC_FB_APP_ID?.trim() ?? "";
 
 // Ensure OG image is always absolute for social media crawlers
-const absoluteOgImage = ogImage.startsWith('http') 
-  ? ogImage 
+const absoluteOgImage = ogImage.startsWith("http")
+  ? ogImage
   : new URL(ogImage, SITE_URL).toString();
 ---
 
@@ -46,7 +46,7 @@ const absoluteOgImage = ogImage.startsWith('http')
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
-    
+
     <!-- Facebook / Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -57,16 +57,22 @@ const absoluteOgImage = ogImage.startsWith('http')
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Sharah Kitab al-Tawheed — book cover" />
+    <meta
+      property="og:image:alt"
+      content="Sharah Kitab al-Tawheed — book cover"
+    />
     {fbAppId && <meta property="fb:app_id" content={fbAppId} />}
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={absoluteOgImage} />
-    <meta name="twitter:image:alt" content="Sharah Kitab al-Tawheed — book cover" />
-    
+    <meta
+      name="twitter:image:alt"
+      content="Sharah Kitab al-Tawheed — book cover"
+    />
+
     <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
