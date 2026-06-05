@@ -1,0 +1,76 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCatalog, getAppConfig } from "../../lib/catalog";
+import { t, tx, getLocalePaths } from "../../lib/i18n";
+
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { locale } = Astro.params;
+const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const i18n = t(locale);
+---
+
+<Layout
+  title={locale === "ur" ? "کتاب التوحید کیا ہے؟ — خلاصہ اور مفت اردو شرح" : "What is Kitab al-Tawheed? — Summary & Free Urdu Sharah"}
+  description={locale === "ur" ? "کتاب التوحید کیا ہے، کس نے لکھی، اور شیخ عبداللہ ناصر رحمانی کی مکمل اردو شرح — ۵۰ دروس آن لائن مفت۔" : "Learn what Kitab al-Tawheed is and listen to the free Urdu sharah by Shaikh Abdullah Nasir Rahmani."}
+  {appConfig}
+>
+  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" dir="rtl" data-pagefind-body>
+    <nav class="text-xs text-fg-3 mb-6" dir="ltr">
+      <a href={`/${locale}/`} class="hover:text-[#C9A84C]">Home</a> → Kitab al-Tawheed
+    </nav>
+
+    <h1 class="text-3xl font-bold mb-4 font-urdu">{i18n.kitab.pageTitle}</h1>
+    <p class="text-[#C9A84C] text-xl mb-6" dir="rtl" lang="ar">كتاب التوحيد</p>
+
+    <p class="text-fg-2 leading-relaxed mb-4 font-urdu">{i18n.kitab.p1}</p>
+    <p class="text-fg-2 leading-relaxed mb-4 font-urdu">
+      <strong class="text-fg">{locale === "ur" ? "امام محمد بن عبدالوہاب رحمہ اللہ" : "Imam Muhammad ibn Abd al-Wahhab Rahimahullah"}</strong>{" "}
+      {i18n.kitab.p2}
+    </p>
+
+    <section class="bg-surface border border-[var(--divider)] rounded-xl p-5 mb-8">
+      <h2 class="text-lg font-bold text-[#C9A84C] mb-2 font-urdu">{i18n.kitab.freeSection.title}</h2>
+      <p class="text-sm text-fg-2 mb-4 font-urdu">
+        <strong class="text-fg">{locale === "ur" ? "شیخ عبداللہ ناصر رحمانی" : "Shaikh Abdullah Nasir Rahmani"}</strong>{" "}
+        {tx(i18n.kitab.freeSection.description, { count: catalog.book.lectureCount })}
+      </p>
+      <div dir="ltr" class="flex flex-wrap gap-3">
+        <a href="/lectures/" class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">
+          Browse lectures
+        </a>
+        <a href="/search/" class="border border-[var(--divider-lg)] px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover">
+          Search
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-bold mb-4 font-urdu">
+        {locale === "ur" ? "اکثر پوچھے گئے سوالات" : "Frequently Asked Questions"}
+      </h2>
+      <div class="space-y-4">
+        {i18n.kitab.faq.map(({ question, answer }) => (
+          <details class="bg-surface border border-[var(--divider)] rounded-xl overflow-hidden group">
+            <summary class="px-5 py-4 cursor-pointer font-semibold list-none flex items-center justify-between gap-3 hover:bg-surface-hover transition-colors font-urdu">
+              <span>{question}</span>
+              <span class="text-fg-3 text-lg shrink-0 group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-fg-2 text-sm leading-relaxed font-urdu">
+              {answer.includes("{count}") ? tx(answer, { count: catalog.book.lectureCount }) : answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .font-urdu {
+    font-family: "Noto Naskh Arabic", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.9;
+  }
+</style>

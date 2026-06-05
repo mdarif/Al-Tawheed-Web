@@ -1,24 +1,35 @@
 ---
+import LangSelector from "./LangSelector.astro";
+
 interface Props {
   storeUrl: string;
 }
 
 const { storeUrl } = Astro.props;
 
+const locale = Astro.currentLocale ?? "en";
+
+// Only pages that have actual translated versions get the locale prefix
+const urduVersions = new Set(["/about/", "/kitab-al-tawheed/", "/tawheed/", "/download/"]);
+function localize(path: string): string {
+  if (locale !== "ur") return path;
+  return urduVersions.has(path) ? `/ur${path}` : path;
+}
+
 const links = [
-  { href: '/lectures/', label: 'Lectures' },
-  { href: '/search/', label: 'Search' },
-  { href: '/download/', label: 'Download App' },
-  { href: '/about/', label: 'About' },
-  { href: '/kitab-al-tawheed/', label: 'Kitab al-Tawheed' },
-  { href: '/tawheed/', label: 'Tawheed' },
+  { href: localize("/lectures/"), label: 'Lectures' },
+  { href: localize("/search/"), label: 'Search' },
+  { href: localize("/download/"), label: 'Download App' },
+  { href: localize("/about/"), label: 'About' },
+  { href: localize("/kitab-al-tawheed/"), label: 'Kitab al-Tawheed' },
+  { href: localize("/tawheed/"), label: 'Tawheed' },
 ];
 ---
 
 <header class="sticky top-0 z-50 border-b border-[var(--divider)] bg-bg/95 backdrop-blur-sm">
   <div class="mx-auto max-w-5xl flex items-center justify-between gap-2 px-4 py-3 min-w-0">
     <a
-      href="/"
+      href={locale === "ur" ? "/ur/" : "/"}
       class="text-[#C9A84C] font-semibold text-sm tracking-wide hover:opacity-80 transition-opacity min-w-0 shrink"
     >
       <span class="md:hidden">Kitab al-Tawheed</span>
@@ -29,6 +40,7 @@ const links = [
       {links.slice(0, 4).map(({ href, label }) => (
         <a href={href} class="hover:text-fg transition-colors whitespace-nowrap">{label}</a>
       ))}
+      <LangSelector />
       <!-- Theme toggle — desktop -->
       <button
         type="button"
@@ -54,6 +66,7 @@ const links = [
     </nav>
 
     <div class="flex md:hidden items-center gap-2 shrink-0">
+      <LangSelector />
       <!-- Theme toggle — mobile -->
       <button
         type="button"

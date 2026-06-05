@@ -1,49 +1,60 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import ContinueListening from "../components/ContinueListening.astro";
-import DailyBenefitCard from "../components/DailyBenefitCard.astro";
-import { getCatalog, getAppConfig, en, playStoreUrl } from "../lib/catalog";
+import Layout from "../../layouts/Layout.astro";
+import ContinueListening from "../../components/ContinueListening.astro";
+import DailyBenefitCard from "../../components/DailyBenefitCard.astro";
+import { getCatalog, getAppConfig, en, playStoreUrl } from "../../lib/catalog";
+import { t, tx, getLocalePaths } from "../../lib/i18n";
 
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { locale } = Astro.params;
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
 const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
+const i18n = t(locale);
 ---
 
 <Layout
-  title="Sharah Kitab al-Tawheed | Urdu Audio Series"
-  description={`50 Urdu Audio Lessons • ${totalHours}+ Hours • Online & Offline`}
+  title={locale === "ur"
+    ? "شرح کتاب التوحید | اردو آڈیو سلسلہ"
+    : "Sharah Kitab al-Tawheed | Audio Series"}
+  description={tx(i18n.hero.description, {
+    count: catalog.book.lectureCount,
+    hours: totalHours,
+    speaker: en(catalog.book.speaker),
+  })}
   {appConfig}
 >
   <!-- Hero -->
   <section
     class="mx-auto max-w-5xl px-4 sm:px-6 pt-10 sm:pt-14 pb-10 text-center"
+    dir="rtl"
   >
     <p
-      class="text-[#C9A84C] text-sm font-semibold tracking-widest uppercase mb-4"
+      class="text-[#C9A84C] text-sm font-semibold tracking-widest uppercase mb-4 font-urdu"
     >
-      THE FOUNDATION OF TAWHEED
+      {i18n.hero.eyebrow}
     </p>
     <h1
-      class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-3 text-balance"
-    >
-      {en(catalog.book.title)}
-    </h1>
-    <p
-      class="text-xl sm:text-2xl text-[#C9A84C] font-medium mb-2"
-      dir="rtl"
-      lang="ur"
+      class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-3 text-balance font-urdu"
     >
       {catalog.book.title.ur ?? "شرح کتاب التوحید"}
-    </p>
-    <p class="text-fg-2 text-base sm:text-lg mb-4 px-1">
-      {catalog.book.lectureCount} Lectures · {totalHours} Hours Audio · By {
-        en(catalog.book.speaker)
+    </h1>
+    <p class="text-fg-2 text-base sm:text-lg mb-4 px-1 font-urdu">
+      {
+        tx(i18n.hero.description, {
+          count: catalog.book.lectureCount,
+          hours: totalHours,
+          speaker: en(catalog.book.speaker),
+        })
       }
     </p>
 
     <div class="flex justify-center mb-6">
       <div
-        class="inline-flex items-center gap-2 bg-surface border border-[var(--divider)] rounded-full px-4 py-1.5 text-xs text-fg-2"
+        class="inline-flex items-center gap-2 bg-surface border border-[var(--divider)] rounded-full px-4 py-1.5 text-xs text-fg-2 font-urdu"
       >
         <span class="flex -space-x-1.5">
           <span
@@ -56,11 +67,13 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
             class="w-5 h-5 rounded-full bg-[#C9A84C]/15 border border-[var(--bg)]"
           ></span>
         </span>
-        <span>Trusted by students of knowledge worldwide</span>
+        <span>{i18n.hero.trustBadge}</span>
       </div>
     </div>
 
+    <!-- CTAs stay English -->
     <div
+      dir="ltr"
       class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8"
     >
       <a
@@ -83,13 +96,17 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
       </a>
     </div>
 
-    <p class="text-xs text-fg-3 mb-4 max-w-md mx-auto">
+    <!-- App feature chips stay English -->
+    <p class="text-xs text-fg-3 mb-4 max-w-md mx-auto" dir="ltr">
       Features below are available in the <a
         href="/download/"
         class="text-[#C9A84C] hover:underline">Android app</a
       >.
     </p>
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-xl mx-auto mt-2">
+    <div
+      dir="ltr"
+      class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-xl mx-auto mt-2"
+    >
       {
         [
           { icon: "⬇️", label: "Offline Downloads" },
@@ -110,7 +127,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 
   <ContinueListening />
 
-  <!-- Experience the App -->
+  <!-- Experience the App — stays English -->
   <section class="mx-auto max-w-5xl px-4 sm:px-6 py-12 sm:py-16">
     <div class="text-center mb-10">
       <p
@@ -124,8 +141,6 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         ad-free, and free forever.
       </p>
     </div>
-
-    <!-- Screenshot carousel: scrollable on mobile, row on desktop -->
     <div
       class="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 sm:pb-0 sm:overflow-x-visible sm:justify-center -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide"
     >
@@ -167,7 +182,6 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         ))
       }
     </div>
-
     <div class="text-center mt-10">
       <a
         href={storeUrl}
@@ -184,7 +198,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     </div>
   </section>
 
-  <!-- Testimonials -->
+  <!-- Testimonials — real reviews stay in original language -->
   <section
     class="mx-auto max-w-3xl px-4 sm:px-6 py-10 border-t border-[var(--divider)]"
   >
@@ -197,7 +211,6 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         <span>5.0 · Google Play</span>
       </div>
     </div>
-
     <div class="grid sm:grid-cols-2 gap-4">
       {
         [
@@ -248,7 +261,6 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         ))
       }
     </div>
-
     <p class="text-center mt-6 text-xs text-fg-3">
       Reviews from Google Play Store
     </p>
@@ -256,7 +268,6 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 
   <DailyBenefitCard {catalog} />
 
-  <!-- Browse link -->
   <div class="text-center py-6">
     <a
       href="/lectures/"
@@ -266,7 +277,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     </a>
   </div>
 
-  <!-- Web vs App comparison -->
+  <!-- Web vs App — stays English -->
   <section class="mx-auto max-w-3xl px-4 py-12">
     <h2 class="text-xl font-bold text-center mb-8">Web vs Android App</h2>
     <div class="grid sm:grid-cols-2 gap-4">
@@ -290,7 +301,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         >
         <h3 class="font-semibold mb-3 text-[#C9A84C]">📱 Android App</h3>
         <ul class="text-sm space-y-2">
-          <li>✓ All 50 Lectures</li>
+          <li>✓ All 50 lectures</li>
           <li>✓ <strong>Offline Downloads</strong></li>
           <li>✓ <strong>Progress Tracking</strong></li>
           <li>✓ <strong>Study Mode</strong></li>
@@ -311,7 +322,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         Download Free — Google Play
       </a>
       <a
-        href="/download/"
+        href={`/${locale}/download/`}
         class="inline-block border border-[#C9A84C]/40 text-[#C9A84C] font-semibold px-8 py-3 rounded-xl text-sm hover:bg-[#C9A84C]/10 transition-colors"
       >
         See app features →
@@ -319,21 +330,33 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     </div>
   </section>
 
-  <!-- About snippet -->
-  <section class="mx-auto max-w-3xl px-4 py-8 border-t border-[var(--divider)]">
-    <h2 class="text-xl font-bold mb-4">About This Series</h2>
-    <p class="text-fg-2 leading-relaxed mb-3">
-      <strong class="text-fg">Kitab al-Tawheed</strong> is a foundational text on
-      Islamic monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn
-      Sulayman al-Tamimi Al Najdi Rahimahullah. This complete Urdu explanation by
-      <strong class="text-fg"
-        >Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah</strong
-      > covers all {catalog.book.lectureCount} lectures across 15 classes — over {
-        totalHours
-      } hours of benefit.
+  <!-- About snippet — translated -->
+  <section
+    class="mx-auto max-w-3xl px-4 py-8 border-t border-[var(--divider)]"
+    dir="rtl"
+  >
+    <h2 class="text-xl font-bold mb-4 font-urdu">{i18n.index.aboutTitle}</h2>
+    <p class="text-fg-2 leading-relaxed mb-3 font-urdu">
+      <strong class="text-fg">کتاب التوحید</strong>{" "}
+      {
+        tx(i18n.index.aboutBody, {
+          count: catalog.book.lectureCount,
+          hours: totalHours,
+        }).replace("کتاب التوحید ", "")
+      }
     </p>
-    <a href="/about/" class="text-[#C9A84C] text-sm hover:underline"
-      >Read more →</a
+    <a
+      href={`/${locale}/about/`}
+      class="text-[#C9A84C] text-sm hover:underline font-urdu"
     >
+      {i18n.index.readMore}
+    </a>
   </section>
 </Layout>
+
+<style>
+  .font-urdu {
+    font-family: "Noto Naskh Arabic", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.9;
+  }
+</style>
