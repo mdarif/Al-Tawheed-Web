@@ -15,7 +15,7 @@ const links = [
 ];
 ---
 
-<header class="sticky top-0 z-50 border-b border-white/10 bg-[#0F0F10]/95 backdrop-blur-sm">
+<header class="sticky top-0 z-50 border-b border-[var(--divider)] bg-bg/95 backdrop-blur-sm">
   <div class="mx-auto max-w-5xl flex items-center justify-between gap-2 px-4 py-3 min-w-0">
     <a
       href="/"
@@ -25,10 +25,24 @@ const links = [
       <span class="hidden md:inline">Sharah Kitab al-Tawheed</span>
     </a>
 
-    <nav class="hidden md:flex items-center gap-4 lg:gap-5 text-sm text-[#A09880] shrink-0" aria-label="Main">
+    <nav class="hidden md:flex items-center gap-4 lg:gap-5 text-sm text-fg-2 shrink-0" aria-label="Main">
       {links.slice(0, 4).map(({ href, label }) => (
-        <a href={href} class="hover:text-[#F0EDE4] transition-colors whitespace-nowrap">{label}</a>
+        <a href={href} class="hover:text-fg transition-colors whitespace-nowrap">{label}</a>
       ))}
+      <!-- Theme toggle — desktop -->
+      <button
+        type="button"
+        id="theme-toggle"
+        aria-label="Toggle theme"
+        class="p-1.5 rounded-lg border border-[var(--divider)] text-fg-2 hover:text-fg hover:border-[var(--divider-md)] transition-colors"
+      >
+        <svg id="icon-sun" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg id="icon-moon" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
       <a
         href={storeUrl}
         target="_blank"
@@ -40,6 +54,20 @@ const links = [
     </nav>
 
     <div class="flex md:hidden items-center gap-2 shrink-0">
+      <!-- Theme toggle — mobile -->
+      <button
+        type="button"
+        id="theme-toggle-mobile"
+        aria-label="Toggle theme"
+        class="p-2 rounded-lg border border-[var(--divider)] text-fg-2 hover:text-fg hover:bg-surface-hover transition-colors"
+      >
+        <svg id="icon-sun-m" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg id="icon-moon-m" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
       <a
         href={storeUrl}
         target="_blank"
@@ -51,7 +79,7 @@ const links = [
       <button
         type="button"
         id="site-nav-toggle"
-        class="p-2 -mr-1 rounded-lg border border-white/15 text-[#F0EDE4] hover:bg-white/5"
+        class="p-2 -mr-1 rounded-lg border border-[var(--divider)] text-fg hover:bg-surface-hover"
         aria-expanded="false"
         aria-controls="site-nav-panel"
         aria-label="Open menu"
@@ -63,10 +91,10 @@ const links = [
     </div>
   </div>
 
-  <div id="site-nav-panel" class="hidden md:hidden border-t border-white/10 bg-[#0F0F10]" aria-label="Mobile menu">
+  <div id="site-nav-panel" class="hidden md:hidden border-t border-[var(--divider)] bg-bg" aria-label="Mobile menu">
     <nav class="mx-auto max-w-5xl px-4 py-3 flex flex-col gap-1 text-sm">
       {links.map(({ href, label }) => (
-        <a href={href} class="py-2.5 text-[#A09880] hover:text-[#C9A84C] border-b border-white/5 last:border-0">
+        <a href={href} class="py-2.5 text-fg-2 hover:text-[#C9A84C] border-b border-[var(--divider-sm)] last:border-0">
           {label}
         </a>
       ))}
@@ -83,6 +111,7 @@ const links = [
 </header>
 
 <script>
+  // ── Mobile nav toggle ────────────────────────────────────────────────────
   const toggle = document.getElementById('site-nav-toggle');
   const panel = document.getElementById('site-nav-panel');
   if (toggle && panel) {
@@ -100,4 +129,41 @@ const links = [
       });
     });
   }
+
+  // ── Theme toggle ─────────────────────────────────────────────────────────
+  function applyTheme(theme: string) {
+    const html = document.documentElement;
+    if (theme === 'light') {
+      html.dataset.theme = 'light';
+    } else {
+      delete html.dataset.theme;
+    }
+    // Update sun/moon icons on both buttons
+    ['', '-m'].forEach(suffix => {
+      const sun  = document.getElementById(`icon-sun${suffix}`);
+      const moon = document.getElementById(`icon-moon${suffix}`);
+      if (!sun || !moon) return;
+      if (theme === 'light') {
+        sun.classList.add('hidden');
+        moon.classList.remove('hidden');
+      } else {
+        sun.classList.remove('hidden');
+        moon.classList.add('hidden');
+      }
+    });
+  }
+
+  function handleToggle() {
+    const current = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem('tawheed:theme', next);
+  }
+
+  // Sync icons with current theme on page load
+  const saved = localStorage.getItem('tawheed:theme') ?? 'dark';
+  applyTheme(saved);
+
+  document.getElementById('theme-toggle')?.addEventListener('click', handleToggle);
+  document.getElementById('theme-toggle-mobile')?.addEventListener('click', handleToggle);
 </script>

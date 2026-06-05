@@ -17,14 +17,14 @@ const links = [
 ];
 ---
 
-<footer class="mt-12 border-t border-white/10 pt-8 pb-[calc(2rem+env(safe-area-inset-bottom,0px))] md:pb-8 px-4 text-center text-xs text-[#6B6458]">
+<footer class="mt-12 border-t border-[var(--divider)] pt-8 pb-[calc(2rem+env(safe-area-inset-bottom,0px))] md:pb-8 px-4 text-center text-xs text-fg-3">
   <nav class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 max-w-lg mx-auto mb-3" aria-label="Footer">
     {links.map(({ href, label, external }) => (
       <a
         href={href}
         target={external ? '_blank' : undefined}
         rel={external ? 'noopener' : undefined}
-        class={label === 'Home' ? 'text-[#C9A84C] hover:underline' : 'hover:text-[#A09880]'}
+        class={label === 'Home' ? 'text-[#C9A84C] hover:underline' : 'hover:text-fg-2'}
       >
         {label}
       </a>

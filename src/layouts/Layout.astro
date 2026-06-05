@@ -63,6 +63,10 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
 <!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
+    <!-- Prevent flash of wrong theme: set data-theme before first paint -->
+    <script is:inline>
+      (function(){var t=localStorage.getItem('tawheed:theme');if(t==='light')document.documentElement.dataset.theme='light';})();
+    </script>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -141,8 +145,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
             "@context": "https://schema.org",
             "@type": "AudioSeries",
             name: "Sharah Kitab At-Tawheed",
-            description:
-              "Complete Urdu audio explanation of Kitab Al-Tawheed by Shaikh Abdullah Nasir Rahmani Hafizaullah",
+            description: "50 Urdu Audio Lessons • 27+ Hours • Online & Offline",
             url: "https://kitabattawheed.com",
             image: `${SITE_URL}/og-image.png`,
             creator: {
@@ -159,7 +162,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <slot name="head" />
   </head>
   <body
-    class="site-body bg-[#0F0F10] text-[#F0EDE4] font-sans antialiased min-h-dvh flex flex-col"
+    class="site-body bg-bg text-fg font-sans antialiased min-h-dvh flex flex-col"
   >
     <SiteHeader {storeUrl} />
 
@@ -168,7 +171,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     </main>
 
     <div
-      class="mobile-cta-bar fixed bottom-0 inset-x-0 z-40 md:hidden bg-[#1A1A1C]/95 border-t border-white/10 backdrop-blur-sm"
+      class="mobile-cta-bar fixed bottom-0 inset-x-0 z-40 md:hidden bg-surface/95 border-t border-[var(--divider)] backdrop-blur-sm"
       aria-hidden="false"
     >
       <div
@@ -178,7 +181,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
           <p class="text-xs font-semibold truncate">
             Listen offline — Free app
           </p>
-          <p class="text-[10px] text-[#A09880] truncate">
+          <p class="text-[10px] text-fg-2 truncate">
             Progress · Background play
           </p>
         </div>

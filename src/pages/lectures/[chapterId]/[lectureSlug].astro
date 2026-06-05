@@ -137,7 +137,7 @@ const articleTags = [
     data-pagefind-body
   >
     <nav
-      class="text-xs text-[#6B6458] mb-6 break-words leading-relaxed"
+      class="text-xs text-fg-3 mb-6 break-words leading-relaxed"
       aria-label="Breadcrumb"
     >
       <a href="/" class="hover:text-[#C9A84C]">Home</a>
@@ -149,7 +149,7 @@ const articleTags = [
         class="hover:text-[#C9A84C]">{en(chapter.title)}</a
       >
       <span class="mx-1">→</span>
-      <span class="text-[#A09880]">{en(lecture.title)}</span>
+      <span class="text-fg-2">{en(lecture.title)}</span>
     </nav>
 
     <div class="mb-6">
@@ -165,7 +165,7 @@ const articleTags = [
         class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-balance"
         urduClass="text-[#C9A84C] text-base sm:text-lg mb-1"
       />
-      <p class="text-[#A09880] text-sm line-clamp-3">
+      <p class="text-fg-2 text-sm line-clamp-3">
         {formatDuration(lecture.durationSeconds)} · By {
           en(catalog.book.speaker)
         }
@@ -184,11 +184,11 @@ const articleTags = [
     />
 
     <div
-      class="bg-[#1E1A0F] border border-[#C9A84C]/30 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+      class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
     >
       <div class="min-w-0">
         <p class="text-sm font-semibold text-[#C9A84C]">Continue on the app</p>
-        <p class="text-xs text-[#A09880]">
+        <p class="text-xs text-fg-2">
           Offline · Study Mode · Background play
         </p>
       </div>
@@ -207,9 +207,9 @@ const articleTags = [
         prev && (
           <a
             href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(prev)}/`}
-            class="flex-1 bg-[#1A1A1C] border border-white/10 rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all text-left min-w-0"
+            class="flex-1 bg-surface border border-[var(--divider)] rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all text-left min-w-0"
           >
-            <p class="text-xs text-[#6B6458] mb-1">← Previous</p>
+            <p class="text-xs text-fg-3 mb-1">← Previous</p>
             <p class="text-sm font-semibold truncate">{en(prev.title)}</p>
           </a>
         )
@@ -218,9 +218,9 @@ const articleTags = [
         next && (
           <a
             href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(next)}/`}
-            class="flex-1 bg-[#1A1A1C] border border-white/10 rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all sm:text-right min-w-0"
+            class="flex-1 bg-surface border border-[var(--divider)] rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all sm:text-right min-w-0"
           >
-            <p class="text-xs text-[#6B6458] mb-1">Next →</p>
+            <p class="text-xs text-fg-3 mb-1">Next →</p>
             <p class="text-sm font-semibold truncate">{en(next.title)}</p>
           </a>
         )
@@ -240,7 +240,7 @@ const articleTags = [
 
     <div class="mt-8">
       <h2
-        class="text-sm font-bold text-[#A09880] uppercase tracking-widest mb-3"
+        class="text-sm font-bold text-fg-2 uppercase tracking-widest mb-3"
       >
         All parts in {en(chapter.title)}
       </h2>
@@ -249,7 +249,7 @@ const articleTags = [
           allChapterLectures.map((l) => (
             <a
               href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(l)}/`}
-              class={`flex items-center justify-between px-4 py-2.5 rounded-lg text-sm transition-all gap-3 ${l.id === lecture.id ? "bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C]" : "hover:bg-white/5 text-[#A09880]"}`}
+              class={`flex items-center justify-between px-4 py-2.5 rounded-lg text-sm transition-all gap-3 ${l.id === lecture.id ? "bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C]" : "hover:bg-surface-hover text-fg-2"}`}
             >
               <span class="min-w-0">
                 <span class="block truncate">{en(l.title)}</span>

@@ -11,18 +11,18 @@ const { items, heading = 'Frequently asked questions' } = Astro.props;
 const jsonLd = faqPageJsonLd(items);
 ---
 
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
 
-<section class="mt-12 border-t border-white/10 pt-10">
+<section class="mt-12 border-t border-[var(--divider)] pt-10">
   <h2 class="text-xl font-bold text-[#C9A84C] mb-6">{heading}</h2>
   <div class="space-y-4">
     {items.map((item) => (
-      <details class="group bg-[#1A1A1C] border border-white/10 rounded-xl px-5 py-4 open:border-[#C9A84C]/30">
+      <details class="group bg-surface border border-[var(--divider)] rounded-xl px-5 py-4 open:border-[#C9A84C]/30">
         <summary class="font-semibold cursor-pointer list-none flex items-center justify-between gap-3">
           <span>{item.question}</span>
           <span class="text-[#C9A84C] text-sm shrink-0 group-open:rotate-45 transition-transform">+</span>
         </summary>
-        <p class="text-[#A09880] text-sm leading-relaxed mt-3">{item.answer}</p>
+        <p class="text-fg-2 text-sm leading-relaxed mt-3">{item.answer}</p>
       </details>
     ))}
   </div>

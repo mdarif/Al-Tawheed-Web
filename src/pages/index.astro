@@ -16,7 +16,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 
 <Layout
   title="Sharah Kitab al-Tawheed | Urdu Audio Series"
-  description={`Complete Urdu audio explanation of Kitab At-Tawheed by Shaikh Abdullah Nasir Rahmani. ${catalog.book.lectureCount} lectures, ${totalHours}+ hours — free to stream online or download for Android.`}
+  description={`50 Urdu Audio Lessons • ${totalHours}+ Hours • Online & Offline`}
   {appConfig}
 >
   <!-- Hero -->
@@ -40,7 +40,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     >
       {catalog.book.title.ur ?? "شرح کتاب التوحید"}
     </p>
-    <p class="text-[#A09880] text-base sm:text-lg mb-8 px-1">
+    <p class="text-fg-2 text-base sm:text-lg mb-8 px-1">
       {catalog.book.lectureCount} Lectures · {totalHours} Hours Audio · By {
         en(catalog.book.speaker)
       }
@@ -59,13 +59,13 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
       </a>
       <a
         href="/lectures/"
-        class="w-full sm:w-auto border border-white/20 font-semibold px-8 py-4 rounded-xl text-base hover:bg-white/5 transition-colors"
+        class="w-full sm:w-auto border border-[var(--divider-lg)] font-semibold px-8 py-4 rounded-xl text-base hover:bg-surface-hover transition-colors"
       >
         Browse All Lectures →
       </a>
     </div>
 
-    <p class="text-xs text-[#6B6458] mb-4 max-w-md mx-auto">
+    <p class="text-xs text-fg-3 mb-4 max-w-md mx-auto">
       Features below are available in the <a
         href="/download/"
         class="text-[#C9A84C] hover:underline">Android app</a
@@ -81,9 +81,9 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
           { icon: "🌐", label: "Urdu interface" },
           { icon: "🎁", label: "Free forever" },
         ].map(({ icon, label }) => (
-          <div class="flex items-center gap-2.5 bg-[#1A1A1C] border border-white/10 rounded-xl px-3 py-2.5 hover:border-[#C9A84C]/40 transition-colors">
+          <div class="flex items-center gap-2.5 bg-surface border border-[var(--divider)] rounded-xl px-3 py-2.5 hover:border-[#C9A84C]/40 transition-colors">
             <span class="text-lg leading-none">{icon}</span>
-            <span class="text-xs font-semibold text-[#D4C9A8]">{label}</span>
+            <span class="text-xs font-semibold text-fg">{label}</span>
           </div>
         ))
       }
@@ -97,7 +97,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     <div class="text-center mb-10">
       <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2">Android App</p>
       <h2 class="text-2xl sm:text-3xl font-bold mb-3">Experience the App</h2>
-      <p class="text-[#A09880] text-sm sm:text-base max-w-md mx-auto">
+      <p class="text-fg-2 text-sm sm:text-base max-w-md mx-auto">
         Everything you need for your journey through Kitab At-Tawheed — offline, ad-free, and free forever.
       </p>
     </div>
@@ -119,8 +119,8 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
             loading="lazy"
             class="w-full rounded-3xl"
           />
-          <p class="text-sm font-semibold text-[#F0EDE4] mt-3">{label}</p>
-          <p class="text-xs text-[#6B6458] mt-0.5">{detail}</p>
+          <p class="text-sm font-semibold text-fg mt-3">{label}</p>
+          <p class="text-xs text-fg-3 mt-0.5">{detail}</p>
         </div>
       ))}
     </div>
@@ -138,10 +138,10 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
   </section>
 
   <!-- Testimonials -->
-  <section class="mx-auto max-w-3xl px-4 sm:px-6 py-10 border-t border-white/10">
+  <section class="mx-auto max-w-3xl px-4 sm:px-6 py-10 border-t border-[var(--divider)]">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
       <h2 class="text-xl font-bold">What Listeners Say</h2>
-      <div class="flex items-center gap-2 text-sm text-[#A09880]">
+      <div class="flex items-center gap-2 text-sm text-fg-2">
         <span class="text-[#C9A84C] text-base tracking-tight">★★★★★</span>
         <span>5.0 · Google Play</span>
       </div>
@@ -174,7 +174,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
           helpful: 2,
         },
       ].map(({ name, date, text, helpful }) => (
-        <div class="bg-[#1A1A1C] border border-white/10 rounded-xl p-5 flex flex-col gap-4">
+        <div class="bg-surface border border-[var(--divider)] rounded-xl p-5 flex flex-col gap-4">
           <div class="flex items-center gap-3">
             <div class="w-11 h-11 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 flex items-center justify-center shrink-0">
               <span class="text-[#C9A84C] font-bold text-base">{name[0]}</span>
@@ -184,13 +184,13 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
               <p class="text-[#C9A84C] text-sm tracking-tight mt-0.5">★★★★★</p>
             </div>
           </div>
-          <p class="text-[#A09880] text-base leading-relaxed flex-1">"{text}"</p>
-          <p class="text-[#4A4440] text-xs">{helpful} people found this helpful · {date}</p>
+          <p class="text-fg-2 text-base leading-relaxed flex-1">"{text}"</p>
+          <p class="text-fg-4 text-xs">{helpful} people found this helpful · {date}</p>
         </div>
       ))}
     </div>
 
-    <p class="text-center mt-6 text-xs text-[#6B6458]">
+    <p class="text-center mt-6 text-xs text-fg-3">
       Reviews from Google Play Store
     </p>
   </section>
@@ -208,19 +208,19 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
   <section class="mx-auto max-w-3xl px-4 py-12">
     <h2 class="text-xl font-bold text-center mb-8">Web vs Android App</h2>
     <div class="grid sm:grid-cols-2 gap-4">
-      <div class="bg-[#1A1A1C] border border-white/10 rounded-xl p-5">
-        <h3 class="font-semibold mb-3 text-[#A09880]">🌐 Listen in Browser</h3>
-        <ul class="text-sm space-y-2 text-[#A09880]">
+      <div class="bg-surface border border-[var(--divider)] rounded-xl p-5">
+        <h3 class="font-semibold mb-3 text-fg-2">🌐 Listen in Browser</h3>
+        <ul class="text-sm space-y-2 text-fg-2">
           <li>✓ Stream all 50 lectures</li>
           <li>✓ No account needed</li>
           <li>✓ Resume in this browser</li>
-          <li class="text-[#4A4440]">✗ Requires internet</li>
-          <li class="text-[#4A4440]">✗ No Study Mode</li>
-          <li class="text-[#4A4440]">✗ No background play</li>
+          <li class="text-fg-4">✗ Requires internet</li>
+          <li class="text-fg-4">✗ No Study Mode</li>
+          <li class="text-fg-4">✗ No background play</li>
         </ul>
       </div>
       <div
-        class="bg-[#1E1A0F] border border-[#C9A84C]/30 rounded-xl p-5 relative"
+        class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-5 relative"
       >
         <span
           class="absolute -top-2.5 left-4 text-[10px] bg-[#C9A84C] text-black font-bold px-2 py-0.5 rounded-full"
@@ -258,13 +258,13 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
   </section>
 
   <!-- About snippet -->
-  <section class="mx-auto max-w-3xl px-4 py-8 border-t border-white/10">
+  <section class="mx-auto max-w-3xl px-4 py-8 border-t border-[var(--divider)]">
     <h2 class="text-xl font-bold mb-4">About This Series</h2>
-    <p class="text-[#A09880] leading-relaxed mb-3">
-      <strong class="text-[#F0EDE4]">Kitab al-Tawheed</strong> is a foundational text
-      on Islamic monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab
+    <p class="text-fg-2 leading-relaxed mb-3">
+      <strong class="text-fg">Kitab al-Tawheed</strong> is a foundational text
+      on Islamic monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah
       ibn Sulayman al-Tamimi Al Najdi. This complete Urdu explanation by
-      <strong class="text-[#F0EDE4]"
+      <strong class="text-fg"
         >Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah</strong
       > covers all {catalog.book.lectureCount} lectures across 15 classes — over {
         totalHours
