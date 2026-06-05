@@ -18,9 +18,6 @@ export default defineConfig({
     routing: {
       prefixDefaultLocale: false,
     },
-    fallback: {
-      ur: 'en',
-    },
   },
   integrations: [
     pagefind(),
