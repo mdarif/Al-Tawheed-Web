@@ -17,14 +17,14 @@ const source = en(benefit.source);
 
 <section class="mx-auto max-w-3xl px-4 sm:px-6 py-6 min-w-0">
   <h2 class="text-lg font-bold mb-3">Daily Benefit</h2>
-  <div class="bg-gradient-to-br from-[#1E1A0F] to-[#1A1A1C] border border-[#C9A84C]/25 rounded-2xl p-5">
+  <div class="bg-gradient-to-br from-surface-gold to-surface border border-[#C9A84C]/25 rounded-2xl p-5">
     <span class="text-[#C9A84C] text-2xl leading-none" aria-hidden="true">❝</span>
     {benefit.textArabic && (
       <p class="text-lg leading-relaxed mt-2 mb-3 text-right" dir="rtl" lang="ar">
         {benefit.textArabic}
       </p>
     )}
-    <p class="text-[#A09880] italic leading-relaxed">{text}</p>
+    <p class="text-fg-2 italic leading-relaxed">{text}</p>
     <p class="text-[#C9A84C] text-sm font-semibold mt-3">— {source}</p>
   </div>
 </section>

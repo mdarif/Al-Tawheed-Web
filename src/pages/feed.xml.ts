@@ -30,7 +30,7 @@ export const GET: APIRoute = async () => {
   <channel>
     <title>${escapeXml(en(catalog.book.title))}</title>
     <link>${SITE_URL}/</link>
-    <description>${escapeXml(`Complete Urdu audio sharah of Kitab al-Tawheed by ${en(catalog.book.speaker)}. ${catalog.book.lectureCount} lectures.`)}</description>
+    <description>${escapeXml("50 Urdu Audio Lessons • 27+ Hours • Online & Offline")}</description>
     <language>ur</language>
     <lastBuildDate>${new Date(updated).toUTCString()}</lastBuildDate>
     <image>

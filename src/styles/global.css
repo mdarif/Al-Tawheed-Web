@@ -1,5 +1,72 @@
 @import "tailwindcss";
 
+/* ── Theme color tokens ──────────────────────────────────────────────────── */
+
+/*
+ * Tailwind v4: @theme registers semantic colors backed by CSS custom props.
+ * Classes like bg-bg, text-fg, bg-surface, border-divider, etc. are generated.
+ * Opacity modifiers (bg-bg/95) work via CSS color-mix in modern browsers.
+ */
+@theme {
+  --color-bg:           var(--bg, #0F0F10);
+  --color-surface:      var(--surface, #1A1A1C);
+  --color-surface-hover:var(--surface-hover, #1E1E20);
+  --color-surface-gold: var(--surface-gold, #1E1A0F);
+  --color-fg:           var(--fg, #F0EDE4);
+  --color-fg-2:         var(--fg-2, #A09880);
+  --color-fg-3:         var(--fg-3, #6B6458);
+  --color-fg-4:         var(--fg-4, #4A4440);
+}
+
+/* Dark theme (default) */
+:root {
+  color-scheme: dark;
+  --bg:            #0F0F10;
+  --surface:       #1A1A1C;
+  --surface-hover: #1E1E20;
+  --surface-gold:  #1E1A0F;
+  --fg:            #F0EDE4;
+  --fg-2:          #A09880;
+  --fg-3:          #6B6458;
+  --fg-4:          #4A4440;
+  --divider:       rgba(255,255,255,0.10);
+  --divider-sm:    rgba(255,255,255,0.05);
+  --divider-md:    rgba(255,255,255,0.15);
+  --divider-lg:    rgba(255,255,255,0.20);
+}
+
+/* Light theme */
+[data-theme="light"] {
+  color-scheme: light;
+  --bg:            #FAF8F5;
+  --surface:       #FFFFFF;
+  --surface-hover: #F3F0EB;
+  --surface-gold:  #FBF3E0;
+  --fg:            #1C1C1E;
+  --fg-2:          #6C6256;
+  --fg-3:          #9E8E7E;
+  --fg-4:          #BFB0A0;
+  --divider:       rgba(0,0,0,0.10);
+  --divider-sm:    rgba(0,0,0,0.05);
+  --divider-md:    rgba(0,0,0,0.15);
+  --divider-lg:    rgba(0,0,0,0.20);
+}
+
+/* Pagefind light theme */
+[data-theme="light"] .tawheed-search {
+  --pf-text: #1c1c1e;
+  --pf-text-secondary: #6c6256;
+  --pf-text-muted: #9e8e7e;
+  --pf-background: #ffffff;
+  --pf-border: rgba(0,0,0,0.12);
+  --pf-border-focus: rgba(212,175,55,0.55);
+  --pf-hover: #f3f0eb;
+  --pf-mark: #d4af37;
+  --pf-outline-focus: #d4af37;
+  --pf-skeleton: #e8e2d8;
+  --pf-skeleton-shine: #f0ece4;
+}
+
 /* ── Base / overflow ─────────────────────────────────────────────────────── */
 .site-body {
   overflow-x: clip;

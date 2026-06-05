@@ -12,10 +12,10 @@ interface Props {
 const { chapter, nextChapter, nextChapterHref, playStoreUrl } = Astro.props;
 ---
 
-<div class="mt-8 bg-[#1E1A0F] border border-[#C9A84C]/30 rounded-2xl p-6">
+<div class="mt-8 bg-surface-gold border border-[#C9A84C]/30 rounded-2xl p-6">
   <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2">Class complete</p>
   <h2 class="text-xl font-bold mb-2">You finished {en(chapter.title)}</h2>
-  <p class="text-sm text-[#A09880] mb-5">
+  <p class="text-sm text-fg-2 mb-5">
     Track progress, study class-by-class, and listen offline in the Android app.
   </p>
   <div class="flex flex-col sm:flex-row gap-3">
@@ -37,7 +37,7 @@ const { chapter, nextChapter, nextChapterHref, playStoreUrl } = Astro.props;
     </a>
   </div>
   {!nextChapter && (
-    <p class="text-xs text-[#6B6458] mt-4 text-center">
+    <p class="text-xs text-fg-3 mt-4 text-center">
       Mubarak — you have completed all 15 classes. Review any lecture from <a href="/lectures/" class="text-[#C9A84C] hover:underline">the list</a>.
     </p>
   )}

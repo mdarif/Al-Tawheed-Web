@@ -25,7 +25,7 @@ const {
 const coverSrc = coverImageUrl;
 ---
 
-<div class="bg-[#1A1A1C] border border-white/10 rounded-2xl p-4 sm:p-5 mb-6 min-w-0" data-lecture-player data-play-store-url={playStoreUrl}>
+<div class="bg-surface border border-[var(--divider)] rounded-2xl p-4 sm:p-5 mb-6 min-w-0" data-lecture-player data-play-store-url={playStoreUrl}>
   <div class="flex gap-3 sm:gap-4 mb-4 min-w-0">
     <img
       src={coverSrc}
@@ -37,15 +37,15 @@ const coverSrc = coverImageUrl;
     />
     <div class="flex-1 min-w-0">
       <p class="font-semibold text-sm sm:text-base leading-snug line-clamp-2">{lectureTitle}</p>
-      <p class="text-xs text-[#A09880] mt-0.5 line-clamp-2">{speaker}</p>
+      <p class="text-xs text-fg-2 mt-0.5 line-clamp-2">{speaker}</p>
     </div>
   </div>
 
   <div class="flex items-center justify-between gap-2 mb-3 sm:mb-4">
-    <span class="text-xs text-[#6B6458]">Playback speed</span>
+    <span class="text-xs text-fg-3">Playback speed</span>
     <select
       data-playback-speed
-      class="bg-[#0F0F10] border border-white/15 rounded-lg px-3 py-2 text-[#F0EDE4] text-sm min-h-[44px] min-w-[5.5rem]"
+      class="bg-bg border border-[var(--divider-md)] rounded-lg px-3 py-2 text-fg text-sm min-h-[44px] min-w-[5.5rem]"
     >
       <option value="0.75">0.75×</option>
       <option value="1" selected>1×</option>
@@ -68,10 +68,10 @@ const coverSrc = coverImageUrl;
   >
     Your browser does not support audio. <a href={audioUrl} class="text-[#C9A84C] underline">Download MP3</a>
   </audio>
-  <p class="text-xs text-[#6B6458] mt-2 text-center px-1">
+  <p class="text-xs text-fg-3 mt-2 text-center px-1">
     {formatDuration(durationSeconds)} · Urdu audio · Progress saved in this browser
     {import.meta.env.DEV && (
-      <span class="block mt-1 text-[#6B6458]/80">
+      <span class="block mt-1 text-fg-3/80">
         Dev: nudge after 30s audio (~15s at 2×). Dismiss is per visit; refresh to test again.
       </span>
     )}
@@ -79,11 +79,11 @@ const coverSrc = coverImageUrl;
 
   <div
     data-listen-nudge
-    class="hidden mt-4 bg-[#1E1A0F] border border-[#C9A84C]/40 rounded-xl p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+    class="hidden mt-4 bg-surface-gold border border-[#C9A84C]/40 rounded-xl p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
   >
     <div class="min-w-0">
       <p class="text-sm font-semibold text-[#C9A84C]">Enjoying the lecture?</p>
-      <p class="text-xs text-[#A09880]">Continue offline with progress tracking on the free app.</p>
+      <p class="text-xs text-fg-2">Continue offline with progress tracking on the free app.</p>
     </div>
     <div class="flex gap-2 shrink-0 w-full sm:w-auto">
       <a
@@ -98,7 +98,7 @@ const coverSrc = coverImageUrl;
       <button
         type="button"
         data-nudge-dismiss
-        class="text-sm sm:text-xs text-[#6B6458] px-4 py-3 sm:py-2 hover:text-[#A09880] min-h-[44px] sm:min-h-0"
+        class="text-sm sm:text-xs text-fg-3 px-4 py-3 sm:py-2 hover:text-fg-2 min-h-[44px] sm:min-h-0"
       >
         Dismiss
       </button>
