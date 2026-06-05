@@ -2,10 +2,10 @@
 /** Client-hydrated card; reads last playback position from localStorage. */
 ---
 
-<section id="continue-listening" class="mx-auto max-w-3xl px-4 sm:px-6 py-6 min-w-0">
+<section id="continue-listening" class="hidden mx-auto max-w-3xl px-4 sm:px-6 py-6 min-w-0">
   <h2 class="text-lg font-bold mb-3">Continue Listening</h2>
 
-  <div data-continue-card class="hidden bg-[#1A1A1C] border border-white/10 rounded-2xl p-5 hover:border-[#C9A84C]/40 transition-colors">
+  <div data-continue-card class="bg-[#1A1A1C] border border-white/10 rounded-2xl p-5 hover:border-[#C9A84C]/40 transition-colors">
     <a data-continue-link href="/lectures/" class="block">
       <div class="flex items-center gap-4">
         <div class="w-11 h-11 flex items-center justify-center bg-[#C9A84C]/10 rounded-xl shrink-0 text-xl" aria-hidden="true">🎧</div>
@@ -20,12 +20,6 @@
       </div>
       <p data-continue-pct class="text-xs text-[#6B6458] mt-1.5">0% complete</p>
     </a>
-  </div>
-
-  <div data-continue-empty class="bg-[#1A1A1C] border border-white/10 rounded-2xl p-8 text-center">
-    <p class="text-3xl mb-2" aria-hidden="true">🎧</p>
-    <p class="text-[#A09880] text-sm">Start a lecture — your place will be saved in this browser.</p>
-    <a href="/lectures/" class="inline-block mt-4 text-[#C9A84C] text-sm font-semibold hover:underline">Browse lectures →</a>
   </div>
 </section>
 

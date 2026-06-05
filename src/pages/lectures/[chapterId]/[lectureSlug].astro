@@ -35,7 +35,7 @@ const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 const lecture = catalog.lectures.find((l) => l.id === lectureId)!;
 const chapter = catalog.chapters.find((c) => c.id === chapterId)!;
 const allChapterLectures = catalog.lectures.filter(
-  (l) => l.chapterId === chapterId,
+  (l) => l.chapterId === chapterId
 );
 const currentIdx = allChapterLectures.findIndex((l) => l.id === lectureId);
 const prev = allChapterLectures[currentIdx - 1];
@@ -73,16 +73,22 @@ const jsonLd = {
 // Dynamic OG metadata for individual lessons — optimized for social sharing
 const ogTitle = `Part ${String(lecture.number).padStart(2, "0")}: ${en(lecture.title)} — Kitab At-Tawheed`;
 const ogDescription = `${en(lecture.title)} from the complete Sharah by Shaikh Abdullah Nasir Rahmani. ${formatDuration(lecture.durationSeconds)} of free Urdu Islamic education. Listen online free—no app required.`;
-const articleTags = ["Tawheed", "Islamic Studies", "Quran", "Sunnah", en(chapter.title)];
+const articleTags = [
+  "Tawheed",
+  "Islamic Studies",
+  "Quran",
+  "Sunnah",
+  en(chapter.title),
+];
 ---
 
 <Layout
   title={ogTitle}
   description={ogDescription}
-  appConfig={appConfig}
-  ogImageAlt={`${en(lecture.title)} — Sharh Kitab At-Tawheed`}
+  {appConfig}
+  ogImageAlt={`${en(lecture.title)} — Sharah Kitab At-Tawheed`}
   ogType="article"
-  articleTags={articleTags}
+  {articleTags}
 >
   <script
     is:inline
@@ -168,7 +174,7 @@ const articleTags = ["Tawheed", "Islamic Studies", "Quran", "Sunnah", en(chapter
 
     <LectureAudioPlayer
       lectureId={lecture.id}
-      lecturePath={lecturePath}
+      {lecturePath}
       lectureTitle={en(lecture.title)}
       audioUrl={lecture.audioUrl}
       durationSeconds={lecture.durationSeconds}

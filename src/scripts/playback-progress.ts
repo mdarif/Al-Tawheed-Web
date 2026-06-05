@@ -139,15 +139,10 @@ export function initContinueListening(rootId: string): void {
   if (!root) return;
 
   const card = root.querySelector<HTMLElement>('[data-continue-card]');
-  const empty = root.querySelector<HTMLElement>('[data-continue-empty]');
-  if (!card || !empty) return;
+  if (!card) return;
 
   const saved = loadProgress();
-  if (!saved || saved.seconds < RESUME_MIN_SECONDS) {
-    card.classList.add('hidden');
-    empty.classList.remove('hidden');
-    return;
-  }
+  if (!saved || saved.seconds < RESUME_MIN_SECONDS) return; // section stays hidden
 
   const dur = saved.durationSeconds || 1;
   const fraction = Math.min(1, saved.seconds / dur);
@@ -172,6 +167,5 @@ export function initContinueListening(rootId: string): void {
   if (barEl) barEl.style.width = `${Math.round(fraction * 100)}%`;
   if (pctEl) pctEl.textContent = `${Math.round(fraction * 100)}% complete`;
 
-  empty.classList.add('hidden');
-  card.classList.remove('hidden');
+  root.classList.remove('hidden');
 }

@@ -33,6 +33,12 @@
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* Hide scrollbar while keeping scroll behaviour (used by screenshot carousel) */
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
 /* Native audio controls: stay within viewport on narrow phones */
 audio {
   width: 100%;

@@ -18,9 +18,9 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 ---
 
 <Layout
-  title="Sharh Kitab At-Tawheed — 50 Free Urdu Audio Lessons"
+  title="Sharah Kitab al-Tawheed | Urdu Audio Series"
   description={`Complete Urdu audio explanation of Kitab At-Tawheed by Shaikh Abdullah Nasir Rahmani. ${catalog.book.lectureCount} lectures, ${totalHours}+ hours — free to stream online or download for Android.`}
-  appConfig={appConfig}
+  {appConfig}
 >
   <!-- Hero -->
   <section
@@ -31,14 +31,20 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     >
       Free Islamic Audio
     </p>
-    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-3 text-balance">
+    <h1
+      class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-3 text-balance"
+    >
       {en(catalog.book.title)}
     </h1>
-    <p class="text-xl sm:text-2xl text-[#C9A84C] font-medium mb-2" dir="rtl" lang="ur">
+    <p
+      class="text-xl sm:text-2xl text-[#C9A84C] font-medium mb-2"
+      dir="rtl"
+      lang="ur"
+    >
       {catalog.book.title.ur ?? "شرح کتاب التوحید"}
     </p>
     <p class="text-[#A09880] text-base sm:text-lg mb-8 px-1">
-      {catalog.book.lectureCount} lectures · {totalHours}h audio · By {
+      {catalog.book.lectureCount} Lectures · {totalHours} Hours Audio · By {
         en(catalog.book.speaker)
       }
     </p>
@@ -88,7 +94,111 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
   </section>
 
   <ContinueListening />
-  <DailyBenefitCard catalog={catalog} />
+
+  <!-- Experience the App -->
+  <section class="mx-auto max-w-5xl px-4 sm:px-6 py-12 sm:py-16">
+    <div class="text-center mb-10">
+      <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2">Android App</p>
+      <h2 class="text-2xl sm:text-3xl font-bold mb-3">Experience the App</h2>
+      <p class="text-[#A09880] text-sm sm:text-base max-w-md mx-auto">
+        Everything you need for your journey through Kitab At-Tawheed — offline, ad-free, and free forever.
+      </p>
+    </div>
+
+    <!-- Screenshot carousel: scrollable on mobile, row on desktop -->
+    <div class="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 sm:pb-0 sm:overflow-x-visible sm:justify-center -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+      {[
+        { src: '/app-screenshots/01-welcome-framed.png', label: 'Home Screen',        detail: 'Start where you left off'     },
+        { src: '/app-screenshots/02-lectures-framed.png', label: 'Offline Downloads', detail: 'Save any lecture for offline'  },
+        { src: '/app-screenshots/03-player-framed.png', label: 'Audio Player',        detail: 'Seek, speed control & more'   },
+        { src: '/app-screenshots/04-home-framed.png', label: 'Progress Tracking',     detail: 'Study Mode & class progress'  },
+      ].map(({ src, label, detail }) => (
+        <div class="snap-center shrink-0 w-[188px] sm:w-[200px] text-center">
+          <img
+            src={src}
+            alt={label}
+            width="200"
+            height="410"
+            loading="lazy"
+            class="w-full rounded-3xl"
+          />
+          <p class="text-sm font-semibold text-[#F0EDE4] mt-3">{label}</p>
+          <p class="text-xs text-[#6B6458] mt-0.5">{detail}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="text-center mt-10">
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener"
+        class="inline-block bg-[#C9A84C] text-black font-bold px-8 py-3.5 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors"
+      >
+        Download Free on Google Play
+      </a>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="mx-auto max-w-3xl px-4 sm:px-6 py-10 border-t border-white/10">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
+      <h2 class="text-xl font-bold">What Listeners Say</h2>
+      <div class="flex items-center gap-2 text-sm text-[#A09880]">
+        <span class="text-[#C9A84C] text-base tracking-tight">★★★★★</span>
+        <span>5.0 · Google Play</span>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      {[
+        {
+          name: 'Kashif Husain',
+          date: 'April 2022',
+          text: "Very handy and useful app for learning and understanding 'Kitaab at Tauheed' lectures. Easy to use without any hassles. May the developer of the app find it's 'ajr' as it's a 'Sadka e jaariya'.",
+          helpful: 8,
+        },
+        {
+          name: 'Hasan Khan',
+          date: 'March 2022',
+          text: 'Jazakallah khair Sheikh. May Allah bless and reward you for your efforts. Every single Muslim must listen to these lectures once, thoroughly.',
+          helpful: 8,
+        },
+        {
+          name: 'Mohsin Khan',
+          date: 'June 2021',
+          text: 'JazakAllah khair Shaikh. May Allah accept your efforts and keeps you in good health. Ameen ya Rabbul Alameen.',
+          helpful: 14,
+        },
+        {
+          name: 'Sarfaraz Ahmad',
+          date: 'June 2024',
+          text: "Masha'Allah bahut behtarin voice & cleared hai.",
+          helpful: 2,
+        },
+      ].map(({ name, date, text, helpful }) => (
+        <div class="bg-[#1A1A1C] border border-white/10 rounded-xl p-5 flex flex-col gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 flex items-center justify-center shrink-0">
+              <span class="text-[#C9A84C] font-bold text-base">{name[0]}</span>
+            </div>
+            <div class="min-w-0">
+              <p class="font-semibold truncate">{name}</p>
+              <p class="text-[#C9A84C] text-sm tracking-tight mt-0.5">★★★★★</p>
+            </div>
+          </div>
+          <p class="text-[#A09880] text-base leading-relaxed flex-1">"{text}"</p>
+          <p class="text-[#4A4440] text-xs">{helpful} people found this helpful · {date}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="text-center mt-6 text-xs text-[#6B6458]">
+      Reviews from Google Play Store
+    </p>
+  </section>
+
+  <DailyBenefitCard {catalog} />
 
   <!-- Chapter grid -->
   <section class="mx-auto max-w-5xl px-4 py-8">
@@ -97,7 +207,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
       {
         catalog.chapters.map((chapter) => {
           const parts = catalog.lectures.filter(
-            (l) => l.chapterId === chapter.id,
+            (l) => l.chapterId === chapter.id
           );
           const totalSecs = parts.reduce((s, l) => s + l.durationSeconds, 0);
           return (
@@ -135,7 +245,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     <h2 class="text-xl font-bold text-center mb-8">Web vs Android App</h2>
     <div class="grid sm:grid-cols-2 gap-4">
       <div class="bg-[#1A1A1C] border border-white/10 rounded-xl p-5">
-        <h3 class="font-semibold mb-3 text-[#A09880]">🌐 This website</h3>
+        <h3 class="font-semibold mb-3 text-[#A09880]">🌐 Listen in Browser</h3>
         <ul class="text-sm space-y-2 text-[#A09880]">
           <li>✓ Stream all 50 lectures</li>
           <li>✓ No account needed</li>
