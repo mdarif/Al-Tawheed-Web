@@ -1,6 +1,5 @@
 ---
 import type { FaqItem } from '../lib/faq';
-import { faqPageJsonLd } from '../lib/faq';
 
 interface Props {
   items: FaqItem[];
@@ -8,10 +7,7 @@ interface Props {
 }
 
 const { items, heading = 'Frequently asked questions' } = Astro.props;
-const jsonLd = faqPageJsonLd(items);
 ---
-
-<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
 
 <section class="mt-12 border-t border-[var(--divider)] pt-10">
   <h2 class="text-xl font-bold text-[#C9A84C] mb-6">{heading}</h2>
