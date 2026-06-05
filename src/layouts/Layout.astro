@@ -26,9 +26,9 @@ interface Props {
 
 const {
   title,
-  description = "Complete Urdu audio explanation of Kitab At-Tawheed by Shaikh Abdullah Nasir Rahmani. 50 lectures, 27+ hours — free to stream online or download for Android.",
+  description = "50 Urdu Audio Lessons • 27+ Hours • Online & Offline",
   appConfig,
-  ogImageAlt = "Sharh Kitab At-Tawheed — 50 Free Urdu Audio Lessons, 27+ Hours, Free Android App",
+  ogImageAlt = "Sharah Kitab al-Tawheed | Urdu Audio Series, 27+ Hours",
   ogSiteName = "Kitab At-Tawheed — Free Islamic Audio",
   ogType = "website",
   articleTags = [],
@@ -40,8 +40,10 @@ const {
 // When a caller passes a custom ogImage (e.g. the CDN book cover), we don't
 // know its dimensions, so we suppress the width/height tags unless explicitly provided.
 const resolvedOgImage = Astro.props.ogImage ?? `${SITE_URL}/og-image.png`;
-const resolvedOgImageWidth  = ogImageWidth  ?? (Astro.props.ogImage ? undefined : 1200);
-const resolvedOgImageHeight = ogImageHeight ?? (Astro.props.ogImage ? undefined : 630);
+const resolvedOgImageWidth =
+  ogImageWidth ?? (Astro.props.ogImage ? undefined : 1200);
+const resolvedOgImageHeight =
+  ogImageHeight ?? (Astro.props.ogImage ? undefined : 630);
 
 const storeUrl = appConfig
   ? playStoreUrl(appConfig)
@@ -81,19 +83,35 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <meta property="og:locale:alternate" content="ur_PK" />
     <meta property="og:image" content={absoluteOgImage} />
     <meta property="og:image:type" content="image/png" />
-    {resolvedOgImageWidth  && <meta property="og:image:width"  content={String(resolvedOgImageWidth)} />}
-    {resolvedOgImageHeight && <meta property="og:image:height" content={String(resolvedOgImageHeight)} />}
+    {
+      resolvedOgImageWidth && (
+        <meta
+          property="og:image:width"
+          content={String(resolvedOgImageWidth)}
+        />
+      )
+    }
+    {
+      resolvedOgImageHeight && (
+        <meta
+          property="og:image:height"
+          content={String(resolvedOgImageHeight)}
+        />
+      )
+    }
     <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:image:secure_url" content={absoluteOgImage} />
     {fbAppId && <meta property="fb:app_id" content={fbAppId} />}
-    {ogType === "article" && (
-      <>
-        <meta property="article:section" content="Islamic Education" />
-        {articleTags.map((tag) => (
-          <meta property="article:tag" content={tag} />
-        ))}
-      </>
-    )}
+    {
+      ogType === "article" && (
+        <>
+          <meta property="article:section" content="Islamic Education" />
+          {articleTags.map((tag) => (
+            <meta property="article:tag" content={tag} />
+          ))}
+        </>
+      )
+    }
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -117,20 +135,24 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <!-- JSON-LD Structured Data -->
     {
       ogType === "website" && (
-        <script type="application/ld+json" set:html={JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "AudioSeries",
-          "name": "Sharah Kitab At-Tawheed",
-          "description": "Complete Urdu audio explanation of Kitab Al-Tawheed by Shaikh Abdullah Nasir Rahmani Hafizaullah",
-          "url": "https://kitabattawheed.com",
-          "image": `${SITE_URL}/og-image.png`,
-          "creator": {
-            "@type": "Person",
-            "name": "Shaikh Abdullah Nasir Rahmani"
-          },
-          "numberOfEpisodes": 50,
-          "inLanguage": "ur"
-        })}/>
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AudioSeries",
+            name: "Sharah Kitab At-Tawheed",
+            description:
+              "Complete Urdu audio explanation of Kitab Al-Tawheed by Shaikh Abdullah Nasir Rahmani Hafizaullah",
+            url: "https://kitabattawheed.com",
+            image: `${SITE_URL}/og-image.png`,
+            creator: {
+              "@type": "Person",
+              name: "Shaikh Abdullah Nasir Rahmani",
+            },
+            numberOfEpisodes: 50,
+            inLanguage: "ur",
+          })}
+        />
       )
     }
 
@@ -139,7 +161,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
   <body
     class="site-body bg-[#0F0F10] text-[#F0EDE4] font-sans antialiased min-h-dvh flex flex-col"
   >
-    <SiteHeader storeUrl={storeUrl} />
+    <SiteHeader {storeUrl} />
 
     <main class="flex-1 w-full min-w-0 main-with-mobile-cta">
       <slot />
@@ -171,7 +193,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
       </div>
     </div>
 
-    <SiteFooter storeUrl={storeUrl} />
+    <SiteFooter {storeUrl} />
 
     {
       cfAnalyticsToken && (
