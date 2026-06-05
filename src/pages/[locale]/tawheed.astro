@@ -1,0 +1,83 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCatalog, getAppConfig } from "../../lib/catalog";
+import { t, tx, getLocalePaths } from "../../lib/i18n";
+
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { locale } = Astro.params;
+const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const i18n = t(locale);
+---
+
+<Layout
+  title={locale === "ur" ? "اسلام میں توحید کیا ہے؟ | اردو دروس" : "What is Tawheed in Islam? — Types of Tawheed | Urdu Lectures"}
+  description={locale === "ur" ? "توحید کا مفہوم، اس کی اقسام، اور شرک — شرح کتاب التوحید سے مفت اردو دروس۔" : "Learn what Tawheed means, the three types of Tawheed, and shirk — with free Urdu lectures."}
+  {appConfig}
+>
+  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" dir="rtl" data-pagefind-body>
+    <nav class="text-xs text-fg-3 mb-6" dir="ltr">
+      <a href={`/${locale}/`} class="hover:text-[#C9A84C]">Home</a> → Tawheed
+    </nav>
+
+    <h1 class="text-3xl font-bold mb-4 font-urdu">{i18n.tawheed.pageTitle}</h1>
+    <p class="text-2xl text-[#C9A84C] mb-6" dir="rtl" lang="ar">التوحيد</p>
+
+    <p class="text-fg-2 leading-relaxed mb-4 font-urdu">
+      <strong class="text-fg">{locale === "ur" ? "توحید" : "Tawheed"}</strong>{" "}
+      {i18n.tawheed.p1}
+    </p>
+
+    <section class="mb-8">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3 font-urdu">{i18n.tawheed.typesTitle}</h2>
+      <ul class="space-y-4 text-fg-2 text-sm">
+        {i18n.tawheed.types.map(({ term, desc }) => (
+          <li class="bg-surface border border-[var(--divider)] rounded-xl p-4 font-urdu">
+            <strong class="text-fg">{term}</strong> — {desc}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <p class="text-fg-2 leading-relaxed mb-8 font-urdu">
+      <a href={`/${locale}/kitab-al-tawheed/`} class="text-[#C9A84C] hover:underline">
+        {locale === "ur" ? "کتاب التوحید" : "Kitab al-Tawheed"}
+      </a>{" "}
+      {i18n.tawheed.p2Body}
+    </p>
+
+    <div dir="ltr" class="mb-8">
+      <a href="/lectures/" class="inline-block bg-[#C9A84C] text-black font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#D4B55C]">
+        Listen to all lectures →
+      </a>
+    </div>
+
+    <section>
+      <h2 class="text-xl font-bold mb-4 font-urdu">
+        {locale === "ur" ? "اکثر پوچھے گئے سوالات" : "Frequently Asked Questions"}
+      </h2>
+      <div class="space-y-4">
+        {i18n.tawheed.faq.map(({ question, answer }) => (
+          <details class="bg-surface border border-[var(--divider)] rounded-xl overflow-hidden group">
+            <summary class="px-5 py-4 cursor-pointer font-semibold list-none flex items-center justify-between gap-3 hover:bg-surface-hover transition-colors font-urdu">
+              <span>{question}</span>
+              <span class="text-fg-3 text-lg shrink-0 group-open:rotate-45 transition-transform">+</span>
+            </summary>
+            <p class="px-5 pb-4 text-fg-2 text-sm leading-relaxed font-urdu">
+              {answer.includes("{count}") ? tx(answer, { count: catalog.book.lectureCount }) : answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .font-urdu {
+    font-family: "Noto Naskh Arabic", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.9;
+  }
+</style>

@@ -4,6 +4,7 @@ import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import type { AppConfig } from "../lib/catalog";
 import { SITE_URL, playStoreUrl } from "../lib/catalog";
+import { altLocaleUrl } from "../lib/i18n";
 
 interface Props {
   title: string;
@@ -49,6 +50,10 @@ const storeUrl = appConfig
   ? playStoreUrl(appConfig)
   : "https://play.google.com/store/apps/details?id=com.almarfa.tawheed";
 const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).toString();
+const locale = Astro.currentLocale ?? "en";
+const altPath = altLocaleUrl(locale, Astro.url.pathname);
+const enUrl = locale === "en" ? canonicalUrl : new URL(altPath, SITE_URL).toString();
+const urUrl = locale === "ur" ? canonicalUrl : new URL(altPath, SITE_URL).toString();
 const cfAnalyticsToken =
   import.meta.env.PUBLIC_CF_WEB_ANALYTICS_TOKEN?.trim() ?? "";
 const fbAppId = import.meta.env.PUBLIC_FB_APP_ID?.trim() ?? "";
@@ -61,13 +66,28 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang={locale} class="scroll-smooth">
   <head>
     <!-- Prevent flash of wrong theme: set data-theme before first paint -->
     <script is:inline>
       (function () {
         var t = localStorage.getItem("tawheed:theme");
         if (t === "light") document.documentElement.dataset.theme = "light";
+      })();
+    </script>
+    <!-- Enforce saved locale preference before first paint -->
+    <script is:inline>
+      (function () {
+        var pref = localStorage.getItem("tawheed:locale");
+        if (pref !== "ur") return;
+        var path = window.location.pathname;
+        var isUrdu = path === "/ur/" || path === "/ur" || path.startsWith("/ur/");
+        if (isUrdu) return;
+        // Only redirect for pages that have actual translated versions
+        var urduPages = ["/", "/about/", "/kitab-al-tawheed/", "/tawheed/", "/download/"];
+        if (urduPages.indexOf(path) !== -1) {
+          window.location.replace("/ur" + (path === "/" ? "/" : path));
+        }
       })();
     </script>
     <meta charset="UTF-8" />
@@ -79,6 +99,15 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="ur" href={urUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    {locale === "ur" && (
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap"
+      />
+    )}
 
     <!-- Facebook / Open Graph -->
     <meta property="og:title" content={title} />

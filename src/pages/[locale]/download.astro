@@ -1,0 +1,122 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCatalog, getAppConfig, en, playStoreUrl, bookCoverSrc } from "../../lib/catalog";
+import { t, tx, getLocalePaths } from "../../lib/i18n";
+
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { locale } = Astro.params;
+const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const storeUrl = playStoreUrl(appConfig);
+const coverSrc = bookCoverSrc(catalog.book);
+const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
+const i18n = t(locale);
+
+const featureTitles = [
+  "Offline Downloads",
+  "Progress Tracking",
+  "Study Mode",
+  "Background Playback",
+  "Playback Speed",
+  "Urdu & Roman Urdu",
+];
+const featureIcons = ["⬇️", "📊", "📚", "🎵", "⚡", "🌐"];
+
+const screenshots = [
+  { src: "/app-screenshots/01-welcome-framed.png", alt: "Welcome screen" },
+  { src: "/app-screenshots/02-lectures-framed.png", alt: "Lecture list by class" },
+  { src: "/app-screenshots/03-player-framed.png", alt: "Audio player" },
+  { src: "/app-screenshots/04-home-framed.png", alt: "Home — continue listening" },
+];
+---
+
+<Layout
+  title={locale === "ur" ? "ایپ ڈاؤنلوڈ کریں — شرح کتاب التوحید | مفت اینڈرائیڈ" : "Download App — Sharah Kitab al-Tawheed | Free Android"}
+  description={locale === "ur" ? `شرح کتاب التوحید مفت اینڈرائیڈ ایپ ڈاؤنلوڈ کریں — ${catalog.book.lectureCount} دروس، آف لائن موڈ، اسٹڈی موڈ۔` : `Download the free Android app for Sharah Kitab al-Tawheed — ${catalog.book.lectureCount} lectures, offline mode, Study Mode.`}
+  {appConfig}
+>
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" dir="rtl">
+    <nav class="text-xs text-fg-3 mb-6" dir="ltr">
+      <a href={`/${locale}/`} class="hover:text-[#C9A84C]">Home</a> → Download App
+    </nav>
+
+    <div class="flex flex-col md:flex-row gap-8 items-start mb-12">
+      <img
+        src={coverSrc}
+        alt={en(catalog.book.title)}
+        width="200"
+        height="280"
+        class="w-40 md:w-48 rounded-xl border border-[#C9A84C]/30 shadow-lg shrink-0 mx-auto md:mx-0"
+        loading="eager"
+      />
+      <div class="flex-1 text-center md:text-right">
+        <h1 class="text-3xl font-bold mb-2 font-urdu">{i18n.download.pageTitle}</h1>
+        <p class="text-[#C9A84C] text-lg mb-1" dir="rtl" lang="ur">{catalog.book.title.ur ?? "شرح کتاب التوحید"}</p>
+        <p class="text-fg-2 mb-3 font-urdu">
+          {catalog.book.lectureCount} {locale === "ur" ? "دروس" : "lectures"} · {totalHours}h · {en(catalog.book.speaker)}
+        </p>
+        <div dir="ltr" class="flex flex-col items-center md:items-start gap-2">
+          <a href={storeUrl} target="_blank" rel="noopener" class="inline-block hover:opacity-90 transition-opacity">
+            <img src="/google-play-badge.png" alt="Get it on Google Play" class="w-[220px] h-auto" />
+          </a>
+          <p class="text-xs text-fg-3 font-urdu">
+            {i18n.download.streamNote}{" "}
+            <a href="/lectures/" class="text-[#C9A84C] hover:underline">
+              {locale === "ur" ? "آن لائن دروس براؤز کریں" : "Browse lectures on the web"}
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-6 font-urdu">{i18n.download.whyTitle}</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        {i18n.download.features.map(({ desc }, idx) => (
+          <div class="bg-surface border border-[var(--divider)] rounded-xl p-4">
+            <!-- Feature title stays English per hybrid model -->
+            <p class="text-lg mb-1">{featureIcons[idx]} <span class="font-semibold">{featureTitles[idx]}</span></p>
+            <p class="text-sm text-fg-2 font-urdu">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-6 font-urdu">{i18n.download.previewTitle}</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {screenshots.map(({ src, alt }) => (
+          <img
+            src={src}
+            alt={alt}
+            width="270"
+            height="480"
+            class="w-full rounded-xl border border-[var(--divider)] bg-surface"
+            loading="lazy"
+          />
+        ))}
+      </div>
+    </section>
+
+    <section class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-6 text-center">
+      <p class="font-semibold mb-2 font-urdu">{i18n.download.ctaFree}</p>
+      <p class="text-sm text-fg-2 mb-4 font-urdu">
+        {tx(i18n.download.ctaDesc, { appName: appConfig.about.appName, count: appConfig.about.lectureCount, duration: appConfig.about.totalDuration })}
+      </p>
+      <div class="flex flex-col items-center gap-3">
+        <a href={storeUrl} target="_blank" rel="noopener" class="hover:opacity-90 transition-opacity">
+          <img src="/google-play-badge.png" alt="Get it on Google Play" class="w-[200px] h-auto mx-auto" />
+        </a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .font-urdu {
+    font-family: "Noto Naskh Arabic", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.9;
+  }
+</style>
