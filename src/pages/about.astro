@@ -1,6 +1,6 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getCatalog, getAppConfig, en, playStoreUrl } from '../lib/catalog';
+import Layout from "../layouts/Layout.astro";
+import { getCatalog, getAppConfig, en, playStoreUrl } from "../lib/catalog";
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
@@ -9,10 +9,9 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 
 <Layout
   title="About — Sharah Kitab al-Tawheed"
-  appConfig={appConfig}
+  {appConfig}
   description="About the Sharah Kitab al-Tawheed audio series by Shaikh Abdullah Nasir Rahmani — 50 Urdu lectures on Islamic monotheism."
 >
-
   <div class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">
     <nav class="text-xs text-fg-3 mb-6">
       <a href="/" class="hover:text-[#C9A84C]">Home</a> → About
@@ -23,12 +22,18 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     <section class="mb-10">
       <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Kitab al-Tawheed</h2>
       <p class="text-fg-2 leading-relaxed mb-3">
-        <strong class="text-fg">Kitab al-Tawheed</strong> (كتاب التوحيد — "The Book of Islamic Monotheism") is one of the most important works in Islamic theology,
-        written by <strong class="text-fg">Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah</strong> (1703–1792). It is widely studied in Islamic institutes and seminaries worldwide.
+        <strong class="text-fg">Kitab al-Tawheed</strong> (كتاب التوحيد — "The Book
+        of Islamic Monotheism") is one of the most important works in Islamic theology,
+        written by <strong class="text-fg"
+          >Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman
+          al-Tamimi Al Najdi Rahimahullah</strong
+        > (1703–1792). It is widely studied in Islamic institutes and seminaries worldwide.
       </p>
       <p class="text-fg-2 leading-relaxed mb-3">
-        The book covers the foundation of Islamic faith — Tawheed (the oneness of Allah) — drawing exclusively from the Quran and authentic Sunnah.
-        It addresses the three categories of Tawheed, the dangers of shirk (associating partners with Allah), and the obligations upon every Muslim
+        The book covers the foundation of Islamic faith — Tawheed (the oneness
+        of Allah) — drawing exclusively from the Quran and authentic Sunnah. It
+        addresses the three categories of Tawheed, the dangers of shirk
+        (associating partners with Allah), and the obligations upon every Muslim
         to understand and implement Tawheed in their daily lives.
       </p>
     </section>
@@ -36,32 +41,51 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     <section class="mb-10">
       <h2 class="text-xl font-bold text-[#C9A84C] mb-3">The Speaker</h2>
       <p class="text-fg-2 leading-relaxed mb-3">
-        <strong class="text-fg">Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah</strong> is a respected Islamic scholar based in India,
-        known for his clear and accessible Urdu explanations of classical Islamic texts. His teaching style — rooted in evidence from Quran and Sunnah — has benefited hundreds of thousands of Muslims across South Asia and beyond.
+        <strong class="text-fg"
+          >Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah</strong
+        > is a respected Islamic scholar, known for his clear and accessible Urdu
+        explanations of classical Islamic texts. His teaching style — rooted in evidence
+        from Quran and Sunnah — has benefited hundreds of thousands of Muslims across
+        South Asia and beyond.
       </p>
       <p class="text-fg-2 leading-relaxed">
-        This series is his complete explanation of Kitab al-Tawheed — {catalog.book.lectureCount} lectures totalling over {totalHours} hours, delivered across 15 classes.
+        This series is his complete explanation of Kitab al-Tawheed — {
+          catalog.book.lectureCount
+        } lectures totalling over {totalHours} hours, delivered across 15 classes.
       </p>
     </section>
 
     <section class="mb-10">
       <h2 class="text-xl font-bold text-[#C9A84C] mb-3">The App</h2>
       <p class="text-fg-2 leading-relaxed mb-4">
-        The <strong class="text-fg">Sharah Kitab al-Tawheed Android app</strong> provides the best experience for studying this series —
-        with offline downloads, progress tracking, Study Mode, background playback, and a Urdu/Roman Urdu interface.
+        The <strong class="text-fg">Sharah Kitab al-Tawheed Android app</strong> provides
+        the best experience for studying this series — with offline downloads, progress
+        tracking, Study Mode, background playback, and a Urdu/Roman Urdu Interface.
       </p>
-      <a href={storeUrl} target="_blank" rel="noopener"
-        class="inline-block bg-[#C9A84C] text-black font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors">
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener"
+        class="inline-block bg-[#C9A84C] text-black font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors"
+      >
         Download Free on Google Play
       </a>
-      <a href="/download/" class="block mt-3 text-[#C9A84C] text-sm hover:underline">App features & screenshots →</a>
+      <a
+        href="/download/"
+        class="block mt-3 text-[#C9A84C] text-sm hover:underline"
+        >App features & screenshots →</a
+      >
     </section>
 
     <section>
       <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Contact</h2>
       <p class="text-fg-2">
         Questions or feedback?
-        <a href={`mailto:${appConfig.contact.email}`} class="text-[#C9A84C] hover:underline ml-1">{appConfig.contact.email}</a>
+        <a
+          href={`mailto:${appConfig.contact.email}`}
+          class="text-[#C9A84C] hover:underline ml-1"
+          >{appConfig.contact.email}</a
+        >
       </p>
     </section>
   </div>

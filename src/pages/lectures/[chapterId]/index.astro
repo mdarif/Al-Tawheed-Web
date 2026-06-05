@@ -1,6 +1,5 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import I18nTitle from '../../../components/I18nTitle.astro';
 import { getCatalog, getAppConfig, formatDuration, en, chapterSlug, lectureSlug, playStoreUrl } from '../../../lib/catalog';
 
 export async function getStaticPaths() {
@@ -33,7 +32,7 @@ const storeUrl = playStoreUrl(appConfig);
 
     <div class="mb-8">
       <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-1">Class {String(chapter.number).padStart(2,'0')}</p>
-      <I18nTitle field={chapter.title} as="h1" class="text-3xl font-bold mb-2" urduClass="text-[#C9A84C] text-lg mb-2" />
+      <h1 class="text-3xl font-bold mb-2">{en(chapter.title)}</h1>
       <p class="text-fg-2">{lectures.length} {lectures.length === 1 ? 'part' : 'parts'} · {formatDuration(totalSecs)}</p>
     </div>
 
@@ -46,12 +45,7 @@ const storeUrl = playStoreUrl(appConfig);
               {String(lecture.number).padStart(2,'0')}
             </span>
             <div class="min-w-0">
-              <I18nTitle
-                field={lecture.title}
-                as="p"
-                class="font-semibold text-sm group-hover:text-[#C9A84C] transition-colors truncate"
-                urduClass="text-xs text-fg-3 mt-0.5 truncate"
-              />
+              <p class="font-semibold text-sm group-hover:text-[#C9A84C] transition-colors truncate">{en(lecture.title)}</p>
               <p class="text-xs text-fg-3">{formatDuration(lecture.durationSeconds)}</p>
             </div>
           </div>
@@ -63,13 +57,14 @@ const storeUrl = playStoreUrl(appConfig);
     <div class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-5 text-center">
       <p class="font-semibold mb-1">Want offline access?</p>
       <p class="text-sm text-fg-2 mb-4">Download the free Android app — listen without internet, track your progress, enable Study Mode.</p>
-      <a href={storeUrl} target="_blank" rel="noopener"
-        class="inline-block bg-[#C9A84C] text-black font-bold px-6 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C] transition-colors mr-2">
-        Google Play
-      </a>
-      <a href="/download/" class="inline-block text-[#C9A84C] text-sm hover:underline mt-2 sm:mt-0">
-        App details →
-      </a>
+      <div class="flex flex-col items-center gap-3">
+        <a href={storeUrl} target="_blank" rel="noopener" class="hover:opacity-90 transition-opacity">
+          <img src="/google-play-badge.png" alt="Get it on Google Play" class="w-[180px] h-auto" />
+        </a>
+        <a href="/download/" class="text-[#C9A84C] text-sm hover:underline">
+          App details →
+        </a>
+      </div>
     </div>
   </div>
 </Layout>

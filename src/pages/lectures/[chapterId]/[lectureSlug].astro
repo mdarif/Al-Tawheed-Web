@@ -1,6 +1,5 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import I18nTitle from "../../../components/I18nTitle.astro";
 import LectureAudioPlayer from "../../../components/LectureAudioPlayer.astro";
 import ChapterCompleteCard from "../../../components/ChapterCompleteCard.astro";
 import {
@@ -159,12 +158,9 @@ const articleTags = [
         Class {String(chapter.number).padStart(2, "0")} · Part {currentIdx + 1} of
         {allChapterLectures.length}
       </p>
-      <I18nTitle
-        field={lecture.title}
-        as="h1"
-        class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-balance"
-        urduClass="text-[#C9A84C] text-base sm:text-lg mb-1"
-      />
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-balance">
+        {en(lecture.title)}
+      </h1>
       <p class="text-fg-2 text-sm line-clamp-3">
         {formatDuration(lecture.durationSeconds)} · By {
           en(catalog.book.speaker)
@@ -187,10 +183,8 @@ const articleTags = [
       class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
     >
       <div class="min-w-0">
-        <p class="text-sm font-semibold text-[#C9A84C]">Continue on the app</p>
-        <p class="text-xs text-fg-2">
-          Offline · Study Mode · Background play
-        </p>
+        <p class="text-sm font-semibold text-[#C9A84C]">Continue On The App</p>
+        <p class="text-xs text-fg-2">Offline · Study Mode · Background Play</p>
       </div>
       <a
         href={storeUrl}
@@ -239,9 +233,7 @@ const articleTags = [
     }
 
     <div class="mt-8">
-      <h2
-        class="text-sm font-bold text-fg-2 uppercase tracking-widest mb-3"
-      >
+      <h2 class="text-sm font-bold text-fg-2 uppercase tracking-widest mb-3">
         All parts in {en(chapter.title)}
       </h2>
       <div class="space-y-1.5">

@@ -1,51 +1,67 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import I18nTitle from '../../components/I18nTitle.astro';
-import { getCatalog, getAppConfig, formatDuration, chapterSlug } from '../../lib/catalog';
+import Layout from "../../layouts/Layout.astro";
+import {
+  getCatalog,
+  getAppConfig,
+  en,
+  formatDuration,
+  chapterSlug,
+} from "../../lib/catalog";
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 ---
 
 <Layout
   title="All Lectures — Sharah Kitab al-Tawheed"
-  appConfig={appConfig}
+  {appConfig}
   description="Browse all 50 lectures from Sharah Kitab al-Tawheed — 15 classes by Shaikh Abdullah Nasir Rahmani Hafizahullah. Free online Urdu audio."
 >
-
   <div class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">
     <nav class="text-xs text-fg-3 mb-6">
       <a href="/" class="hover:text-[#C9A84C]">Home</a> → Lectures
     </nav>
 
     <h1 class="text-3xl font-bold mb-2">All Lectures</h1>
-    <p class="text-fg-2 mb-8">{catalog.book.lectureCount} lectures · 15 classes · {Math.floor(catalog.book.totalDurationSeconds/3600)}h audio</p>
+    <p class="text-fg-2 mb-8">
+      {catalog.book.lectureCount} Lectures · 15 Classes · {
+        Math.floor(catalog.book.totalDurationSeconds / 3600)
+      } Hours Audio
+    </p>
 
     <div class="space-y-3">
-      {catalog.chapters.map((chapter) => {
-        const parts = catalog.lectures.filter(l => l.chapterId === chapter.id);
-        const totalSecs = parts.reduce((s, l) => s + l.durationSeconds, 0);
-        return (
-          <a href={`/lectures/${chapterSlug(chapter.id)}/`}
-            class="group flex items-center justify-between bg-surface border border-[var(--divider)] rounded-xl px-5 py-4 hover:border-[#C9A84C]/40 hover:bg-surface-hover transition-all">
-            <div class="flex items-center gap-4">
-              <span class="w-9 h-9 flex items-center justify-center bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-bold rounded-lg shrink-0">
-                {String(chapter.number).padStart(2,'0')}
-              </span>
-              <div>
-                <I18nTitle
-                  field={chapter.title}
-                  as="p"
-                  class="font-semibold group-hover:text-[#C9A84C] transition-colors"
-                  urduClass="text-xs text-fg-3 mt-0.5"
-                />
-                <p class="text-xs text-fg-3">{chapter.lectureCount} {chapter.lectureCount === 1 ? 'part' : 'parts'} · {formatDuration(totalSecs)}</p>
+      {
+        catalog.chapters.map((chapter) => {
+          const parts = catalog.lectures.filter(
+            (l) => l.chapterId === chapter.id
+          );
+          const totalSecs = parts.reduce((s, l) => s + l.durationSeconds, 0);
+          return (
+            <a
+              href={`/lectures/${chapterSlug(chapter.id)}/`}
+              class="group flex items-center justify-between bg-surface border border-[var(--divider)] rounded-xl px-5 py-4 hover:border-[#C9A84C]/40 hover:bg-surface-hover transition-all"
+            >
+              <div class="flex items-center gap-4">
+                <span class="w-9 h-9 flex items-center justify-center bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-bold rounded-lg shrink-0">
+                  {String(chapter.number).padStart(2, "0")}
+                </span>
+                <div>
+                  <p class="font-semibold group-hover:text-[#C9A84C] transition-colors">
+                    {en(chapter.title)}
+                  </p>
+                  <p class="text-xs text-fg-3">
+                    {chapter.lectureCount}{" "}
+                    {chapter.lectureCount === 1 ? "part" : "parts"} ·{" "}
+                    {formatDuration(totalSecs)}
+                  </p>
+                </div>
               </div>
-            </div>
-            <span class="text-fg-3 group-hover:text-[#C9A84C] transition-colors text-sm">→</span>
-          </a>
-        );
-      })}
+              <span class="text-fg-3 group-hover:text-[#C9A84C] transition-colors text-sm">
+                →
+              </span>
+            </a>
+          );
+        })
+      }
     </div>
   </div>
-
 </Layout>

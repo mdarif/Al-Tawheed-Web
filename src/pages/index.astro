@@ -2,12 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import ContinueListening from "../components/ContinueListening.astro";
 import DailyBenefitCard from "../components/DailyBenefitCard.astro";
-import {
-  getCatalog,
-  getAppConfig,
-  en,
-  playStoreUrl,
-} from "../lib/catalog";
+import { getCatalog, getAppConfig, en, playStoreUrl } from "../lib/catalog";
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
@@ -26,7 +21,7 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     <p
       class="text-[#C9A84C] text-sm font-semibold tracking-widest uppercase mb-4"
     >
-      Free Islamic Audio
+      THE FOUNDATION OF TAWHEED
     </p>
     <h1
       class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-3 text-balance"
@@ -40,11 +35,30 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     >
       {catalog.book.title.ur ?? "شرح کتاب التوحید"}
     </p>
-    <p class="text-fg-2 text-base sm:text-lg mb-8 px-1">
+    <p class="text-fg-2 text-base sm:text-lg mb-4 px-1">
       {catalog.book.lectureCount} Lectures · {totalHours} Hours Audio · By {
         en(catalog.book.speaker)
       }
     </p>
+
+    <div class="flex justify-center mb-6">
+      <div
+        class="inline-flex items-center gap-2 bg-surface border border-[var(--divider)] rounded-full px-4 py-1.5 text-xs text-fg-2"
+      >
+        <span class="flex -space-x-1.5">
+          <span
+            class="w-5 h-5 rounded-full bg-[#C9A84C]/30 border border-[var(--bg)]"
+          ></span>
+          <span
+            class="w-5 h-5 rounded-full bg-[#C9A84C]/20 border border-[var(--bg)]"
+          ></span>
+          <span
+            class="w-5 h-5 rounded-full bg-[#C9A84C]/15 border border-[var(--bg)]"
+          ></span>
+        </span>
+        <span>Trusted by students of knowledge worldwide</span>
+      </div>
+    </div>
 
     <div
       class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8"
@@ -53,9 +67,13 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         href={storeUrl}
         target="_blank"
         rel="noopener"
-        class="w-full sm:w-auto bg-[#C9A84C] text-black font-bold px-8 py-4 rounded-xl text-base hover:bg-[#D4B55C] transition-colors"
+        class="hover:opacity-90 transition-opacity"
       >
-        📱 Download Free on Google Play
+        <img
+          src="/google-play-badge.png"
+          alt="Get it on Google Play"
+          class="w-[220px] h-auto"
+        />
       </a>
       <a
         href="/lectures/"
@@ -78,8 +96,8 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
           { icon: "🎵", label: "Background Playback" },
           { icon: "📊", label: "Progress Tracking" },
           { icon: "📚", label: "Study Mode" },
-          { icon: "🌐", label: "Urdu interface" },
-          { icon: "🎁", label: "Free forever" },
+          { icon: "🌐", label: "Urdu Interface" },
+          { icon: "🎁", label: "Free Forever" },
         ].map(({ icon, label }) => (
           <div class="flex items-center gap-2.5 bg-surface border border-[var(--divider)] rounded-xl px-3 py-2.5 hover:border-[#C9A84C]/40 transition-colors">
             <span class="text-lg leading-none">{icon}</span>
@@ -95,34 +113,59 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
   <!-- Experience the App -->
   <section class="mx-auto max-w-5xl px-4 sm:px-6 py-12 sm:py-16">
     <div class="text-center mb-10">
-      <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2">Android App</p>
-      <h2 class="text-2xl sm:text-3xl font-bold mb-3">Experience the App</h2>
+      <p
+        class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2"
+      >
+        Android App
+      </p>
+      <h2 class="text-2xl sm:text-3xl font-bold mb-3">Experience The App</h2>
       <p class="text-fg-2 text-sm sm:text-base max-w-md mx-auto">
-        Everything you need for your journey through Kitab At-Tawheed — offline, ad-free, and free forever.
+        Everything you need for your journey through Kitab At-Tawheed — offline,
+        ad-free, and free forever.
       </p>
     </div>
 
     <!-- Screenshot carousel: scrollable on mobile, row on desktop -->
-    <div class="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 sm:pb-0 sm:overflow-x-visible sm:justify-center -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
-      {[
-        { src: '/app-screenshots/01-welcome-framed.png', label: 'Home Screen',        detail: 'Start where you left off'     },
-        { src: '/app-screenshots/02-lectures-framed.png', label: 'Offline Downloads', detail: 'Save any lecture for offline'  },
-        { src: '/app-screenshots/03-player-framed.png', label: 'Audio Player',        detail: 'Seek, speed control & more'   },
-        { src: '/app-screenshots/04-home-framed.png', label: 'Progress Tracking',     detail: 'Study Mode & class progress'  },
-      ].map(({ src, label, detail }) => (
-        <div class="snap-center shrink-0 w-[188px] sm:w-[200px] text-center">
-          <img
-            src={src}
-            alt={label}
-            width="200"
-            height="410"
-            loading="lazy"
-            class="w-full rounded-3xl"
-          />
-          <p class="text-sm font-semibold text-fg mt-3">{label}</p>
-          <p class="text-xs text-fg-3 mt-0.5">{detail}</p>
-        </div>
-      ))}
+    <div
+      class="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 sm:pb-0 sm:overflow-x-visible sm:justify-center -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide"
+    >
+      {
+        [
+          {
+            src: "/app-screenshots/01-welcome-framed.png",
+            label: "Home Screen",
+            detail: "Start where you left off",
+          },
+          {
+            src: "/app-screenshots/02-lectures-framed.png",
+            label: "Offline Downloads",
+            detail: "Save any lecture for offline",
+          },
+          {
+            src: "/app-screenshots/03-player-framed.png",
+            label: "Audio Player",
+            detail: "Seek, speed control & more",
+          },
+          {
+            src: "/app-screenshots/04-home-framed.png",
+            label: "Progress Tracking",
+            detail: "Study Mode & class progress",
+          },
+        ].map(({ src, label, detail }) => (
+          <div class="snap-center shrink-0 w-[188px] sm:w-[200px] text-center">
+            <img
+              src={src}
+              alt={label}
+              width="200"
+              height="410"
+              loading="lazy"
+              class="w-full rounded-3xl"
+            />
+            <p class="text-sm font-semibold text-fg mt-3">{label}</p>
+            <p class="text-xs text-fg-3 mt-0.5">{detail}</p>
+          </div>
+        ))
+      }
     </div>
 
     <div class="text-center mt-10">
@@ -130,16 +173,24 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         href={storeUrl}
         target="_blank"
         rel="noopener"
-        class="inline-block bg-[#C9A84C] text-black font-bold px-8 py-3.5 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors"
+        class="inline-block hover:opacity-90 transition-opacity"
       >
-        Download Free on Google Play
+        <img
+          src="/google-play-badge.png"
+          alt="Get it on Google Play"
+          class="w-[200px] h-auto mx-auto"
+        />
       </a>
     </div>
   </section>
 
   <!-- Testimonials -->
-  <section class="mx-auto max-w-3xl px-4 sm:px-6 py-10 border-t border-[var(--divider)]">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
+  <section
+    class="mx-auto max-w-3xl px-4 sm:px-6 py-10 border-t border-[var(--divider)]"
+  >
+    <div
+      class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8"
+    >
       <h2 class="text-xl font-bold">What Listeners Say</h2>
       <div class="flex items-center gap-2 text-sm text-fg-2">
         <span class="text-[#C9A84C] text-base tracking-tight">★★★★★</span>
@@ -148,46 +199,54 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
     </div>
 
     <div class="grid sm:grid-cols-2 gap-4">
-      {[
-        {
-          name: 'Kashif Husain',
-          date: 'April 2022',
-          text: "Very handy and useful app for learning and understanding 'Kitaab at Tauheed' lectures. Easy to use without any hassles. May the developer of the app find it's 'ajr' as it's a 'Sadka e jaariya'.",
-          helpful: 8,
-        },
-        {
-          name: 'Hasan Khan',
-          date: 'March 2022',
-          text: 'Jazakallah khair Sheikh. May Allah bless and reward you for your efforts. Every single Muslim must listen to these lectures once, thoroughly.',
-          helpful: 8,
-        },
-        {
-          name: 'Mohsin Khan',
-          date: 'June 2021',
-          text: 'JazakAllah khair Shaikh. May Allah accept your efforts and keeps you in good health. Ameen ya Rabbul Alameen.',
-          helpful: 14,
-        },
-        {
-          name: 'Sarfaraz Ahmad',
-          date: 'June 2024',
-          text: "Masha'Allah bahut behtarin voice & cleared hai.",
-          helpful: 2,
-        },
-      ].map(({ name, date, text, helpful }) => (
-        <div class="bg-surface border border-[var(--divider)] rounded-xl p-5 flex flex-col gap-4">
-          <div class="flex items-center gap-3">
-            <div class="w-11 h-11 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 flex items-center justify-center shrink-0">
-              <span class="text-[#C9A84C] font-bold text-base">{name[0]}</span>
+      {
+        [
+          {
+            name: "Kashif Husain",
+            date: "April 2022",
+            text: "Very handy and useful app for learning and understanding 'Kitaab at Tauheed' lectures. Easy to use without any hassles. May the developer of the app find it's 'ajr' as it's a 'Sadka e jaariya'.",
+            helpful: 8,
+          },
+          {
+            name: "Hasan Khan",
+            date: "March 2022",
+            text: "Jazakallah khair Sheikh. May Allah bless and reward you for your efforts. Every single Muslim must listen to these lectures once, thoroughly.",
+            helpful: 8,
+          },
+          {
+            name: "Mohsin Khan",
+            date: "June 2021",
+            text: "JazakAllah khair Shaikh. May Allah accept your efforts and keeps you in good health. Ameen ya Rabbul Alameen.",
+            helpful: 14,
+          },
+          {
+            name: "Sarfaraz Ahmad",
+            date: "June 2024",
+            text: "Masha'Allah bahut behtarin voice & cleared hai.",
+            helpful: 2,
+          },
+        ].map(({ name, date, text, helpful }) => (
+          <div class="bg-surface border border-[var(--divider)] rounded-xl p-5 flex flex-col gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-full bg-[#C9A84C]/15 border border-[#C9A84C]/25 flex items-center justify-center shrink-0">
+                <span class="text-[#C9A84C] font-bold text-base">
+                  {name[0]}
+                </span>
+              </div>
+              <div class="min-w-0">
+                <p class="font-semibold truncate">{name}</p>
+                <p class="text-[#C9A84C] text-sm tracking-tight mt-0.5">
+                  ★★★★★
+                </p>
+              </div>
             </div>
-            <div class="min-w-0">
-              <p class="font-semibold truncate">{name}</p>
-              <p class="text-[#C9A84C] text-sm tracking-tight mt-0.5">★★★★★</p>
-            </div>
+            <p class="text-fg-2 text-base leading-relaxed flex-1">"{text}"</p>
+            <p class="text-fg-4 text-xs">
+              {helpful} people found this helpful · {date}
+            </p>
           </div>
-          <p class="text-fg-2 text-base leading-relaxed flex-1">"{text}"</p>
-          <p class="text-fg-4 text-xs">{helpful} people found this helpful · {date}</p>
-        </div>
-      ))}
+        ))
+      }
     </div>
 
     <p class="text-center mt-6 text-xs text-fg-3">
@@ -199,7 +258,10 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 
   <!-- Browse link -->
   <div class="text-center py-6">
-    <a href="/lectures/" class="inline-block border border-[#C9A84C]/50 text-[#C9A84C] font-semibold px-8 py-3 rounded-xl text-base hover:bg-[#C9A84C]/10 transition-colors">
+    <a
+      href="/lectures/"
+      class="inline-block border border-[#C9A84C]/50 text-[#C9A84C] font-semibold px-8 py-3 rounded-xl text-base hover:bg-[#C9A84C]/10 transition-colors"
+    >
       Browse all 15 classes →
     </a>
   </div>
@@ -228,11 +290,11 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         >
         <h3 class="font-semibold mb-3 text-[#C9A84C]">📱 Android App</h3>
         <ul class="text-sm space-y-2">
-          <li>✓ All 50 lectures</li>
-          <li>✓ <strong>Offline downloads</strong></li>
-          <li>✓ <strong>Progress tracking</strong></li>
+          <li>✓ All 50 Lectures</li>
+          <li>✓ <strong>Offline dDwnloads</strong></li>
+          <li>✓ <strong>Progress Tracking</strong></li>
           <li>✓ <strong>Study Mode</strong></li>
-          <li>✓ <strong>Background playback</strong></li>
+          <li>✓ <strong>Background Playback</strong></li>
           <li>✓ <strong>Urdu / Roman Urdu UI</strong></li>
         </ul>
       </div>
@@ -261,9 +323,9 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
   <section class="mx-auto max-w-3xl px-4 py-8 border-t border-[var(--divider)]">
     <h2 class="text-xl font-bold mb-4">About This Series</h2>
     <p class="text-fg-2 leading-relaxed mb-3">
-      <strong class="text-fg">Kitab al-Tawheed</strong> is a foundational text
-      on Islamic monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah
-      ibn Sulayman al-Tamimi Al Najdi. This complete Urdu explanation by
+      <strong class="text-fg">Kitab al-Tawheed</strong> is a foundational text on
+      Islamic monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn
+      Sulayman al-Tamimi Al Najdi Rahimahullah. This complete Urdu explanation by
       <strong class="text-fg"
         >Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah</strong
       > covers all {catalog.book.lectureCount} lectures across 15 classes — over {

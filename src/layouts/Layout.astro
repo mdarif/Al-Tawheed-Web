@@ -29,7 +29,7 @@ const {
   description = "50 Urdu Audio Lessons • 27+ Hours • Online & Offline",
   appConfig,
   ogImageAlt = "Sharah Kitab al-Tawheed | Urdu Audio Series, 27+ Hours",
-  ogSiteName = "Kitab At-Tawheed — Free Islamic Audio",
+  ogSiteName = "Kitab At-Tawheed — The Foundation of Tawheed",
   ogType = "website",
   articleTags = [],
   ogImageWidth,
@@ -65,7 +65,10 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
   <head>
     <!-- Prevent flash of wrong theme: set data-theme before first paint -->
     <script is:inline>
-      (function(){var t=localStorage.getItem('tawheed:theme');if(t==='light')document.documentElement.dataset.theme='light';})();
+      (function () {
+        var t = localStorage.getItem("tawheed:theme");
+        if (t === "light") document.documentElement.dataset.theme = "light";
+      })();
     </script>
     <meta charset="UTF-8" />
     <meta
