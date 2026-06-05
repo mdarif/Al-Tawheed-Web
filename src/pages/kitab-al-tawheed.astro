@@ -1,29 +1,29 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import FaqSection from '../components/FaqSection.astro';
-import { getCatalog, getAppConfig } from '../lib/catalog';
+import Layout from "../layouts/Layout.astro";
+import FaqSection from "../components/FaqSection.astro";
+import { getCatalog, getAppConfig } from "../lib/catalog";
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 
 const faq = [
   {
-    question: 'What is Kitab al-Tawheed?',
+    question: "What is Kitab al-Tawheed?",
     answer:
-      'Kitab al-Tawheed (كتاب التوحيد) is a foundational Islamic text on monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah. It explains Tawheed — the oneness of Allah — using evidence from the Quran and authentic Sunnah.',
+      "Kitab al-Tawheed (كتاب التوحيد) is a foundational Islamic text on monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah. It explains Tawheed — the oneness of Allah — using evidence from the Quran and authentic Sunnah.",
   },
   {
-    question: 'Who wrote Kitab al-Tawheed?',
+    question: "Who wrote Kitab al-Tawheed?",
     answer:
-      'It was written by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah (1703–1792). The book is widely taught in institutes and seminaries across the Muslim world.',
+      "It was written by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah (1703–1792). The book is widely taught in institutes and seminaries across the Muslim world.",
   },
   {
-    question: 'Is there an Urdu explanation available?',
+    question: "Is there an Urdu explanation available?",
     answer: `Yes. Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah has recorded a complete sharah (explanation) — ${catalog.book.lectureCount} Urdu lectures in 15 classes, free on this website and the Android app.`,
   },
   {
-    question: 'How should I study Kitab al-Tawheed?',
+    question: "How should I study Kitab al-Tawheed?",
     answer:
-      'Listen class by class in order. The Android app offers Study Mode with progress tracking; this website lets you stream every lecture without an account.',
+      "Listen class by class in order. The Android app offers Study Mode with progress tracking; this website lets you stream every lecture without an account.",
   },
 ];
 ---
@@ -31,9 +31,12 @@ const faq = [
 <Layout
   title="What is Kitab al-Tawheed? — Summary & Free Urdu Sharah"
   description="Learn what Kitab al-Tawheed is, who wrote it, and listen to a complete free Urdu sharah by Shaikh Abdullah Nasir Rahmani — 50 lectures online."
-  appConfig={appConfig}
+  {appConfig}
 >
-  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
+  <article
+    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0"
+    data-pagefind-body
+  >
     <nav class="text-xs text-fg-3 mb-6">
       <a href="/" class="hover:text-[#C9A84C]">Home</a> → Kitab al-Tawheed
     </nav>
@@ -42,20 +45,41 @@ const faq = [
     <p class="text-[#C9A84C] text-xl mb-6" dir="rtl" lang="ar">كتاب التوحيد</p>
 
     <p class="text-fg-2 leading-relaxed mb-4">
-      <strong class="text-fg">Kitab al-Tawheed</strong> ("The Book of Islamic Monotheism") is among the most important works on <em>aqeedah</em> (Islamic creed). It clarifies the rights of Allah upon His creation: to worship Him alone, avoid shirk (associating partners with Him), and understand Tawheed as the Prophets taught it.
+      <strong class="text-fg">Kitab al-Tawheed</strong> ("The Book of Islamic Monotheism")
+      is among the most important works on <em>aqeedah</em> (Islamic creed). It clarifies
+      the rights of Allah upon His creation: to worship Him alone, avoid shirk (associating
+      partners with Him), and understand Tawheed as the Prophets taught it.
     </p>
     <p class="text-fg-2 leading-relaxed mb-4">
-      The author, <strong class="text-fg">Imam Muhammad ibn Abd al-Wahhab Rahimahullah</strong>, relied exclusively on the Quran and Sunnah. The book is structured for students — each chapter builds understanding of Allah's names, attributes, types of worship, and common errors that contradict Tawheed.
+      The author, <strong class="text-fg"
+        >Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman
+        al-Tamimi Al Najdi Rahimahullah</strong
+      >, relied exclusively on the Quran and Sunnah. The book is structured for
+      students — each chapter builds understanding of Allah's names, attributes,
+      types of worship, and common errors that contradict Tawheed.
     </p>
 
-    <section class="bg-surface border border-[var(--divider)] rounded-xl p-5 mb-8">
-      <h2 class="text-lg font-bold text-[#C9A84C] mb-2">Free Urdu sharah on this site</h2>
+    <section
+      class="bg-surface border border-[var(--divider)] rounded-xl p-5 mb-8"
+    >
+      <h2 class="text-lg font-bold text-[#C9A84C] mb-2">Urdu Sharah</h2>
       <p class="text-sm text-fg-2 mb-4">
-        <strong class="text-fg">Shaikh Abdullah Nasir Rahmani</strong> explains the full book in {catalog.book.lectureCount} Urdu audio lectures across 15 classes.
+        <strong class="text-fg"
+          >Shaikh Abdullah Nasir Rahmani Hafizahullah</strong
+        > explains the full book in {catalog.book.lectureCount} Urdu audio lectures
+        across 15 classes.
       </p>
       <div class="flex flex-wrap gap-3">
-        <a href="/lectures/" class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">Browse lectures</a>
-        <a href="/search/" class="border border-[var(--divider-lg)] px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover">Search</a>
+        <a
+          href="/lectures/"
+          class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]"
+          >Browse lectures</a
+        >
+        <a
+          href="/search/"
+          class="border border-[var(--divider-lg)] px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover"
+          >Search</a
+        >
       </div>
     </section>
 

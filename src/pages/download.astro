@@ -1,6 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getCatalog, getAppConfig, en, playStoreUrl, bookCoverSrc } from '../lib/catalog';
+import Layout from "../layouts/Layout.astro";
+import {
+  getCatalog,
+  getAppConfig,
+  en,
+  playStoreUrl,
+  bookCoverSrc,
+} from "../lib/catalog";
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
@@ -8,26 +14,59 @@ const coverSrc = bookCoverSrc(catalog.book);
 const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 
 const screenshots = [
-  { src: '/app-screenshots/01-welcome-framed.png', alt: 'Welcome screen' },
-  { src: '/app-screenshots/02-lectures-framed.png', alt: 'Lecture list by class' },
-  { src: '/app-screenshots/03-player-framed.png', alt: 'Audio player with seek and speed' },
-  { src: '/app-screenshots/04-home-framed.png', alt: 'Home — continue listening and daily benefit' },
+  { src: "/app-screenshots/01-welcome-framed.png", alt: "Welcome screen" },
+  {
+    src: "/app-screenshots/02-lectures-framed.png",
+    alt: "Lecture list by class",
+  },
+  {
+    src: "/app-screenshots/03-player-framed.png",
+    alt: "Audio player with seek and speed",
+  },
+  {
+    src: "/app-screenshots/04-home-framed.png",
+    alt: "Home — continue listening and daily benefit",
+  },
 ];
 
 const features = [
-  { icon: '⬇️', title: 'Offline downloads', desc: 'Save lectures for travel or poor connectivity.' },
-  { icon: '📊', title: 'Progress tracking', desc: 'Resume exactly where you stopped on each part.' },
-  { icon: '📚', title: 'Study Mode', desc: 'Work through each class in order with completion tracking.' },
-  { icon: '🎵', title: 'Background playback', desc: 'Listen while using other apps or with screen off.' },
-  { icon: '⚡', title: 'Playback speed', desc: '0.75× to 2× — same range as the full player.' },
-  { icon: '🌐', title: 'Urdu & Roman Urdu', desc: 'Interface and titles in your preferred script.' },
+  {
+    icon: "⬇️",
+    title: "Offline downloads",
+    desc: "Save lectures for travel or poor connectivity.",
+  },
+  {
+    icon: "📊",
+    title: "Progress tracking",
+    desc: "Resume exactly where you stopped on each part.",
+  },
+  {
+    icon: "📚",
+    title: "Study Mode",
+    desc: "Work through each class in order with completion tracking.",
+  },
+  {
+    icon: "🎵",
+    title: "Background playback",
+    desc: "Listen while using other apps or with screen off.",
+  },
+  {
+    icon: "⚡",
+    title: "Playback speed",
+    desc: "0.75× to 2× — same range as the full player.",
+  },
+  {
+    icon: "🌐",
+    title: "Urdu & Roman Urdu",
+    desc: "Interface and titles in your preferred script.",
+  },
 ];
 ---
 
 <Layout
   title="Download App — Sharah Kitab al-Tawheed | Free Android"
   description={`Download the free Android app for Sharah Kitab al-Tawheed — ${catalog.book.lectureCount} lectures, offline mode, Study Mode, and progress tracking.`}
-  appConfig={appConfig}
+  {appConfig}
 >
   <div class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">
     <nav class="text-xs text-fg-3 mb-6">
@@ -44,65 +83,92 @@ const features = [
         loading="eager"
       />
       <div class="flex-1 text-center md:text-left">
-        <h1 class="text-3xl font-bold mb-2">Sharah Kitab al-Tawheed App</h1>
-        <p class="text-[#C9A84C] text-lg mb-1" dir="rtl" lang="ur">{catalog.book.title.ur ?? 'شرح کتاب التوحید'}</p>
-        <p class="text-fg-2 mb-6">
-          {catalog.book.lectureCount} lectures · {totalHours}h · {en(catalog.book.speaker)}
+        <h1 class="text-3xl font-bold mb-2">
+          Sharah Kitab al-Tawheed Mobile App
+        </h1>
+        <p class="text-[#C9A84C] text-lg mb-1" dir="rtl" lang="ur">
+          {catalog.book.title.ur ?? "شرح کتاب التوحید"}
+        </p>
+        <p class="text-fg-2 mb-3">
+          {catalog.book.lectureCount} Lectures · {totalHours} Hours · {
+            en(catalog.book.speaker)
+          }
         </p>
         <a
           href={storeUrl}
           target="_blank"
           rel="noopener"
-          class="inline-block bg-[#C9A84C] text-black font-bold px-8 py-4 rounded-xl text-base hover:bg-[#D4B55C] transition-colors"
+          class="inline-block hover:opacity-90 transition-opacity"
         >
-          Download Free on Google Play
+          <img
+            src="/google-play-badge.png"
+            alt="Get it on Google Play"
+            class="w-[220px] h-auto"
+          />
         </a>
         <p class="text-xs text-fg-3 mt-3">
-          Prefer streaming? <a href="/lectures/" class="text-[#C9A84C] hover:underline">Browse lectures on the web</a>
+          Prefer streaming? <a
+            href="/lectures/"
+            class="text-[#C9A84C] hover:underline">Browse lectures on the web</a
+          >
         </p>
       </div>
     </div>
 
     <section class="mb-12">
-      <h2 class="text-xl font-bold text-[#C9A84C] mb-6">Why use the app?</h2>
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-6">Why Use The App?</h2>
       <div class="grid sm:grid-cols-2 gap-4">
-        {features.map(({ icon, title, desc }) => (
-          <div class="bg-surface border border-[var(--divider)] rounded-xl p-4">
-            <p class="text-lg mb-1">{icon} <span class="font-semibold">{title}</span></p>
-            <p class="text-sm text-fg-2">{desc}</p>
-          </div>
-        ))}
+        {
+          features.map(({ icon, title, desc }) => (
+            <div class="bg-surface border border-[var(--divider)] rounded-xl p-4">
+              <p class="text-lg mb-1">
+                {icon} <span class="font-semibold">{title}</span>
+              </p>
+              <p class="text-sm text-fg-2">{desc}</p>
+            </div>
+          ))
+        }
       </div>
     </section>
 
     <section class="mb-12">
-      <h2 class="text-xl font-bold text-[#C9A84C] mb-6">App preview</h2>
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-6">Mobile App Preview</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {screenshots.map(({ src, alt }) => (
-          <img
-            src={src}
-            alt={alt}
-            width="270"
-            height="480"
-            class="w-full rounded-xl border border-[var(--divider)] bg-surface"
-            loading="lazy"
-          />
-        ))}
+        {
+          screenshots.map(({ src, alt }) => (
+            <img
+              src={src}
+              alt={alt}
+              width="270"
+              height="480"
+              class="w-full rounded-xl border border-[var(--divider)] bg-surface"
+              loading="lazy"
+            />
+          ))
+        }
       </div>
     </section>
 
-    <section class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-6 text-center">
+    <section
+      class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-6 text-center"
+    >
       <p class="font-semibold mb-2">Free · No ads · No account</p>
       <p class="text-sm text-fg-2 mb-4">
-        {appConfig.about.appName} — {appConfig.about.lectureCount} lectures, {appConfig.about.totalDuration} of benefit.
+        {appConfig.about.appName} — {appConfig.about.lectureCount} lectures, {
+          appConfig.about.totalDuration
+        } of benefit.
       </p>
       <a
         href={storeUrl}
         target="_blank"
         rel="noopener"
-        class="inline-block bg-[#C9A84C] text-black font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors"
+        class="inline-block hover:opacity-90 transition-opacity"
       >
-        Get it on Google Play
+        <img
+          src="/google-play-badge.png"
+          alt="Get it on Google Play"
+          class="w-[200px] h-auto mx-auto"
+        />
       </a>
     </section>
   </div>
