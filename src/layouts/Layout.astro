@@ -23,6 +23,8 @@ interface Props {
   /** Explicit OG image dimensions — only set when you know the exact size */
   ogImageWidth?: number;
   ogImageHeight?: number;
+  /** FAQPage structured data — array of {question, answer} pairs */
+  faqItems?: ReadonlyArray<{ question: string; answer: string }>;
 }
 
 const {
@@ -35,6 +37,7 @@ const {
   articleTags = [],
   ogImageWidth,
   ogImageHeight,
+  faqItems,
 } = Astro.props;
 
 // Resolve OG image: default to the dedicated social card (known 1200x630).
@@ -103,10 +106,14 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <link rel="alternate" hreflang="ur" href={urUrl} />
     <link rel="alternate" hreflang="x-default" href={enUrl} />
     {locale === "ur" && (
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap"
-      />
+      <>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap"
+        />
+      </>
     )}
 
     <!-- Facebook / Open Graph -->
@@ -186,6 +193,23 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
             },
             numberOfEpisodes: 50,
             inLanguage: "ur",
+          })}
+        />
+      )
+    }
+    {
+      faqItems && faqItems.length > 0 && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqItems.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: { "@type": "Answer", text: item.answer },
+            })),
           })}
         />
       )
