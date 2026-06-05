@@ -338,12 +338,7 @@ const i18n = t(locale);
     <h2 class="text-xl font-bold mb-4 font-urdu">{i18n.index.aboutTitle}</h2>
     <p class="text-fg-2 leading-relaxed mb-3 font-urdu">
       <strong class="text-fg">کتاب التوحید</strong>{" "}
-      {
-        tx(i18n.index.aboutBody, {
-          count: catalog.book.lectureCount,
-          hours: totalHours,
-        }).replace("کتاب التوحید ", "")
-      }
+      {tx(i18n.index.aboutBody, { count: catalog.book.lectureCount, hours: totalHours })}
     </p>
     <a
       href={`/${locale}/about/`}

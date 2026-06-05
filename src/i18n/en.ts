@@ -14,17 +14,17 @@ export const en = {
     pageTitle: "About This Series",
     kitab: {
       title: "Kitab al-Tawheed",
-      p1: 'Kitab al-Tawheed (كتاب التوحيد — "The Book of Islamic Monotheism") is one of the most important works in Islamic theology, written by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah (1703–1792). It is widely studied in Islamic institutes and seminaries worldwide.',
+      p1: '(كتاب التوحيد — "The Book of Islamic Monotheism") is one of the most important works in Islamic theology, written by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah (1703–1792). It is widely studied in Islamic institutes and seminaries worldwide.',
       p2: "The book covers the foundation of Islamic faith — Tawheed (the oneness of Allah) — drawing exclusively from the Quran and authentic Sunnah. It addresses the three categories of Tawheed, the dangers of shirk (associating partners with Allah), and the obligations upon every Muslim to understand and implement Tawheed in their daily lives.",
     },
     speaker: {
       title: "The Speaker",
-      p1: "Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah is a respected Islamic scholar, known for his clear and accessible Urdu explanations of classical Islamic texts. His teaching style — rooted in evidence from Quran and Sunnah — has benefited hundreds of thousands of Muslims across South Asia and beyond.",
+      p1: "is a respected Islamic scholar, known for his clear and accessible Urdu explanations of classical Islamic texts. His teaching style — rooted in evidence from Quran and Sunnah — has benefited hundreds of thousands of Muslims across South Asia and beyond.",
       p2: "This series is his complete explanation of Kitab al-Tawheed — {count} lectures totalling over {hours} hours, delivered across 15 classes.",
     },
     app: {
       title: "The App",
-      p1: "The Sharah Kitab al-Tawheed Android app provides the best experience for studying this series — with offline downloads, progress tracking, Study Mode, background playback, and a Urdu/Roman Urdu Interface.",
+      p1: "provides the best experience for studying this series — with offline downloads, progress tracking, Study Mode, background playback, and a Urdu/Roman Urdu Interface.",
     },
     contact: {
       title: "Contact",
@@ -34,11 +34,11 @@ export const en = {
   kitab: {
     pageTitle: "What is Kitab al-Tawheed?",
     p1: '"Kitab al-Tawheed ("The Book of Islamic Monotheism") is among the most important works on aqeedah (Islamic creed). It clarifies the rights of Allah upon His creation: to worship Him alone, avoid shirk (associating partners with Him), and understand Tawheed as the Prophets taught it.',
-    p2: "The author, Imam Muhammad ibn Abd al-Wahhab Rahimahullah, relied exclusively on the Quran and Sunnah. The book is structured for students — each chapter builds understanding of Allah's names, attributes, types of worship, and common errors that contradict Tawheed.",
+    p2: "relied exclusively on the Quran and Sunnah. The book is structured for students — each chapter builds understanding of Allah's names, attributes, types of worship, and common errors that contradict Tawheed.",
     freeSection: {
       title: "Free Urdu sharah on this site",
       description:
-        "Shaikh Abdullah Nasir Rahmani explains the full book in {count} Urdu audio lectures across 15 classes.",
+        "explains the full book in {count} Urdu audio lectures across 15 classes.",
     },
     faq: [
       {
@@ -65,7 +65,7 @@ export const en = {
   },
   tawheed: {
     pageTitle: "What is Tawheed in Islam?",
-    p1: "Tawheed (monotheism) is the message of every Prophet: worship Allah alone, obey Him, and do not associate partners with Him. It is not merely a label but a complete way of life — in prayer, intention, love, fear, hope, and reliance.",
+    p1: "(monotheism) is the message of every Prophet: worship Allah alone, obey Him, and do not associate partners with Him. It is not merely a label but a complete way of life — in prayer, intention, love, fear, hope, and reliance.",
     typesTitle: "Three types of Tawheed",
     types: [
       {
