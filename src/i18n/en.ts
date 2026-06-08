@@ -109,7 +109,7 @@ export const en = {
     ctaDesc: "{appName} — {count} lectures, {duration} of benefit.",
     streamNote: "Prefer streaming?",
     features: [
-      { desc: "Save lectures for travel or poor connectivity." },
+      { desc: "Save lectures for travel or poor connectivity. Wi-Fi-only mode and one-tap cleanup keep storage tidy." },
       { desc: "Resume exactly where you stopped on each part." },
       { desc: "Work through each class in order with completion tracking." },
       { desc: "Listen while using other apps or with screen off." },
