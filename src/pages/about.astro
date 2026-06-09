@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getCatalog, getAppConfig, en, playStoreUrl } from "../lib/catalog";
+import { getCatalog, getAppConfig, playStoreUrl } from "../lib/catalog";
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
@@ -75,6 +75,20 @@ const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
         class="block mt-3 text-[#C9A84C] text-sm hover:underline"
         >App features & screenshots →</a
       >
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Al Marfa Duroos</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        Sharah Kitab al-Tawheed is a course from <a
+          href="https://www.youtube.com/@almarfaduroos"
+          target="_blank"
+          rel="noopener"
+          class="text-[#C9A84C] hover:underline font-semibold"
+          >Al Marfa Duroos</a
+        > — free Urdu Islamic audio lessons built to make classical scholarship accessible
+        to every Urdu-speaking Muslim, anywhere in the world, without cost or account.
+      </p>
     </section>
 
     <section>
