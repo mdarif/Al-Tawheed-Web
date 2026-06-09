@@ -1,30 +1,45 @@
 ---
 import type { Catalog } from '../lib/catalog';
 import { en } from '../lib/catalog';
-import { getTodaysBenefit } from '../lib/daily-benefit';
 
 interface Props {
   catalog: Catalog;
 }
 
 const { catalog } = Astro.props;
-const benefit = getTodaysBenefit(catalog);
-if (!benefit) return null;
+const benefits = catalog.dailyBenefits;
+if (!benefits?.length) return null;
 
-const text = en(benefit.text);
-const source = en(benefit.source);
+// Server-side: pick benefit for build date as SSR default (no flash)
+const EPOCH_MS = new Date('2026-01-01T00:00:00Z').getTime();
+const buildDayIndex = Math.floor((Date.now() - EPOCH_MS) / 86_400_000);
+const defaultBenefit = benefits[((buildDayIndex % benefits.length) + benefits.length) % benefits.length];
 ---
 
 <section class="mx-auto max-w-3xl px-4 sm:px-6 py-6 min-w-0">
   <h2 class="text-lg font-bold mb-3">Daily Benefit</h2>
   <div class="bg-gradient-to-br from-surface-gold to-surface border border-[#C9A84C]/25 rounded-2xl p-5">
     <span class="text-[#C9A84C] text-2xl leading-none" aria-hidden="true">❝</span>
-    {benefit.textArabic && (
-      <p class="text-lg leading-relaxed mt-2 mb-3 text-right" dir="rtl" lang="ar">
-        {benefit.textArabic}
-      </p>
-    )}
-    <p class="text-fg-2 italic leading-relaxed">{text}</p>
-    <p class="text-[#C9A84C] text-sm font-semibold mt-3">— {source}</p>
+    <p id="daily-arabic" class="text-lg leading-relaxed mt-2 mb-3 text-right" dir="rtl" lang="ar">
+      {defaultBenefit.textArabic ?? ''}
+    </p>
+    <p id="daily-text" class="text-fg-2 italic leading-relaxed">{en(defaultBenefit.text)}</p>
+    <p id="daily-source" class="text-[#C9A84C] text-sm font-semibold mt-3">— {en(defaultBenefit.source)}</p>
   </div>
 </section>
+
+<script is:inline define:vars={{ benefits, EPOCH_MS: new Date('2026-01-01T00:00:00Z').getTime() }}>
+  (function () {
+    var dayIndex = Math.floor((Date.now() - EPOCH_MS) / 86400000);
+    var b = benefits[((dayIndex % benefits.length) + benefits.length) % benefits.length];
+    if (!b) return;
+
+    var arabicEl = document.getElementById('daily-arabic');
+    var textEl   = document.getElementById('daily-text');
+    var sourceEl = document.getElementById('daily-source');
+
+    if (arabicEl) arabicEl.textContent = b.textArabic || '';
+    if (textEl)   textEl.textContent   = (typeof b.text === 'string' ? b.text : b.text.en) || '';
+    if (sourceEl) sourceEl.textContent = '— ' + ((typeof b.source === 'string' ? b.source : b.source.en) || '');
+  })();
+</script>

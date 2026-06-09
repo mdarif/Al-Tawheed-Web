@@ -4,7 +4,6 @@ import PagefindConfig from 'astro-pagefind/components/PagefindConfig.astro';
 import { getAppConfig } from '../lib/catalog';
 
 const appConfig = await getAppConfig();
-const q = Astro.url.searchParams.get('q')?.trim() ?? '';
 ---
 
 <Layout
@@ -52,19 +51,21 @@ const q = Astro.url.searchParams.get('q')?.trim() ?? '';
   new MutationObserver(syncPfTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 </script>
 
-{q && (
-  <script define:vars={{ q }}>
-    async function applyInitialQuery() {
-      await customElements.whenDefined('pagefind-input');
-      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-      const host = document.querySelector('pagefind-input');
-      const input = host?.querySelector('.pf-input');
-      if (input instanceof HTMLInputElement) {
-        input.value = q;
-        input.dispatchEvent(new Event('input', { bubbles: true }));
-        input.focus();
-      }
+<script>
+  async function applyInitialQuery() {
+    const q = new URLSearchParams(window.location.search).get('q')?.trim();
+    if (!q) return;
+    await customElements.whenDefined('pagefind-input');
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const host = document.querySelector('pagefind-input');
+    const input =
+      host?.shadowRoot?.querySelector('input') ??
+      host?.querySelector('input');
+    if (input instanceof HTMLInputElement) {
+      input.value = q;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.focus();
     }
-    applyInitialQuery();
-  </script>
-)}
+  }
+  applyInitialQuery();
+</script>

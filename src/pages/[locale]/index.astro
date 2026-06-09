@@ -210,15 +210,16 @@ const i18n = t(locale);
     </div>
   </section>
 
-  <!-- Testimonials — real reviews stay in original language -->
+  <!-- Testimonials -->
   <section
     class="mx-auto max-w-3xl px-4 sm:px-6 py-10 border-t border-[var(--divider)]"
   >
     <div
       class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8"
+      dir="rtl"
     >
-      <h2 class="text-xl font-bold">What Listeners Say</h2>
-      <div class="flex items-center gap-2 text-sm text-fg-2">
+      <h2 class="text-xl font-bold font-urdu">{locale === "ur" ? "سننے والوں کی رائے" : "What Listeners Say"}</h2>
+      <div class="flex items-center gap-2 text-sm text-fg-2" dir="ltr">
         <span class="text-[#C9A84C] text-base tracking-tight">★★★★★</span>
         <span>5.0 · Google Play</span>
       </div>
@@ -289,36 +290,61 @@ const i18n = t(locale);
     </a>
   </div>
 
-  <!-- Web vs App — stays English -->
+  <!-- Web vs App -->
   <section class="mx-auto max-w-3xl px-4 py-12">
-    <h2 class="text-xl font-bold text-center mb-8">Web vs Android App</h2>
+    <h2 class="text-xl font-bold text-center mb-8 font-urdu">
+      {locale === "ur" ? "ویب بمقابلہ اینڈرائیڈ ایپ" : "Web vs Android App"}
+    </h2>
     <div class="grid sm:grid-cols-2 gap-4">
-      <div class="bg-surface border border-[var(--divider)] rounded-xl p-5">
-        <h3 class="font-semibold mb-3 text-fg-2">🌐 Listen in Browser</h3>
-        <ul class="text-sm space-y-2 text-fg-2">
-          <li>✓ Stream all 50 lectures</li>
-          <li>✓ No account needed</li>
-          <li>✓ Resume in this browser</li>
-          <li class="text-fg-4">✗ Requires internet</li>
-          <li class="text-fg-4">✗ No Study Mode</li>
-          <li class="text-fg-4">✗ No background play</li>
+      <div class="bg-surface border border-[var(--divider)] rounded-xl p-5" dir="rtl">
+        <h3 class="font-semibold mb-3 text-fg-2 font-urdu">🌐 {locale === "ur" ? "براؤزر میں سنیں" : "Listen in Browser"}</h3>
+        <ul class="text-sm space-y-2 text-fg-2 font-urdu">
+          {locale === "ur" ? (
+            <>
+              <li>✓ تمام ۵۰ دروس اسٹریم کریں</li>
+              <li>✓ کوئی اکاؤنٹ نہیں</li>
+              <li>✓ اسی براؤزر میں جاری رکھیں</li>
+              <li class="text-fg-4">✗ انٹرنیٹ ضروری ہے</li>
+              <li class="text-fg-4">✗ اسٹڈی موڈ نہیں</li>
+              <li class="text-fg-4">✗ بیک گراؤنڈ پلے نہیں</li>
+            </>
+          ) : (
+            <>
+              <li>✓ Stream all 50 lectures</li>
+              <li>✓ No account needed</li>
+              <li>✓ Resume in this browser</li>
+              <li class="text-fg-4">✗ Requires internet</li>
+              <li class="text-fg-4">✗ No Study Mode</li>
+              <li class="text-fg-4">✗ No background play</li>
+            </>
+          )}
         </ul>
       </div>
-      <div
-        class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-5 relative"
-      >
-        <span
-          class="absolute -top-2.5 left-4 text-[10px] bg-[#C9A84C] text-black font-bold px-2 py-0.5 rounded-full"
-          >RECOMMENDED</span
-        >
-        <h3 class="font-semibold mb-3 text-[#C9A84C]">📱 Android App</h3>
-        <ul class="text-sm space-y-2">
-          <li>✓ All 50 lectures</li>
-          <li>✓ <strong>Offline Downloads</strong></li>
-          <li>✓ <strong>Progress Tracking</strong></li>
-          <li>✓ <strong>Study Mode</strong></li>
-          <li>✓ <strong>Background Playback</strong></li>
-          <li>✓ <strong>Urdu / Roman Urdu UI</strong></li>
+      <div class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-5 relative" dir="rtl">
+        <span class="absolute -top-2.5 right-4 text-[10px] bg-[#C9A84C] text-black font-bold px-2 py-0.5 rounded-full font-urdu">
+          {locale === "ur" ? "تجویز کردہ" : "RECOMMENDED"}
+        </span>
+        <h3 class="font-semibold mb-3 text-[#C9A84C] font-urdu">📱 {locale === "ur" ? "اینڈرائیڈ ایپ" : "Android App"}</h3>
+        <ul class="text-sm space-y-2 font-urdu">
+          {locale === "ur" ? (
+            <>
+              <li>✓ تمام ۵۰ دروس</li>
+              <li>✓ <strong>آف لائن ڈاؤنلوڈ</strong></li>
+              <li>✓ <strong>پیشرفت ٹریکنگ</strong></li>
+              <li>✓ <strong>اسٹڈی موڈ</strong></li>
+              <li>✓ <strong>بیک گراؤنڈ پلے بیک</strong></li>
+              <li>✓ <strong>اردو / رومن اردو انٹرفیس</strong></li>
+            </>
+          ) : (
+            <>
+              <li>✓ All 50 lectures</li>
+              <li>✓ <strong>Offline Downloads</strong></li>
+              <li>✓ <strong>Progress Tracking</strong></li>
+              <li>✓ <strong>Study Mode</strong></li>
+              <li>✓ <strong>Background Playback</strong></li>
+              <li>✓ <strong>Urdu / Roman Urdu UI</strong></li>
+            </>
+          )}
         </ul>
       </div>
     </div>
