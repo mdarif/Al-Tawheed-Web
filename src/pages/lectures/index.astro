@@ -22,11 +22,30 @@ const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
     </nav>
 
     <h1 class="text-3xl font-bold mb-2">All Lectures</h1>
-    <p class="text-fg-2 mb-8">
+    <p class="text-fg-2 mb-5">
       {catalog.book.lectureCount} Lectures · 15 Classes · {
         Math.floor(catalog.book.totalDurationSeconds / 3600)
       } Hours Audio
     </p>
+
+    <div class="mb-8">
+      <div class="relative max-w-md">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-fg-3 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          id="class-filter"
+          type="search"
+          placeholder="Filter classes…"
+          autocomplete="off"
+          class="w-full bg-surface border border-[var(--divider)] rounded-xl pl-10 pr-4 py-2.5 text-sm placeholder:text-fg-3 focus:outline-none focus:border-[#C9A84C]/60 transition-colors"
+        />
+      </div>
+      <p id="full-search-hint" class="hidden mt-2 text-xs text-fg-3">
+        Looking for a specific topic?
+        <a id="full-search-link" href="/search/" class="text-[#C9A84C] hover:underline">Search all lecture content →</a>
+      </p>
+    </div>
 
     <div class="space-y-3">
       {
@@ -38,7 +57,8 @@ const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
           return (
             <a
               href={`/lectures/${chapterSlug(chapter.id)}/`}
-              class="group flex items-center justify-between bg-surface border border-[var(--divider)] rounded-xl px-5 py-4 hover:border-[#C9A84C]/40 hover:bg-surface-hover transition-all"
+              class="class-card group flex items-center justify-between bg-surface border border-[var(--divider)] rounded-xl px-5 py-4 hover:border-[#C9A84C]/40 hover:bg-surface-hover transition-all"
+              data-title={`class ${String(chapter.number).padStart(2, '0')} ${en(chapter.title)}`.toLowerCase()}
             >
               <div class="flex items-center gap-4">
                 <span class="w-9 h-9 flex items-center justify-center bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-bold rounded-lg shrink-0">
@@ -65,3 +85,24 @@ const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
     </div>
   </div>
 </Layout>
+
+<script>
+  const input = document.getElementById('class-filter') as HTMLInputElement | null;
+  const hint = document.getElementById('full-search-hint');
+  const link = document.getElementById('full-search-link') as HTMLAnchorElement | null;
+  const cards = document.querySelectorAll<HTMLElement>('.class-card');
+
+  input?.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+
+    if (link) link.href = `/search/?q=${encodeURIComponent(input.value.trim())}`;
+    if (hint) hint.classList.toggle('hidden', q.length === 0);
+
+    let visible = 0;
+    cards.forEach((card) => {
+      const match = !q || (card.dataset.title ?? '').includes(q);
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+  });
+</script>
