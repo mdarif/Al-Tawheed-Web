@@ -190,6 +190,16 @@ test.describe("Download page", () => {
     await expect(page.locator('text=Background Playback')).toBeVisible();
   });
 
+  test("what's new section shows latest app version", async ({ page }) => {
+    await page.goto("/download/");
+    await expect(page.locator("#whats-new-heading")).toBeVisible();
+    await expect(page.locator('text=Latest')).toBeVisible();
+    await expect(page.locator('text=v2.2.0')).toBeVisible();
+    await expect(
+      page.locator('text=Study Mode has its own tab')
+    ).toBeVisible();
+  });
+
   test("app screenshots are present", async ({ page }) => {
     await page.goto("/download/");
     const screenshots = page.locator('img[src*="app-screenshots"]');

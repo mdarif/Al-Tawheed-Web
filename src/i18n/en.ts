@@ -103,6 +103,8 @@ export const en = {
   },
   download: {
     pageTitle: "Sharah Kitab al-Tawheed App",
+    whatsNewTitle: "What's New",
+    allReleases: "All releases on GitHub",
     whyTitle: "Why use the app?",
     previewTitle: "App preview",
     ctaFree: "Free · No ads · No account",

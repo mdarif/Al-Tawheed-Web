@@ -105,6 +105,8 @@ export const ur: Translations = {
   },
   download: {
     pageTitle: "شرح کتاب التوحید ایپ",
+    whatsNewTitle: "نیا کیا ہے؟",
+    allReleases: "GitHub پر تمام ریلیزز",
     whyTitle: "ایپ کیوں استعمال کریں؟",
     previewTitle: "ایپ کی جھلکیاں",
     ctaFree: "مفت · کوئی اشتہار نہیں · کوئی اکاؤنٹ نہیں",
