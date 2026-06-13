@@ -184,19 +184,36 @@ test.describe("Download page", () => {
 
   test("features grid has 6 items", async ({ page }) => {
     await page.goto("/download/");
-    await expect(page.locator('text=Offline Downloads')).toBeVisible();
-    await expect(page.locator('text=Progress Tracking')).toBeVisible();
-    await expect(page.locator('text=Study Mode')).toBeVisible();
-    await expect(page.locator('text=Background Playback')).toBeVisible();
+    const section = page.locator("section", {
+      has: page.getByRole("heading", { name: "Why Use The App?" }),
+    });
+    await expect(
+      section.getByText("Offline Downloads", { exact: true })
+    ).toBeVisible();
+    await expect(
+      section.getByText("Progress Tracking", { exact: true })
+    ).toBeVisible();
+    await expect(section.getByText("Study Mode", { exact: true })).toBeVisible();
+    await expect(
+      section.getByText("Background Playback", { exact: true })
+    ).toBeVisible();
+    await expect(
+      section.getByText("Playback Speed", { exact: true })
+    ).toBeVisible();
+    await expect(
+      section.getByText("Urdu & Roman Urdu", { exact: true })
+    ).toBeVisible();
+    await expect(section.locator(":scope > .grid > div")).toHaveCount(6);
   });
 
   test("what's new section shows latest app version", async ({ page }) => {
     await page.goto("/download/");
-    await expect(page.locator("#whats-new-heading")).toBeVisible();
-    await expect(page.locator('text=Latest')).toBeVisible();
-    await expect(page.locator('text=v2.2.0')).toBeVisible();
+    const section = page.locator("section[aria-labelledby='whats-new-heading']");
+    await expect(section.getByRole("heading", { name: "What's New" })).toBeVisible();
+    await expect(section.getByText("Latest")).toBeVisible();
+    await expect(section.getByText("v2.2.0")).toBeVisible();
     await expect(
-      page.locator('text=Study Mode has its own tab')
+      section.getByText("Study Mode has its own tab")
     ).toBeVisible();
   });
 
