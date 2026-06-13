@@ -1,0 +1,54 @@
+---
+import { APP_RELEASES, APP_RELEASES_URL } from "../lib/app-releases";
+
+interface Props {
+  title?: string;
+  allReleasesLabel?: string;
+}
+
+const {
+  title = "What's New",
+  allReleasesLabel = "All releases on GitHub",
+} = Astro.props;
+---
+
+<section class="mb-12" aria-labelledby="whats-new-heading">
+  <h2 id="whats-new-heading" class="text-xl font-bold text-[#C9A84C] mb-6">
+    {title}
+  </h2>
+  <div class="space-y-4">
+    {
+      APP_RELEASES.map((release, index) => (
+        <article
+          class="bg-surface border border-[var(--divider)] rounded-xl p-5"
+          aria-label={`Version ${release.version}`}
+        >
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span class="text-sm font-bold text-fg">v{release.version}</span>
+            <span class="text-xs text-fg-3">{release.date}</span>
+            {index === 0 && (
+              <span class="text-[10px] uppercase tracking-wide bg-[#C9A84C] text-black font-bold px-2 py-0.5 rounded-full">
+                Latest
+              </span>
+            )}
+          </div>
+          <ul class="text-sm text-fg-2 space-y-2 list-disc ps-5">
+            {release.highlights.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+  <p class="text-xs text-fg-3 mt-4">
+    <a
+      href={APP_RELEASES_URL}
+      target="_blank"
+      rel="noopener"
+      class="text-[#C9A84C] hover:underline"
+    >
+      {allReleasesLabel}
+    </a>
+  </p>
+</section>

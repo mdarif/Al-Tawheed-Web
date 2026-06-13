@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import WhatsNew from "../components/WhatsNew.astro";
 import {
   getCatalog,
   getAppConfig,
@@ -51,7 +52,7 @@ const features = [
   {
     icon: "📚",
     title: "Study Mode",
-    desc: "Work through each class in order with completion tracking.",
+    desc: "Dedicated Study tab — work through each class in order with completion tracking.",
   },
   {
     icon: "🎵",
@@ -156,6 +157,8 @@ const features = [
         }
       </div>
     </section>
+
+    <WhatsNew />
 
     <section
       class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-6 text-center"
