@@ -1,0 +1,10 @@
+# Cloudflare Pages — same-host redirects (see docs/DEPLOY.md for www DNS)
+# Trailing slashes are enforced by Astro; these cover common non-slash variants.
+
+/about       /about/       301
+/download    /download/    301
+/search      /search/      301
+/lectures    /lectures/    301
+/tawheed     /tawheed/     301
+/kitab-al-tawheed  /kitab-al-tawheed/  301
+/sheikh-rahmani    /sheikh-rahmani/    301

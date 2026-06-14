@@ -4,6 +4,10 @@ import sitemap from '@astrojs/sitemap';
 import pagefind from 'astro-pagefind';
 import tailwindcss from '@tailwindcss/vite';
 import { pagefindDev } from './vite-pagefind-dev.mjs';
+import { getCatalog } from './src/lib/catalog.ts';
+
+const catalog = await getCatalog();
+const catalogLastmod = catalog.book.catalogUpdatedAt ?? new Date().toISOString();
 
 // https://astro.build/config
 export default defineConfig({
@@ -23,6 +27,7 @@ export default defineConfig({
     pagefind(),
     sitemap({
       serialize(item) {
+        item.lastmod = catalogLastmod;
         if (item.url === 'https://kitabattawheed.com/') {
           item.changefreq = 'weekly';
           item.priority = 1;
