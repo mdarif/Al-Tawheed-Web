@@ -7,6 +7,19 @@
 import { test, expect } from "@playwright/test";
 import { getFirstChapterHref } from "./helpers";
 
+// ── Soft 404 / SPA fallback (fixed: added 404.html — without it Cloudflare Pages
+//    served index.html with 200 for every unknown URL, polluting Search Console) ─
+
+test("unknown URL returns 404, not homepage", async ({ request }) => {
+  const res = await request.get("/this-path-does-not-exist-xyz/");
+  expect(res.status()).toBe(404);
+});
+
+test("ghost /ur/ path returns 404, not homepage", async ({ request }) => {
+  const res = await request.get("/ur/sheikh-rahmani/");
+  expect(res.status()).toBe(404);
+});
+
 // ── i18n content duplication (fixed: translator strings were complete sentences
 //    but templates also rendered the lead word/name in <strong>, causing double) ─
 

@@ -1,0 +1,46 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getAppConfig } from "../lib/catalog";
+
+const appConfig = await getAppConfig();
+---
+
+<Layout
+  title="Page Not Found — Sharah Kitab al-Tawheed"
+  description="The page you requested was not found. Browse lectures or return to the home page."
+  appConfig={appConfig}
+>
+  <meta name="robots" content="noindex" slot="head" />
+
+  <section
+    class="mx-auto max-w-lg px-4 py-16 sm:py-24 text-center min-w-0"
+  >
+    <p class="text-[#C9A84C] text-sm font-semibold uppercase tracking-widest mb-3">
+      404
+    </p>
+    <h1 class="text-2xl sm:text-3xl font-bold mb-3">Page not found</h1>
+    <p class="text-fg-2 text-sm mb-8">
+      This URL does not exist. Try one of the links below.
+    </p>
+    <nav class="flex flex-col sm:flex-row gap-3 justify-center text-sm">
+      <a
+        href="/"
+        class="bg-[#C9A84C] text-black font-semibold px-6 py-3 rounded-xl hover:bg-[#D4B55C] transition-colors"
+      >
+        Home
+      </a>
+      <a
+        href="/lectures/"
+        class="border border-[var(--divider-lg)] font-semibold px-6 py-3 rounded-xl hover:bg-surface-hover transition-colors"
+      >
+        Browse lectures
+      </a>
+      <a
+        href="/search/"
+        class="border border-[var(--divider-lg)] font-semibold px-6 py-3 rounded-xl hover:bg-surface-hover transition-colors"
+      >
+        Search
+      </a>
+    </nav>
+  </section>
+</Layout>

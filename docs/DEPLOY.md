@@ -98,15 +98,19 @@ View reports: **Web Analytics** in the Cloudflare dashboard (visits, pages, refe
 ## Custom domain checklist
 
 - [ ] `kitabattawheed.com` attached to Pages project (SSL active)
-- [ ] `www.kitabattawheed.com` → redirect to apex (optional, recommended)
+- [ ] **`www.kitabattawheed.com` attached to the same Pages project** (not DNS-only — an unattached `www` record causes **522** errors in Search Console)
+- [ ] Or: **Bulk Redirect** in Cloudflare → `www.kitabattawheed.com/*` → `https://kitabattawheed.com/$1` (301)
 - [ ] Astro `site` in `astro.config.mjs` is `https://kitabattawheed.com` (canonical URLs)
+- [ ] After deploy, confirm unknown URLs return **404** (not the homepage): e.g. `/no-such-page/` → 404
 
 ---
 
 ## Google Search Console (after first deploy)
 
+### Submit sitemap
+
 1. Go to [Google Search Console](https://search.google.com/search-console).
-2. **Add property** → URL prefix: `https://kitabattawheed.com`
+2. **Add property** → URL prefix: `https://kitabattawheed.com` (use apex, not `www`, unless `www` is fixed)
 3. Verify ownership (HTML file, DNS TXT, or Cloudflare integration).
 4. **Sitemaps** → Submit:
    ```
@@ -115,6 +119,17 @@ View reports: **Web Analytics** in the Cloudflare dashboard (visits, pages, refe
 5. Optional: request indexing for `/` and `/lectures/` after major launches.
 
 Also confirm `https://kitabattawheed.com/robots.txt` lists the sitemap (it does).
+
+### Common indexing reports (what they mean)
+
+| Status | Meaning | Action |
+|--------|---------|--------|
+| **Discovered – currently not indexed** | Google knows the URL (sitemap/links) but has not crawled/indexed yet | Normal for a **new** site. Fix `www`/404 issues below, then wait or use URL Inspection → Request indexing for `/` and `/lectures/`. |
+| **Page with redirect** | Non-canonical URL (e.g. without trailing `/`) redirects to the real URL | Expected with `trailingSlash: 'always'`. No fix needed. |
+| **Alternative page with proper canonical** | Duplicate URL correctly points canonical elsewhere | Often a `www` or mistyped `/ur/...` ghost URL. Fix soft-404 + `www`. |
+| **Server error (5xx)** | Crawler got an error | Check **www** (522 if not on Pages) and redeploy if transient. |
+
+**Important:** The site ships `404.html` so Cloudflare Pages does **not** fall back to the homepage for missing paths (without it, every bad URL returned 200 + home — bad for SEO).
 
 ---
 
