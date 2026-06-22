@@ -10,6 +10,7 @@ interface Props {
   speaker: string;
   playStoreUrl: string;
   coverImageUrl: string;
+  audioLangLabel?: string;
 }
 
 const {
@@ -21,6 +22,7 @@ const {
   speaker,
   playStoreUrl,
   coverImageUrl,
+  audioLangLabel = 'Urdu',
 } = Astro.props;
 const coverSrc = coverImageUrl;
 ---
@@ -69,7 +71,7 @@ const coverSrc = coverImageUrl;
     Your browser does not support audio. <a href={audioUrl} class="text-[#C9A84C] underline">Download MP3</a>
   </audio>
   <p class="text-xs text-fg-3 mt-2 text-center px-1">
-    {formatDuration(durationSeconds)} · Urdu audio · Progress saved in this browser
+    {formatDuration(durationSeconds)} · {audioLangLabel} audio · Progress saved in this browser
     {import.meta.env.DEV && (
       <span class="block mt-1 text-fg-3/80">
         Dev: nudge after 30s audio (~15s at 2×). Dismiss is per visit; refresh to test again.

@@ -7,7 +7,7 @@ export interface I18nField {
 }
 
 /** Matches Flutter [AppLanguage] content resolution keys. */
-export type ContentLocale = 'en' | 'ur' | 'roman';
+export type ContentLocale = 'en' | 'ur' | 'roman' | 'ar';
 
 export interface Book {
   id: string;
@@ -67,6 +67,7 @@ export interface AppConfig {
 export const SITE_URL = 'https://kitabattawheed.com';
 
 const CONTENT_BASE = 'https://al-tawheed-content.pages.dev/tawheed';
+export const ARABIC_CONTENT_BASE = 'https://al-tawheed-content.pages.dev/tawheed-ar';
 
 /** CDN book cover (same art as Flutter `assets/tawheed.png`). */
 export const CDN_COVER_URL = `${CONTENT_BASE}/images/cover.jpg`;
@@ -87,6 +88,12 @@ export function bookCoverOgUrl(book?: Book): string {
 export async function getCatalog(): Promise<Catalog> {
   const res = await fetch(`${CONTENT_BASE}/catalog.json`);
   if (!res.ok) throw new Error(`Failed to fetch catalog: ${res.status}`);
+  return res.json();
+}
+
+export async function getArabicCatalog(): Promise<Catalog> {
+  const res = await fetch(`${ARABIC_CONTENT_BASE}/catalog.json`);
+  if (!res.ok) throw new Error(`Failed to fetch Arabic catalog: ${res.status}`);
   return res.json();
 }
 
@@ -135,6 +142,11 @@ export function en(field: string | I18nField | undefined): string {
   return resolve(field, 'en');
 }
 
+/** Arabic string for RTL UI on Arabic pages. */
+export function ar(field: string | I18nField | undefined): string {
+  return resolve(field, 'ar');
+}
+
 /** Urdu subtitle when present (for bilingual UI under English titles). */
 export function urduSubtitle(field: string | I18nField | undefined): string | undefined {
   const map = asI18n(field);
@@ -150,6 +162,11 @@ export function chapterSlug(chapterId: string): string {
 /** Slug from lecture id: "lec-001" → "part-01" using the lecture number */
 export function lectureSlug(lecture: Lecture): string {
   return `part-${String(lecture.number).padStart(2, '0')}`;
+}
+
+/** Slug for Arabic dars: dars-01 … dars-91 */
+export function arabicLectureSlug(lecture: Lecture): string {
+  return `dars-${String(lecture.number).padStart(2, '0')}`;
 }
 
 export function playStoreUrl(appConfig: AppConfig): string {

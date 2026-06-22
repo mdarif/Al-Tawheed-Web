@@ -25,11 +25,15 @@ interface Props {
   ogImageHeight?: number;
   /** FAQPage structured data — array of {question, answer} pairs */
   faqItems?: ReadonlyArray<{ question: string; answer: string }>;
+  /** Override html[lang] — use for non-locale-routed pages like /arabic/ */
+  lang?: string;
+  /** Override html[dir] — use 'rtl' for Arabic/Urdu pages */
+  dir?: 'ltr' | 'rtl';
 }
 
 const {
   title,
-  description = "50 Urdu Audio Lessons • 27+ Hours • Online & Offline",
+  description = "50 Urdu + 91 Arabic Audio Lessons on Kitab al-Tawheed • Free • Online & Offline",
   appConfig,
   ogImageAlt = "Sharah Kitab al-Tawheed | Urdu Audio Series, 27+ Hours",
   ogSiteName = "Al Marfa Duroos",
@@ -38,6 +42,8 @@ const {
   ogImageWidth,
   ogImageHeight,
   faqItems,
+  lang: langProp,
+  dir: dirProp,
 } = Astro.props;
 
 // Resolve OG image: default to the dedicated social card (known 1200x630).
@@ -54,6 +60,9 @@ const storeUrl = appConfig
   : "https://play.google.com/store/apps/details?id=com.almarfa.tawheed";
 const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).toString();
 const locale = Astro.currentLocale ?? "en";
+const htmlLang = langProp ?? locale;
+const htmlDir = dirProp ?? (locale === "ur" ? "rtl" : undefined);
+const isArabicPage = htmlLang === "ar";
 const altPath = altLocaleUrl(locale, Astro.url.pathname);
 const enUrl = locale === "en" ? canonicalUrl : new URL(altPath, SITE_URL).toString();
 const urUrl = locale === "ur" ? canonicalUrl : new URL(altPath, SITE_URL).toString();
@@ -69,7 +78,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
 ---
 
 <!doctype html>
-<html lang={locale} class="scroll-smooth">
+<html lang={htmlLang} dir={htmlDir} class="scroll-smooth">
   <head>
     <!-- Prevent flash of wrong theme: set data-theme before first paint -->
     <script is:inline>
@@ -102,10 +111,14 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="alternate" hreflang="en" href={enUrl} />
-    <link rel="alternate" hreflang="ur" href={urUrl} />
-    <link rel="alternate" hreflang="x-default" href={enUrl} />
-    {locale === "ur" && (
+    {!isArabicPage && (
+      <>
+        <link rel="alternate" hreflang="en" href={enUrl} />
+        <link rel="alternate" hreflang="ur" href={urUrl} />
+        <link rel="alternate" hreflang="x-default" href={enUrl} />
+      </>
+    )}
+    {(locale === "ur" || isArabicPage) && (
       <>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -179,14 +192,15 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
 
     <!-- JSON-LD Structured Data -->
     {
-      ogType === "website" && (
+      ogType === "website" && !isArabicPage && (
         <script
+          is:inline
           type="application/ld+json"
           set:html={JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AudioSeries",
             name: "Sharah Kitab At-Tawheed",
-            description: "50 Urdu Audio Lessons • 27+ Hours • Online & Offline",
+            description: "50 Urdu + 91 Arabic Audio Lessons on Kitab al-Tawheed • Free",
             url: "https://kitabattawheed.com",
             image: `${SITE_URL}/og-image.png`,
             creator: {

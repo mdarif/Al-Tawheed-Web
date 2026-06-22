@@ -1,0 +1,262 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import LectureAudioPlayer from "../../components/LectureAudioPlayer.astro";
+import {
+  getArabicCatalog,
+  getAppConfig,
+  ar,
+  en,
+  formatDuration,
+  arabicLectureSlug,
+  playStoreUrl,
+  bookCoverOgUrl,
+  SITE_URL,
+} from "../../lib/catalog";
+import { arUI } from "../../i18n/ar";
+
+export async function getStaticPaths() {
+  const catalog = await getArabicCatalog();
+  return catalog.lectures.map((lecture) => ({
+    params: { lectureSlug: arabicLectureSlug(lecture) },
+    props: { lectureId: lecture.id },
+  }));
+}
+
+const { lectureId } = Astro.props;
+const [catalog, appConfig] = await Promise.all([getArabicCatalog(), getAppConfig()]);
+const storeUrl = playStoreUrl(appConfig);
+const lecture = catalog.lectures.find((l) => l.id === lectureId)!;
+const sortedLectures = catalog.lectures.slice().sort((a, b) => a.number - b.number);
+const currentIdx = sortedLectures.findIndex((l) => l.id === lectureId);
+const prev = sortedLectures[currentIdx - 1];
+const next = sortedLectures[currentIdx + 1];
+const lecturePath = `/arabic/${arabicLectureSlug(lecture)}/`;
+const coverUrl = bookCoverOgUrl(catalog.book);
+
+const lectureTitle = ar(lecture.title) || en(lecture.title);
+const speakerName = ar(catalog.book.speaker) || en(catalog.book.speaker);
+
+const jsonLdAudio = {
+  "@context": "https://schema.org",
+  "@type": "AudioObject",
+  name: lectureTitle,
+  description: `${lectureTitle} — كتاب التوحيد للشيخ صالح الفوزان`,
+  duration: `PT${Math.floor(lecture.durationSeconds / 60)}M${lecture.durationSeconds % 60}S`,
+  encodingFormat: "audio/mpeg",
+  contentUrl: lecture.audioUrl,
+  thumbnailUrl: coverUrl,
+  inLanguage: "ar",
+  isPartOf: {
+    "@type": "Course",
+    name: ar(catalog.book.title) || en(catalog.book.title),
+    url: `${SITE_URL}/arabic/`,
+  },
+};
+
+const jsonLdBreadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+    { "@type": "ListItem", position: 2, name: "الدروس", item: `${SITE_URL}/arabic/` },
+    { "@type": "ListItem", position: 3, name: lectureTitle, item: `${SITE_URL}${lecturePath}` },
+  ],
+};
+
+const ogTitle = `درس ${String(lecture.number).padStart(2, "0")}: ${lectureTitle} — كتاب التوحيد`;
+const ogDescription = `${lectureTitle} من كتاب التوحيد — الشيخ صالح الفوزان. ${formatDuration(lecture.durationSeconds)}. استمع مجاناً.`;
+---
+
+<Layout
+  title={ogTitle}
+  description={ogDescription}
+  {appConfig}
+  ogImage={coverUrl}
+  ogImageAlt={`${lectureTitle} — كتاب التوحيد`}
+  ogType="article"
+  lang="ar"
+  dir="rtl"
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLdAudio)}
+    slot="head"
+  />
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLdBreadcrumb)}
+    slot="head"
+  />
+
+  <article
+    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0"
+    dir="rtl"
+    lang="ar"
+    data-pagefind-body
+  >
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-fg-3 mb-6 break-words leading-relaxed font-arabic" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-[#C9A84C]">Home</a>
+      <span class="mx-1">←</span>
+      <a href="/arabic/" class="hover:text-[#C9A84C] font-arabic">{arUI.nav.lessons}</a>
+      <span class="mx-1">←</span>
+      <span class="text-fg-2 font-arabic">{lectureTitle}</span>
+    </nav>
+
+    <!-- Title block -->
+    <div class="mb-6">
+      <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-1" dir="ltr">
+        {arUI.nav.dars} {String(lecture.number).padStart(2, "0")} · {currentIdx + 1} / {sortedLectures.length}
+      </p>
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold mb-1 text-balance font-arabic">
+        {lectureTitle}
+      </h1>
+      <div class="flex items-center gap-3 flex-wrap mt-1">
+        <p class="text-fg-2 text-sm font-arabic">
+          {formatDuration(lecture.durationSeconds)} · {speakerName}
+        </p>
+        <button
+          id="share-btn"
+          type="button"
+          class="flex items-center gap-1.5 text-xs text-fg-3 border border-[var(--divider)] rounded-lg px-3 py-1.5 hover:text-fg hover:border-[var(--divider-md)] transition-colors shrink-0 font-arabic"
+          aria-label="مشاركة هذا الدرس"
+        >
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          {arUI.player.share}
+        </button>
+      </div>
+    </div>
+
+    <div
+      id="share-toast"
+      class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-surface border border-[var(--divider)] rounded-xl px-4 py-2.5 text-sm shadow-lg opacity-0 pointer-events-none transition-opacity duration-300"
+      aria-live="polite"
+    >
+      تم نسخ الرابط!
+    </div>
+
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById('share-btn');
+        var toast = document.getElementById('share-toast');
+        var toastTimer;
+        function showToast(msg) {
+          if (!toast) return;
+          toast.textContent = msg;
+          toast.classList.remove('opacity-0');
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () { toast.classList.add('opacity-0'); }, 2200);
+        }
+        function copyFallback() {
+          navigator.clipboard.writeText(location.href).then(function () {
+            showToast('تم نسخ الرابط!');
+          }).catch(function () {
+            showToast(location.href);
+          });
+        }
+        if (btn) {
+          btn.addEventListener('click', function () {
+            if (navigator.share) {
+              navigator.share({ title: document.title, url: location.href }).catch(function (e) {
+                if (e.name !== 'AbortError') copyFallback();
+              });
+            } else {
+              copyFallback();
+            }
+          });
+        }
+      })();
+    </script>
+
+    <LectureAudioPlayer
+      lectureId={lecture.id}
+      {lecturePath}
+      lectureTitle={lectureTitle}
+      audioUrl={lecture.audioUrl}
+      durationSeconds={lecture.durationSeconds}
+      speaker={speakerName}
+      playStoreUrl={storeUrl}
+      coverImageUrl={catalog.book.coverImageUrl}
+      audioLangLabel={arUI.player.audioLabel}
+    />
+
+    <!-- Get App CTA -->
+    <div class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="min-w-0">
+        <p class="text-sm font-semibold text-[#C9A84C] font-arabic">{arUI.player.continueOnApp}</p>
+        <p class="text-xs text-fg-2 font-arabic">{arUI.player.offlineFeatures}</p>
+      </div>
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener"
+        class="shrink-0 w-full sm:w-auto text-center bg-[#C9A84C] text-black font-bold px-4 py-3 sm:py-2 rounded-lg text-sm sm:text-xs hover:bg-[#D4B55C] transition-colors min-h-[44px] sm:min-h-0 flex items-center justify-center font-arabic"
+      >
+        {arUI.player.getApp}
+      </a>
+    </div>
+
+    <!-- Prev / Next -->
+    <div class="flex flex-col sm:flex-row gap-3 mb-8">
+      {
+        next && (
+          <a
+            href={`/arabic/${arabicLectureSlug(next)}/`}
+            class="flex-1 bg-surface border border-[var(--divider)] rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all text-right min-w-0"
+          >
+            <p class="text-xs text-fg-3 mb-1 font-arabic">{arUI.nav.next}</p>
+            <p class="text-sm font-semibold truncate font-arabic">{ar(next.title) || en(next.title)}</p>
+          </a>
+        )
+      }
+      {
+        prev && (
+          <a
+            href={`/arabic/${arabicLectureSlug(prev)}/`}
+            class="flex-1 bg-surface border border-[var(--divider)] rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all text-left min-w-0"
+          >
+            <p class="text-xs text-fg-3 mb-1 font-arabic">{arUI.nav.previous}</p>
+            <p class="text-sm font-semibold truncate font-arabic">{ar(prev.title) || en(prev.title)}</p>
+          </a>
+        )
+      }
+    </div>
+
+    <!-- All lessons in series -->
+    <div>
+      <h2 class="text-sm font-bold text-fg-2 uppercase tracking-widest mb-3 font-arabic">
+        {arUI.nav.allInSeries}
+      </h2>
+      <div class="space-y-1.5">
+        {
+          sortedLectures.map((l) => (
+            <a
+              href={`/arabic/${arabicLectureSlug(l)}/`}
+              class={`flex items-center justify-between px-4 py-2.5 rounded-lg text-sm transition-all gap-3 ${l.id === lecture.id ? "bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C]" : "hover:bg-surface-hover text-fg-2"}`}
+            >
+              <span class="min-w-0 flex items-center gap-3">
+                <span class="text-xs font-bold shrink-0 w-6 text-left" dir="ltr">
+                  {String(l.number).padStart(2, "0")}
+                </span>
+                <span class="block truncate font-arabic">{ar(l.title) || en(l.title)}</span>
+              </span>
+              <span class="text-xs shrink-0" dir="ltr">{formatDuration(l.durationSeconds)}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .font-arabic {
+    font-family: "Noto Naskh Arabic", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.8;
+  }
+</style>
