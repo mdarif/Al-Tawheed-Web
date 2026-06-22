@@ -1,0 +1,146 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import {
+  getArabicCatalog,
+  getAppConfig,
+  ar,
+  en,
+  formatDuration,
+  arabicLectureSlug,
+  playStoreUrl,
+  bookCoverOgUrl,
+  SITE_URL,
+} from "../../lib/catalog";
+import { arUI } from "../../i18n/ar";
+
+const [catalog, appConfig] = await Promise.all([getArabicCatalog(), getAppConfig()]);
+const storeUrl = playStoreUrl(appConfig);
+const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
+const totalMinutes = Math.floor((catalog.book.totalDurationSeconds % 3600) / 60);
+const coverUrl = bookCoverOgUrl(catalog.book);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  name: ar(catalog.book.title) || en(catalog.book.title),
+  description: `كتاب التوحيد — ${catalog.book.lectureCount} دروس صوتية بالعربية للشيخ صالح الفوزان`,
+  url: `${SITE_URL}/arabic/`,
+  image: coverUrl,
+  inLanguage: "ar",
+  numberOfEpisodes: catalog.book.lectureCount,
+  creator: {
+    "@type": "Person",
+    name: ar(catalog.book.speaker) || en(catalog.book.speaker),
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Al Marfa Duroos",
+  },
+};
+---
+
+<Layout
+  title="كتاب التوحيد بالعربية | الشيخ صالح الفوزان — Al Marfa Duroos"
+  description={`كتاب التوحيد — ${catalog.book.lectureCount} دروس صوتية بالعربية للشيخ صالح الفوزان. استمع مجاناً.`}
+  {appConfig}
+  ogImage={coverUrl}
+  ogImageAlt="كتاب التوحيد — الشيخ صالح الفوزان"
+  lang="ar"
+  dir="rtl"
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+    slot="head"
+  />
+
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-12" dir="rtl" lang="ar" data-pagefind-body>
+    <!-- Header -->
+    <div class="mb-10">
+      <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-3 font-arabic" dir="ltr">
+        {arUI.series.eyebrow}
+      </p>
+      <div class="flex gap-4 items-start">
+        <img
+          src={catalog.book.coverImageUrl}
+          alt=""
+          width="80"
+          height="80"
+          class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover shrink-0 border border-[#C9A84C]/20"
+          loading="eager"
+        />
+        <div class="flex-1 min-w-0">
+          <h1 class="text-2xl sm:text-3xl font-bold leading-snug mb-1 font-arabic">
+            {ar(catalog.book.title) || en(catalog.book.title)}
+          </h1>
+          <p class="text-fg-2 text-sm font-arabic">
+            {ar(catalog.book.speaker) || en(catalog.book.speaker)}
+          </p>
+          <p class="text-fg-3 text-xs mt-1 font-arabic">
+            {catalog.book.lectureCount} {arUI.series.lessons} · {totalHours}h {totalMinutes}m
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a
+          href={storeUrl}
+          target="_blank"
+          rel="noopener"
+          class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C] transition-colors font-arabic"
+        >
+          {arUI.player.getApp}
+        </a>
+        <a
+          href="/lectures/"
+          class="border border-[var(--divider)] text-fg-2 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover transition-colors"
+          dir="ltr"
+        >
+          Urdu Series →
+        </a>
+      </div>
+    </div>
+
+    <!-- Lecture list -->
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-sm font-bold text-fg-2 uppercase tracking-widest font-arabic">
+        {arUI.series.allLessons}
+      </h2>
+      <span class="text-xs text-fg-3">{catalog.book.lectureCount}</span>
+    </div>
+
+    <div class="space-y-1.5">
+      {
+        catalog.lectures
+          .slice()
+          .sort((a, b) => a.number - b.number)
+          .map((lecture) => (
+            <a
+              href={`/arabic/${arabicLectureSlug(lecture)}/`}
+              class="flex items-center justify-between px-4 py-3 rounded-lg text-sm hover:bg-surface-hover transition-all gap-3 border border-transparent hover:border-[#C9A84C]/20"
+            >
+              <span class="min-w-0 flex items-center gap-3">
+                <span class="text-[#C9A84C] text-xs font-bold shrink-0 w-8 text-left" dir="ltr">
+                  {String(lecture.number).padStart(2, "0")}
+                </span>
+                <span class="block truncate font-arabic text-fg">
+                  {ar(lecture.title) || en(lecture.title)}
+                </span>
+              </span>
+              <span class="text-xs text-fg-3 shrink-0" dir="ltr">
+                {formatDuration(lecture.durationSeconds)}
+              </span>
+            </a>
+          ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .font-arabic {
+    font-family: "Noto Naskh Arabic", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.8;
+  }
+</style>
