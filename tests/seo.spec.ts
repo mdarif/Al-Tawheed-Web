@@ -72,21 +72,43 @@ for (const path of SEO_PAGES) {
       expect(canonical, "canonical link missing").toBeTruthy();
       expect(canonical, "canonical must be absolute").toMatch(/^https?:\/\//);
     });
-
-    test("has hreflang en, ur, x-default", async ({ page }) => {
-      await page.goto(path);
-      await expect(
-        page.locator('link[rel="alternate"][hreflang="en"]')
-      ).toHaveCount(1);
-      await expect(
-        page.locator('link[rel="alternate"][hreflang="ur"]')
-      ).toHaveCount(1);
-      await expect(
-        page.locator('link[rel="alternate"][hreflang="x-default"]')
-      ).toHaveCount(1);
-    });
   });
 }
+
+// ── hreflang — only on pages that actually have an Urdu translation ────────────
+// Pages without a /ur/ counterpart (lectures, arabic, search, sheikh-rahmani…)
+// must NOT emit hreflang="ur" — it would point to a 404.
+const TRANSLATED_PAGES = [
+  "/",
+  "/about/",
+  "/download/",
+  "/tawheed/",
+  "/kitab-al-tawheed/",
+  "/ur/",
+  "/ur/about/",
+];
+
+for (const path of TRANSLATED_PAGES) {
+  test(`hreflang en/ur/x-default on ${path}`, async ({ page }) => {
+    await page.goto(path);
+    await expect(
+      page.locator('link[rel="alternate"][hreflang="en"]')
+    ).toHaveCount(1);
+    await expect(
+      page.locator('link[rel="alternate"][hreflang="ur"]')
+    ).toHaveCount(1);
+    await expect(
+      page.locator('link[rel="alternate"][hreflang="x-default"]')
+    ).toHaveCount(1);
+  });
+}
+
+test("no hreflang on pages without an Urdu version", async ({ page }) => {
+  await page.goto("/lectures/");
+  await expect(
+    page.locator('link[rel="alternate"][hreflang="ur"]')
+  ).toHaveCount(0);
+});
 
 // ── JSON-LD structured data ───────────────────────────────────────────────────
 
@@ -106,8 +128,8 @@ test.describe("JSON-LD", () => {
 
   test("lecture player has AudioObject structured data", async ({ page }) => {
     // Navigate dynamically — never hardcode lecture slugs
-    await page.goto("/lectures/");
-    await page.locator("main a[href^='/lectures/']").first().click();
+    await page.goto("/lectures/urdu/");
+    await page.locator("main a[href^='/lectures/class-']").first().click();
     const hrefs = await page.locator('a[href*="/lectures/"]').evaluateAll((els) =>
       els
         .map((el) => el.getAttribute("href"))
