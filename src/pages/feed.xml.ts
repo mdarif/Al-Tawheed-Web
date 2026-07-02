@@ -10,6 +10,7 @@ import {
 export const GET: APIRoute = async () => {
   const catalog = await getCatalog();
   const updated = catalog.book.catalogUpdatedAt ?? new Date().toISOString();
+  const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
   const items = catalog.lectures.map((lecture) => {
     const chapter = catalog.chapters.find((c) => c.id === lecture.chapterId)!;
     const path = `/lectures/${chapterSlug(chapter.id)}/${lectureSlug(lecture)}/`;
@@ -30,7 +31,7 @@ export const GET: APIRoute = async () => {
   <channel>
     <title>${escapeXml(en(catalog.book.title))}</title>
     <link>${SITE_URL}/</link>
-    <description>${escapeXml("50 Urdu Audio Lessons • 27+ Hours • Online & Offline")}</description>
+    <description>${escapeXml(`${catalog.book.lectureCount} Urdu Audio Lessons (Sharah Kitab al-Tawheed by Shaikh Abdullah Nasir Rahmani) • ${totalHours}+ Hours • Online & Offline. An Arabic series is also available in the app and at ${SITE_URL}/arabic/.`)}</description>
     <language>ur</language>
     <lastBuildDate>${new Date(updated).toUTCString()}</lastBuildDate>
     <image>

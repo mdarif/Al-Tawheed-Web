@@ -1,30 +1,35 @@
 export const en = {
   hero: {
     eyebrow: "The Foundation of Tawheed",
-    description: "{count} Lectures · {hours}+ Hours Audio · By {speaker}",
+    description: "{count} Urdu Lectures · {arabicCount} Arabic Duroos · Free",
     trustBadge: "Trusted by students of knowledge worldwide",
   },
   index: {
-    aboutTitle: "About This Series",
+    aboutTitle: "About This Site",
     aboutBody:
-      "Kitab al-Tawheed is a foundational text on Islamic monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah ibn Sulayman al-Tamimi Al Najdi. This complete Urdu explanation by Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah covers all {count} lectures across 15 classes — over {hours} hours of benefit.",
+      "is a foundational text on Islamic monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah ibn Sulayman al-Tamimi Al Najdi. We offer two complete audio series on this book — free, online, and in the Android app.",
     readMore: "Read more →",
   },
   about: {
-    pageTitle: "About This Series",
+    pageTitle: "About These Series",
     kitab: {
       title: "Kitab al-Tawheed",
       p1: '(كتاب التوحيد — "The Book of Islamic Monotheism") is one of the most important works in Islamic theology, written by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah (1703–1792). It is widely studied in Islamic institutes and seminaries worldwide.',
       p2: "The book covers the foundation of Islamic faith — Tawheed (the oneness of Allah) — drawing exclusively from the Quran and authentic Sunnah. It addresses the three categories of Tawheed, the dangers of shirk (associating partners with Allah), and the obligations upon every Muslim to understand and implement Tawheed in their daily lives.",
     },
     speaker: {
-      title: "The Speaker",
+      title: "The Urdu Series",
       p1: "is a respected Islamic scholar, known for his clear and accessible Urdu explanations of classical Islamic texts. His teaching style — rooted in evidence from Quran and Sunnah — has benefited hundreds of thousands of Muslims across South Asia and beyond.",
-      p2: "This series is his complete explanation of Kitab al-Tawheed — {count} lectures totalling over {hours} hours, delivered across 15 classes.",
+      p2: "This series is his complete Urdu explanation of Kitab al-Tawheed — {count} lectures totalling over {hours} hours, delivered across 15 classes.",
+    },
+    arabic: {
+      title: "The Arabic Series",
+      p1: "The Arabic series is the explanation of Kitab at-Tawheed by Shaikh Ṣāliḥ al-Fawzān Hafizahullah, a senior scholar and member of the Council of Senior Scholars. It presents the book in the original Arabic.",
+      p2: "It comprises {count} audio duroos, available on the Arabic series page.",
     },
     app: {
       title: "The App",
-      p1: "provides the best experience for studying this series — with offline downloads, progress tracking, Study Mode, background playback, and a Urdu/Roman Urdu Interface.",
+      p1: "provides the best experience for studying both series — switch between the Urdu and Arabic series anytime, with offline downloads, progress tracking, Study Mode (Urdu series), an in-app Book tab with the full Arabic text, and background playback.",
     },
     contact: {
       title: "Contact",
@@ -102,21 +107,21 @@ export const en = {
     ],
   },
   download: {
-    pageTitle: "Sharah Kitab al-Tawheed App",
+    pageTitle: "Kitab al-Tawheed App",
     whatsNewTitle: "What's New",
     allReleases: "All releases on GitHub",
     whyTitle: "Why use the app?",
     previewTitle: "App preview",
     ctaFree: "Free · No ads · No account",
-    ctaDesc: "{appName} — {count} lectures, {duration} of benefit.",
+    ctaDesc: "{appName} — {count} free audio lessons across two series.",
     streamNote: "Prefer streaming?",
     features: [
-      { desc: "Save lectures for travel or poor connectivity. Wi-Fi-only mode and one-tap cleanup keep storage tidy." },
-      { desc: "Resume exactly where you stopped on each part." },
-      { desc: "Work through each class in order with completion tracking." },
-      { desc: "Listen while using other apps or with screen off." },
-      { desc: "0.75× to 2× — same range as the full player." },
-      { desc: "Interface and titles in your preferred script." },
+      { desc: "Both the Urdu series (Shaikh Abdullah Nasir Rahmani) and the Arabic series (Shaikh Salih al-Fawzan) — switch anytime." },
+      { desc: "Save lessons for travel or poor connectivity. Wi-Fi-only mode and one-tap cleanup keep storage tidy." },
+      { desc: "Dedicated Study tab for the Urdu series — work through each class in order with completion tracking." },
+      { desc: "The Arabic series includes an in-app Book tab with the full Kitab at-Tawheed text." },
+      { desc: "Resume exactly where you stopped on each lesson." },
+      { desc: "Listen while using other apps or with screen off, at 0.75×–2× speed." },
     ],
   },
   footer: {

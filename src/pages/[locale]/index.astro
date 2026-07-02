@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import ContinueListening from "../../components/ContinueListening.astro";
 import DailyBenefitCard from "../../components/DailyBenefitCard.astro";
-import { getCatalog, getAppConfig, en, playStoreUrl } from "../../lib/catalog";
+import { getCatalog, getArabicCatalog, getAppConfig, playStoreUrl } from "../../lib/catalog";
 import { t, tx, getLocalePaths } from "../../lib/i18n";
 
 export function getStaticPaths() {
@@ -10,9 +10,11 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.params;
-const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const [catalog, arabicCatalog, appConfig] = await Promise.all([getCatalog(), getArabicCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
 const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
+const urduCount = catalog.book.lectureCount;
+const arabicCount = arabicCatalog.book.lectureCount;
 const i18n = t(locale);
 ---
 
@@ -22,8 +24,7 @@ const i18n = t(locale);
     : "Sharah Kitab al-Tawheed | Audio Series"}
   description={tx(i18n.hero.description, {
     count: catalog.book.lectureCount,
-    hours: totalHours,
-    speaker: en(catalog.book.speaker),
+    arabicCount,
   })}
   {appConfig}
 >
@@ -46,8 +47,7 @@ const i18n = t(locale);
       {
         tx(i18n.hero.description, {
           count: catalog.book.lectureCount,
-          hours: totalHours,
-          speaker: en(catalog.book.speaker),
+          arabicCount,
         })
       }
     </p>
@@ -114,7 +114,7 @@ const i18n = t(locale);
           { icon: "📊", label: "Progress Tracking" },
           { icon: "📚", label: "Study Mode" },
           { icon: "🌐", label: "Urdu Interface" },
-          { icon: "🎁", label: "Free Forever" },
+          { icon: "📖", label: "In-App Book" },
         ].map(({ icon, label }) => (
           <div class="flex items-center gap-2.5 bg-surface border border-[var(--divider)] rounded-xl px-3 py-2.5 hover:border-[#C9A84C]/40 transition-colors">
             <span class="text-lg leading-none">{icon}</span>
@@ -147,7 +147,7 @@ const i18n = t(locale);
         Now hear it in the original Arabic
       </h2>
       <p class="text-fg-2 text-base sm:text-lg mb-8">
-        91 audio duroos · Shaikh Salih al-Fawzan · Free
+        91 audio duroos · Shaikh Salih al-Fawzan Hafizahullah · Free
       </p>
       <span class="inline-flex items-center gap-2 bg-[#C9A84C] text-black font-bold px-8 py-4 rounded-xl text-base group-hover:bg-[#D4B55C] transition-colors">
         Browse the Arabic Series →
@@ -179,34 +179,34 @@ const i18n = t(locale);
       {
         [
           {
-            src: "/app-screenshots/01-welcome-framed.png",
+            src: "/app-screenshots/01-welcome.png",
             label: "Welcome",
-            detail: "Begin your journey of Tawheed",
+            detail: "Free · No ads · No account",
           },
           {
-            src: "/app-screenshots/02-lectures-framed.png",
-            label: "Browse by Class",
+            src: "/app-screenshots/02-choose-series.png",
+            label: "Two Series, One App",
+            detail: "Choose Urdu or Arabic",
+          },
+          {
+            src: "/app-screenshots/03-welcome-ar.png",
+            label: "Arabic Series",
+            detail: "By Shaikh Salih al-Fawzan",
+          },
+          {
+            src: "/app-screenshots/04-book-ar.png",
+            label: "Read the Book",
+            detail: "Full Arabic text, in-app",
+          },
+          {
+            src: "/app-screenshots/06-lectures-ur.png",
+            label: "Urdu Series",
             detail: "50 lectures across 15 classes",
           },
           {
-            src: "/app-screenshots/03-player-framed.png",
+            src: "/app-screenshots/08-player-ur.png",
             label: "Audio Player",
             detail: "Seek, speed control & more",
-          },
-          {
-            src: "/app-screenshots/04-home-framed.png",
-            label: "Continue Your Journey",
-            detail: "Study Mode, resume & Daily Benefit",
-          },
-          {
-            src: "/app-screenshots/05-library-framed.png",
-            label: "Offline Library",
-            detail: "See what's downloaded, manage storage",
-          },
-          {
-            src: "/app-screenshots/06-settings-framed.png",
-            label: "Smart Downloads",
-            detail: "Wi-Fi-only mode & one-tap cleanup",
           },
         ].map(({ src, label, detail }) => (
           <div class="snap-center shrink-0 w-[188px] sm:w-[200px] text-center">
@@ -214,7 +214,7 @@ const i18n = t(locale);
               src={src}
               alt={label}
               width="200"
-              height="410"
+              height="400"
               loading="lazy"
               class="w-full rounded-3xl"
             />
@@ -313,7 +313,7 @@ const i18n = t(locale);
 
   <div class="text-center py-6">
     <a
-      href="/lectures/"
+      href="/lectures/urdu/"
       class="inline-block border border-[#C9A84C]/50 text-[#C9A84C] font-semibold px-8 py-3 rounded-xl text-base hover:bg-[#C9A84C]/10 transition-colors"
     >
       Browse all 15 classes →
@@ -331,7 +331,7 @@ const i18n = t(locale);
         <ul class="text-sm space-y-2 text-fg-2 font-urdu">
           {locale === "ur" ? (
             <>
-              <li>✓ تمام ۵۰ دروس اسٹریم کریں</li>
+              <li>✓ تمام ۱۴۱ دروس اسٹریم کریں (اردو + عربی)</li>
               <li>✓ کوئی اکاؤنٹ نہیں</li>
               <li>✓ اسی براؤزر میں جاری رکھیں</li>
               <li class="text-fg-4">✗ انٹرنیٹ ضروری ہے</li>
@@ -340,7 +340,7 @@ const i18n = t(locale);
             </>
           ) : (
             <>
-              <li>✓ Stream all 50 lectures</li>
+              <li>✓ Stream 141 lessons (Urdu + Arabic)</li>
               <li>✓ No account needed</li>
               <li>✓ Resume in this browser</li>
               <li class="text-fg-4">✗ Requires internet</li>
@@ -358,21 +358,21 @@ const i18n = t(locale);
         <ul class="text-sm space-y-2 font-urdu">
           {locale === "ur" ? (
             <>
-              <li>✓ تمام ۵۰ دروس</li>
+              <li>✓ <strong>۵۰ اردو + ۹۱ عربی دروس</strong></li>
               <li>✓ <strong>آف لائن ڈاؤنلوڈ</strong></li>
               <li>✓ <strong>پیشرفت ٹریکنگ</strong></li>
               <li>✓ <strong>اسٹڈی موڈ</strong></li>
               <li>✓ <strong>بیک گراؤنڈ پلے بیک</strong></li>
-              <li>✓ <strong>اردو / رومن اردو انٹرفیس</strong></li>
+              <li>✓ <strong>اردو اور عربی</strong></li>
             </>
           ) : (
             <>
-              <li>✓ All 50 lectures</li>
+              <li>✓ <strong>50 Urdu + 91 Arabic Lessons</strong></li>
               <li>✓ <strong>Offline Downloads</strong></li>
               <li>✓ <strong>Progress Tracking</strong></li>
               <li>✓ <strong>Study Mode</strong></li>
               <li>✓ <strong>Background Playback</strong></li>
-              <li>✓ <strong>Urdu / Roman Urdu UI</strong></li>
+              <li>✓ <strong>Arabic & Urdu</strong></li>
             </>
           )}
         </ul>
@@ -408,11 +408,29 @@ const i18n = t(locale);
       <strong class="text-fg">کتاب التوحید</strong>{" "}
       {
         tx(i18n.index.aboutBody, {
-          count: catalog.book.lectureCount,
+          count: urduCount,
           hours: totalHours,
         })
       }
     </p>
+    <ul class="text-fg-2 text-sm space-y-2 mb-4 font-urdu">
+      <li>
+        <strong class="text-fg">
+          {locale === "ur" ? "اردو سلسلہ" : "Urdu series"}</strong
+        > — {urduCount} {locale === "ur" ? "دروس · شیخ عبداللہ ناصر رحمانی حفظہ اللہ" : "lectures · by Shaikh Abdullah Nasir Rahmani"}.{" "}
+        <a href="/lectures/urdu/" class="text-[#C9A84C] hover:underline">
+          {locale === "ur" ? "براؤز کریں ←" : "Browse →"}</a
+        >
+      </li>
+      <li>
+        <strong class="text-fg">
+          {locale === "ur" ? "عربی سلسلہ" : "Arabic series"}</strong
+        > — {arabicCount} {locale === "ur" ? "دروس · شیخ صالح الفوزان حفظہ اللہ" : "duroos · by Shaikh Ṣāliḥ al-Fawzān"}.{" "}
+        <a href="/arabic/" class="text-[#C9A84C] hover:underline">
+          {locale === "ur" ? "براؤز کریں ←" : "Browse →"}</a
+        >
+      </li>
+    </ul>
     <a
       href={`/${locale}/about/`}
       class="text-[#C9A84C] text-sm hover:underline font-urdu"
