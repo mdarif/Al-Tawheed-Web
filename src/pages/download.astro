@@ -7,7 +7,7 @@ import {
   getAppConfig,
   en,
   playStoreUrl,
-  bookCoverSrc,
+  BOOK_COVER_SRC,
 } from "../lib/catalog";
 
 const [catalog, arabicCatalog, appConfig] = await Promise.all([
@@ -16,7 +16,6 @@ const [catalog, arabicCatalog, appConfig] = await Promise.all([
   getAppConfig(),
 ]);
 const storeUrl = playStoreUrl(appConfig);
-const coverSrc = bookCoverSrc(catalog.book);
 const urduCount = catalog.book.lectureCount;
 const arabicCount = arabicCatalog.book.lectureCount;
 const totalCount = urduCount + arabicCount;
@@ -102,10 +101,10 @@ const features = [
 
     <div class="flex flex-col md:flex-row gap-8 items-start mb-12">
       <img
-        src={coverSrc}
+        src={BOOK_COVER_SRC}
         alt={en(catalog.book.title)}
         width="200"
-        height="105"
+        height="200"
         class="w-40 md:w-48 rounded-xl border border-[#C9A84C]/30 shadow-lg shrink-0 mx-auto md:mx-0"
         loading="eager"
       />
