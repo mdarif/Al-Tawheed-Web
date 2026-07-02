@@ -1,13 +1,13 @@
 import type { Page } from "@playwright/test";
 
-/** Navigate to /lectures/ and return the href of the first chapter card. */
+/** Navigate to the Urdu series page and return the href of the first chapter card. */
 export async function getFirstChapterHref(page: Page): Promise<string> {
-  await page.goto("/lectures/");
+  await page.goto("/lectures/urdu/");
   const href = await page
-    .locator("main a[href^='/lectures/']")
+    .locator("main a[href^='/lectures/class-']")
     .first()
     .getAttribute("href");
-  if (!href) throw new Error("No chapter links found on /lectures/");
+  if (!href) throw new Error("No chapter links found on /lectures/urdu/");
   return href;
 }
 

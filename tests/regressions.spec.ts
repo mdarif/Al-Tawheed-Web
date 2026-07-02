@@ -41,14 +41,14 @@ test("about page — speaker name appears only once (Urdu)", async ({ page }) =>
 test("about page — app name appears only once (EN)", async ({ page }) => {
   await page.goto("/about/");
   const text = await page.locator("main").textContent();
-  const occurrences = (text?.match(/Sharah Kitab al-Tawheed Android app/gi) ?? []).length;
+  const occurrences = (text?.match(/Kitab al-Tawheed Android app/gi) ?? []).length;
   expect(occurrences, `App name appeared ${occurrences} times — expected 1`).toBe(1);
 });
 
 test("about page — app name appears only once (Urdu)", async ({ page }) => {
   await page.goto("/ur/about/");
   const text = await page.locator("main").textContent();
-  const occurrences = (text?.match(/شرح کتاب التوحید اینڈرائیڈ ایپ/g) ?? []).length;
+  const occurrences = (text?.match(/کتاب التوحید اینڈرائیڈ ایپ/g) ?? []).length;
   expect(occurrences, `Urdu app name appeared ${occurrences} times — expected 1`).toBe(1);
 });
 
@@ -150,8 +150,8 @@ test("chapter download card — Google Play badge is fully visible (not overflow
 //    UR subtitle on every lecture row, inconsistent with the mobile app) ────────
 
 test("lectures index shows only English titles (no Urdu subtitles in rows)", async ({ page }) => {
-  await page.goto("/lectures/");
-  const cards = page.locator("main a[href^='/lectures/']");
+  await page.goto("/lectures/urdu/");
+  const cards = page.locator("main a[href^='/lectures/class-']");
   const first = cards.first();
   await expect(first).toBeVisible();
   // Card text must NOT contain Arabic/Urdu script characters (UrduNum range: ؀-ۿ)

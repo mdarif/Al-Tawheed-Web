@@ -88,7 +88,9 @@ test.describe("Urdu pages — Noto Naskh font loaded", () => {
 // ── hreflang tags ─────────────────────────────────────────────────────────────
 
 test.describe("hreflang alternate links", () => {
-  for (const path of [...MAIN_PAGES, "/lectures/"]) {
+  // Only the translated MAIN_PAGES carry hreflang. Pages without an Urdu
+  // version (e.g. /lectures/) must NOT — the ur alternate would 404.
+  for (const path of MAIN_PAGES) {
     test(`${path} has en, ur, x-default`, async ({ page }) => {
       await page.goto(path);
       await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveCount(1);
@@ -96,6 +98,11 @@ test.describe("hreflang alternate links", () => {
       await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveCount(1);
     });
   }
+
+  test("/lectures/ has no ur hreflang (no Urdu version)", async ({ page }) => {
+    await page.goto("/lectures/");
+    await expect(page.locator('link[rel="alternate"][hreflang="ur"]')).toHaveCount(0);
+  });
 });
 
 // ── Redirect guards ───────────────────────────────────────────────────────────

@@ -62,21 +62,34 @@ test.describe("Homepage", () => {
 
 // ── Lectures page ─────────────────────────────────────────────────────────────
 
-test.describe("Lectures page", () => {
+test.describe("Lectures hub", () => {
   test("page heading is visible", async ({ page }) => {
     await page.goto("/lectures/");
     await expect(page.locator("h1").first()).toBeVisible();
   });
 
-  test("has at least 10 chapter cards", async ({ page }) => {
+  test("offers both series (Urdu + Arabic)", async ({ page }) => {
     await page.goto("/lectures/");
-    const chapters = page.locator("main a[href^='/lectures/']");
+    await expect(page.locator("main a[href='/lectures/urdu/']").first()).toBeVisible();
+    await expect(page.locator("main a[href='/arabic/']").first()).toBeVisible();
+  });
+});
+
+test.describe("Urdu series page", () => {
+  test("page heading is visible", async ({ page }) => {
+    await page.goto("/lectures/urdu/");
+    await expect(page.locator("h1").first()).toBeVisible();
+  });
+
+  test("has at least 10 chapter cards", async ({ page }) => {
+    await page.goto("/lectures/urdu/");
+    const chapters = page.locator("main a[href^='/lectures/class-']");
     expect(await chapters.count()).toBeGreaterThanOrEqual(10);
   });
 
   test("chapter cards show a title and duration", async ({ page }) => {
-    await page.goto("/lectures/");
-    const firstCard = page.locator("main a[href^='/lectures/']").first();
+    await page.goto("/lectures/urdu/");
+    const firstCard = page.locator("main a[href^='/lectures/class-']").first();
     await expect(firstCard).toBeVisible();
     // Each card must have some text content (title + metadata)
     const text = await firstCard.textContent();
@@ -153,9 +166,10 @@ test.describe("About page", () => {
     await expect(page.locator('main h2').filter({ hasText: 'Kitab al-Tawheed' }).first()).toBeVisible();
   });
 
-  test("Speaker section is present", async ({ page }) => {
+  test("both series sections are present", async ({ page }) => {
     await page.goto("/about/");
-    await expect(page.locator('text=The Speaker').or(page.locator('text=شارح'))).toBeVisible();
+    await expect(page.locator('main h2').filter({ hasText: 'Urdu Series' }).first()).toBeVisible();
+    await expect(page.locator('main h2').filter({ hasText: 'Arabic Series' }).first()).toBeVisible();
   });
 
   test("App section is present", async ({ page }) => {
@@ -188,20 +202,20 @@ test.describe("Download page", () => {
       has: page.getByRole("heading", { name: "Why Use The App?" }),
     });
     await expect(
+      section.getByText("Two Complete Series", { exact: true })
+    ).toBeVisible();
+    await expect(
       section.getByText("Offline Downloads", { exact: true })
+    ).toBeVisible();
+    await expect(section.getByText("Study Mode", { exact: true })).toBeVisible();
+    await expect(
+      section.getByText("Read the Book", { exact: true })
     ).toBeVisible();
     await expect(
       section.getByText("Progress Tracking", { exact: true })
     ).toBeVisible();
-    await expect(section.getByText("Study Mode", { exact: true })).toBeVisible();
     await expect(
       section.getByText("Background Playback", { exact: true })
-    ).toBeVisible();
-    await expect(
-      section.getByText("Playback Speed", { exact: true })
-    ).toBeVisible();
-    await expect(
-      section.getByText("Urdu & Roman Urdu", { exact: true })
     ).toBeVisible();
     await expect(section.locator(":scope > .grid > div")).toHaveCount(6);
   });
@@ -266,7 +280,7 @@ test.describe("Kitab al-Tawheed page", () => {
   test("free sharah section with lecture links is present", async ({ page }) => {
     await page.goto("/kitab-al-tawheed/");
     // Scope to main — header/footer also contain /lectures/ links
-    await expect(page.locator('main a[href="/lectures/"]').first()).toBeVisible();
+    await expect(page.locator('main a[href="/lectures/urdu/"]').first()).toBeVisible();
   });
 
   test("FAQ section is present", async ({ page }) => {
@@ -313,8 +327,8 @@ test.describe("Urdu About page", () => {
     await expect(page.locator("h1")).toBeVisible();
   });
 
-  test("has Urdu speaker section", async ({ page }) => {
+  test("has Urdu series section", async ({ page }) => {
     await page.goto("/ur/about/");
-    await expect(page.locator('text=شارح')).toBeVisible();
+    await expect(page.locator('text=اردو سلسلہ').first()).toBeVisible();
   });
 });
