@@ -1,11 +1,15 @@
 ---
-import { altLocaleUrl } from "../lib/i18n";
+import { altLocaleUrl, hasTranslation } from "../lib/i18n";
 
 const locale = Astro.currentLocale ?? "en";
 const path = Astro.url.pathname;
 const altPath = altLocaleUrl(locale, path);
+// Hide the toggle on pages with no Urdu counterpart — otherwise the اردو link
+// would 404. (Any /ur/ page is, by definition, translated.)
+const show = hasTranslation(path);
 ---
 
+{show && (
 <nav aria-label="Language selector" class="flex items-center gap-1.5 text-sm">
   <a
     href={locale === "en" ? path : altPath}
@@ -31,6 +35,7 @@ const altPath = altLocaleUrl(locale, path);
     ]}
   >اردو</a>
 </nav>
+)}
 
 <script is:inline>
   document.querySelectorAll("[data-lang]").forEach(function (el) {

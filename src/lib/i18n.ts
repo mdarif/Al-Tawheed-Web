@@ -23,6 +23,27 @@ export const RTL_LOCALES: Locale[] = ["ur"];
 /** All non-default locales. Add 'hi', 'ar', etc. here when ready. */
 export const NON_DEFAULT_LOCALES: Locale[] = ["ur"];
 
+/**
+ * English paths (trailing-slash form) that actually have an Urdu translation
+ * under /ur/. Keep in sync with the [locale]/ pages and the locale-redirect
+ * script in Layout.astro. Only these should emit hreflang="ur" / a language
+ * toggle — everything else has no /ur/ counterpart (would be a 404).
+ */
+export const TRANSLATED_PATHS = [
+  "/",
+  "/about/",
+  "/download/",
+  "/kitab-al-tawheed/",
+  "/tawheed/",
+];
+
+/** Does the given path (en or /ur-prefixed) have an Urdu counterpart? */
+export function hasTranslation(pathname: string): boolean {
+  const enPath = pathname.replace(/^\/ur(?=\/|$)/, "") || "/";
+  const normalized = enPath.endsWith("/") ? enPath : `${enPath}/`;
+  return TRANSLATED_PATHS.includes(normalized);
+}
+
 /** Use in getStaticPaths() for every [locale] page. */
 export function getLocalePaths() {
   return NON_DEFAULT_LOCALES.map((locale) => ({ params: { locale } }));
