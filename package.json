@@ -11,7 +11,7 @@
     "dev:full": "npm run build && astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name=kitabattawheed",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=al-tawheed-web",
     "astro": "astro",
     "test": "playwright test",
     "test:report": "playwright show-report"
