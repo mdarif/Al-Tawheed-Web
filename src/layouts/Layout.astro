@@ -4,7 +4,7 @@ import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import type { AppConfig } from "../lib/catalog";
 import { SITE_URL, playStoreUrl } from "../lib/catalog";
-import { altLocaleUrl } from "../lib/i18n";
+import { altLocaleUrl, hasTranslation } from "../lib/i18n";
 
 interface Props {
   title: string;
@@ -66,6 +66,9 @@ const isArabicPage = htmlLang === "ar";
 const altPath = altLocaleUrl(locale, Astro.url.pathname);
 const enUrl = locale === "en" ? canonicalUrl : new URL(altPath, SITE_URL).toString();
 const urUrl = locale === "ur" ? canonicalUrl : new URL(altPath, SITE_URL).toString();
+// Only emit hreflang alternates for pages that actually have an Urdu version;
+// otherwise the ur alternate would point to a nonexistent /ur/ page (404).
+const hasUrdu = hasTranslation(Astro.url.pathname);
 const cfAnalyticsToken =
   import.meta.env.PUBLIC_CF_WEB_ANALYTICS_TOKEN?.trim() ?? "";
 const fbAppId = import.meta.env.PUBLIC_FB_APP_ID?.trim() ?? "";
@@ -111,7 +114,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
-    {!isArabicPage && (
+    {hasUrdu && (
       <>
         <link rel="alternate" hreflang="en" href={enUrl} />
         <link rel="alternate" hreflang="ur" href={urUrl} />
