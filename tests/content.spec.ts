@@ -225,10 +225,13 @@ test.describe("Download page", () => {
     const section = page.locator("section[aria-labelledby='whats-new-heading']");
     await expect(section.getByRole("heading", { name: "What's New" })).toBeVisible();
     await expect(section.getByText("Latest")).toBeVisible();
-    await expect(section.getByText("v2.2.0")).toBeVisible();
+    await expect(section.getByText("v2.3.1")).toBeVisible();
     await expect(
-      section.getByText("Study Mode has its own tab")
+      section.getByText("lectures could fail to load on first open")
     ).toBeVisible();
+    // The two-series (Arabic) release is present in the history.
+    await expect(section.getByText("v2.3.0")).toBeVisible();
+    await expect(section.getByText("New Arabic series")).toBeVisible();
   });
 
   test("app screenshots are present", async ({ page }) => {

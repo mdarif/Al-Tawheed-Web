@@ -11,6 +11,25 @@ export interface AppRelease {
 
 export const APP_RELEASES: AppRelease[] = [
   {
+    version: "2.3.1",
+    date: "July 2026",
+    highlights: [
+      "Fixed an issue where lectures could fail to load on first open, even with a working connection",
+      "More reliable loading — the app now retries automatically and recovers as soon as your connection is back",
+      "Minor stability improvements",
+    ],
+  },
+  {
+    version: "2.3.0",
+    date: "July 2026",
+    highlights: [
+      "New Arabic series — the complete Kitab at-Tawheed explained in Arabic by Shaikh Salih al-Fawzan, with the full Arabic text of the book in a new Book tab",
+      "Choose your series when you open the app, and switch series or language anytime from Settings",
+      "Faster loading and smoother offline downloads",
+      "Bug fixes and refinements",
+    ],
+  },
+  {
     version: "2.2.0",
     date: "June 2026",
     highlights: [
