@@ -1,6 +1,7 @@
-# Cloudflare Pages — deploy with: npm run deploy
-# See docs/DEPLOY.md for GitHub Actions secrets and custom domain setup.
+# Cloudflare Pages project. Production deploys happen automatically via the
+# Pages↔GitHub integration (push to main). `npm run deploy` is a manual fallback.
+# Project name must match the Cloudflare project: al-tawheed-web.pages.dev.
 
-name = "kitabattawheed"
+name = "al-tawheed-web"
 compatibility_date = "2026-06-01"
 pages_build_output_dir = "./dist"
