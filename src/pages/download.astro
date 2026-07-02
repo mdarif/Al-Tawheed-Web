@@ -3,78 +3,96 @@ import Layout from "../layouts/Layout.astro";
 import WhatsNew from "../components/WhatsNew.astro";
 import {
   getCatalog,
+  getArabicCatalog,
   getAppConfig,
   en,
   playStoreUrl,
   bookCoverSrc,
 } from "../lib/catalog";
 
-const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const [catalog, arabicCatalog, appConfig] = await Promise.all([
+  getCatalog(),
+  getArabicCatalog(),
+  getAppConfig(),
+]);
 const storeUrl = playStoreUrl(appConfig);
 const coverSrc = bookCoverSrc(catalog.book);
-const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
+const urduCount = catalog.book.lectureCount;
+const arabicCount = arabicCatalog.book.lectureCount;
+const totalCount = urduCount + arabicCount;
 
 const screenshots = [
-  { src: "/app-screenshots/01-welcome-framed.png", alt: "Welcome screen" },
   {
-    src: "/app-screenshots/02-lectures-framed.png",
-    alt: "Lecture list by class",
+    src: "/app-screenshots/01-welcome.png",
+    alt: "Welcome — Sharah Kitab al-Tawheed",
   },
   {
-    src: "/app-screenshots/03-player-framed.png",
+    src: "/app-screenshots/02-choose-series.png",
+    alt: "Choose series — Urdu or Arabic",
+  },
+  {
+    src: "/app-screenshots/03-welcome-ar.png",
+    alt: "Arabic series welcome — Shaikh Salih al-Fawzan",
+  },
+  {
+    src: "/app-screenshots/04-book-ar.png",
+    alt: "Arabic Book tab — full Kitab at-Tawheed text in-app",
+  },
+  {
+    src: "/app-screenshots/05-player-ar.png",
+    alt: "Arabic audio player — now playing",
+  },
+  {
+    src: "/app-screenshots/06-lectures-ur.png",
+    alt: "Urdu lecture list by class with Study tab",
+  },
+  {
+    src: "/app-screenshots/07-study-ur.png",
+    alt: "Study Mode — work through each class in order",
+  },
+  {
+    src: "/app-screenshots/08-player-ur.png",
     alt: "Audio player with seek and speed",
-  },
-  {
-    src: "/app-screenshots/04-home-framed.png",
-    alt: "Home — continue listening and daily benefit",
-  },
-  {
-    src: "/app-screenshots/05-library-framed.png",
-    alt: "Offline library showing downloaded chapters and storage used",
-  },
-  {
-    src: "/app-screenshots/06-settings-framed.png",
-    alt: "Settings — Wi-Fi-only downloads and storage management",
   },
 ];
 
 const features = [
   {
-    icon: "⬇️",
-    title: "Offline Downloads",
-    desc: "Save lectures for travel or poor connectivity. Wi-Fi-only mode and one-tap cleanup keep storage tidy.",
+    icon: "📖",
+    title: "Two Complete Series",
+    desc: `The ${urduCount}-lecture Urdu series by Shaikh Abdullah Nasir Rahmani and the ${arabicCount}-duroos Arabic series by Shaikh Salih al-Fawzan — switch anytime.`,
   },
   {
-    icon: "📊",
-    title: "Progress Tracking",
-    desc: "Resume exactly where you stopped on each part.",
+    icon: "⬇️",
+    title: "Offline Downloads",
+    desc: "Save lessons for travel or poor connectivity. Wi-Fi-only mode and one-tap cleanup keep storage tidy.",
   },
   {
     icon: "📚",
     title: "Study Mode",
-    desc: "Dedicated Study tab — work through each class in order with completion tracking.",
+    desc: "Dedicated Study tab for the Urdu series — work through each class in order with completion tracking.",
+  },
+  {
+    icon: "📕",
+    title: "Read the Book",
+    desc: "The Arabic series includes an in-app Book tab with the full Kitab at-Tawheed text.",
+  },
+  {
+    icon: "📊",
+    title: "Progress Tracking",
+    desc: "Resume exactly where you stopped on each lesson.",
   },
   {
     icon: "🎵",
     title: "Background Playback",
-    desc: "Listen while using other apps or with screen off.",
-  },
-  {
-    icon: "⚡",
-    title: "Playback Speed",
-    desc: "0.75× to 2× — same range as the full player.",
-  },
-  {
-    icon: "🌐",
-    title: "Urdu & Roman Urdu",
-    desc: "Interface and titles in your preferred script.",
+    desc: "Listen while using other apps or with screen off, at 0.75×–2× speed.",
   },
 ];
 ---
 
 <Layout
-  title="Download App — Sharah Kitab al-Tawheed | Free Android"
-  description={`Download the free Android app for Sharah Kitab al-Tawheed — ${catalog.book.lectureCount} lectures, offline mode, Study Mode, and progress tracking.`}
+  title="Download App — Kitab al-Tawheed | Free Android"
+  description={`Download the free Android app for Kitab al-Tawheed — ${totalCount} audio lessons across two series (${urduCount} Urdu + ${arabicCount} Arabic), offline mode, Study Mode, and progress tracking.`}
   {appConfig}
 >
   <div class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">
@@ -93,15 +111,13 @@ const features = [
       />
       <div class="flex-1 text-center md:text-left">
         <h1 class="text-3xl font-bold mb-2">
-          Sharah Kitab al-Tawheed Mobile App
+          Kitab al-Tawheed Mobile App
         </h1>
         <p class="text-[#C9A84C] text-lg mb-1" dir="rtl" lang="ur">
           {catalog.book.title.ur ?? "شرح کتاب التوحید"}
         </p>
         <p class="text-fg-2 mb-3">
-          {catalog.book.lectureCount} Lectures · {totalHours} Hours · {
-            en(catalog.book.speaker)
-          }
+          {totalCount} Lessons · Two Series (Urdu & Arabic) · Free
         </p>
         <a
           href={storeUrl}
@@ -165,9 +181,8 @@ const features = [
     >
       <p class="font-semibold mb-2">Free · No ads · No account</p>
       <p class="text-sm text-fg-2 mb-4">
-        {appConfig.about.appName} — {appConfig.about.lectureCount} lectures, {
-          appConfig.about.totalDuration
-        } of benefit.
+        {appConfig.about.appName} — {totalCount} free audio lessons across two
+        series.
       </p>
       <a
         href={storeUrl}

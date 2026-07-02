@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getCatalog, getAppConfig, en, playStoreUrl } from "../../lib/catalog";
+import { getCatalog, getArabicCatalog, getAppConfig, en, playStoreUrl } from "../../lib/catalog";
 import { t, tx, getLocalePaths } from "../../lib/i18n";
 
 export function getStaticPaths() {
@@ -8,15 +8,16 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.params;
-const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const [catalog, arabicCatalog, appConfig] = await Promise.all([getCatalog(), getArabicCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
 const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
+const arabicCount = arabicCatalog.book.lectureCount;
 const i18n = t(locale);
 ---
 
 <Layout
-  title={locale === "ur" ? "شرح کتاب التوحید کے بارے میں" : "About — Sharah Kitab al-Tawheed"}
-  description={locale === "ur" ? "شرح کتاب التوحید آڈیو سلسلے کے بارے میں — شیخ عبداللہ ناصر رحمانی کے ۵۰ اردو دروس۔" : "About the Sharah Kitab al-Tawheed audio series by Shaikh Abdullah Nasir Rahmani."}
+  title={locale === "ur" ? "کتاب التوحید کے بارے میں" : "About — Kitab al-Tawheed"}
+  description={locale === "ur" ? "کتاب التوحید کے آڈیو سلسلوں کے بارے میں — شیخ عبداللہ ناصر رحمانی کے اردو دروس اور شیخ صالح الفوزان کے عربی دروس۔" : "About the Kitab al-Tawheed audio series by Shaikh Abdullah Nasir Rahmani (Urdu) and Shaikh Salih al-Fawzan (Arabic)."}
   {appConfig}
 >
   <div class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" dir="rtl">
@@ -47,9 +48,18 @@ const i18n = t(locale);
     </section>
 
     <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3 font-urdu">{i18n.about.arabic.title}</h2>
+      <p class="text-fg-2 leading-relaxed mb-3 font-urdu">{i18n.about.arabic.p1}</p>
+      <p class="text-fg-2 leading-relaxed font-urdu">
+        {tx(i18n.about.arabic.p2, { count: arabicCount })}{" "}
+        <a href="/arabic/" class="text-[#C9A84C] hover:underline" dir="ltr">/arabic/</a>
+      </p>
+    </section>
+
+    <section class="mb-10">
       <h2 class="text-xl font-bold text-[#C9A84C] mb-3 font-urdu">{i18n.about.app.title}</h2>
       <p class="text-fg-2 leading-relaxed mb-4 font-urdu">
-        <strong class="text-fg">{locale === "ur" ? "شرح کتاب التوحید اینڈرائیڈ ایپ" : "Sharah Kitab al-Tawheed Android app"}</strong>{" "}
+        <strong class="text-fg">{locale === "ur" ? "کتاب التوحید اینڈرائیڈ ایپ" : "Kitab al-Tawheed Android app"}</strong>{" "}
         {i18n.about.app.p1}
       </p>
       <div dir="ltr" class="flex flex-wrap gap-3">
@@ -65,7 +75,7 @@ const i18n = t(locale);
     <section class="mb-10">
       <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Al Marfa Duroos</h2>
       <p class="text-fg-2 leading-relaxed mb-3 font-urdu">
-        شرح کتاب التوحید <a href="https://www.youtube.com/@almarfaduroos" target="_blank" rel="noopener" class="text-[#C9A84C] hover:underline font-semibold">Al Marfa Duroos</a> کا ایک کورس ہے — مفت اردو اسلامی آڈیو دروس، جو کلاسیکی علمی ورثے کو دنیا بھر کے اردو بولنے والے مسلمانوں تک بغیر کسی قیمت یا اکاؤنٹ کے پہنچانے کے لیے بنائے گئے ہیں۔
+کتاب التوحید <a href="https://www.youtube.com/@almarfaduroos" target="_blank" rel="noopener" class="text-[#C9A84C] hover:underline font-semibold">Al Marfa Duroos</a> کا ایک کورس ہے — مفت اردو اور عربی اسلامی آڈیو دروس، جو کلاسیکی علمی ورثے کو دنیا بھر کے مسلمانوں تک بغیر کسی قیمت یا اکاؤنٹ کے پہنچانے کے لیے بنائے گئے ہیں۔
       </p>
     </section>
 

@@ -118,12 +118,18 @@ const articleTags = [
         {
           "@type": "ListItem",
           position: 3,
+          name: "Urdu Series",
+          item: "https://kitabattawheed.com/lectures/urdu/",
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
           name: en(chapter.title),
           item: `https://kitabattawheed.com/lectures/${chapterSlug(chapter.id)}/`,
         },
         {
           "@type": "ListItem",
-          position: 4,
+          position: 5,
           name: en(lecture.title),
           item: `https://kitabattawheed.com${lecturePath}`,
         },
@@ -143,6 +149,8 @@ const articleTags = [
       <a href="/" class="hover:text-[#C9A84C]">Home</a>
       <span class="mx-1">→</span>
       <a href="/lectures/" class="hover:text-[#C9A84C]">Lectures</a>
+      <span class="mx-1">→</span>
+      <a href="/lectures/urdu/" class="hover:text-[#C9A84C]">Urdu Series</a>
       <span class="mx-1">→</span>
       <a
         href={`/lectures/${chapterSlug(chapter.id)}/`}
