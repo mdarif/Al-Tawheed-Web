@@ -1,0 +1,14 @@
+# Cloudflare Pages cache policy (https://developers.cloudflare.com/pages/configuration/headers/)
+#
+# Goal: a new production deploy is never served stale. HTML and non-hashed
+# assets (images, manifest, feed) revalidate on every request, so returning
+# visitors always get the latest after a deploy. Astro's content-hashed build
+# assets (/_astro/*) change filename on any change, so they cache forever.
+
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Content-hashed by Astro — safe to cache immutably (rule placed last so it
+# wins over /* for these paths).
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
