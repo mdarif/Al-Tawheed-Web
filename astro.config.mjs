@@ -25,7 +25,11 @@ export default defineConfig({
     },
   },
   integrations: [
-    pagefind(),
+    // Merge all pages into a single index. Without this, Pagefind splits the
+    // index per <html lang> (en/ur/ar), so the English /search/ page can't see
+    // the Arabic series (lang="ar") or /ur/ pages. forceLanguage unifies them
+    // so one search box covers both series and all languages.
+    pagefind({ indexConfig: { forceLanguage: "en" } }),
     sitemap({
       serialize(item) {
         if (item.url.includes('/arabic/')) {
