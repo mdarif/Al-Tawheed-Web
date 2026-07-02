@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import WhatsNew from "../../components/WhatsNew.astro";
-import { getCatalog, getArabicCatalog, getAppConfig, en, playStoreUrl, bookCoverSrc } from "../../lib/catalog";
+import { getCatalog, getArabicCatalog, getAppConfig, en, playStoreUrl, BOOK_COVER_SRC } from "../../lib/catalog";
 import { t, tx, getLocalePaths } from "../../lib/i18n";
 
 export function getStaticPaths() {
@@ -11,7 +11,6 @@ export function getStaticPaths() {
 const { locale } = Astro.params;
 const [catalog, arabicCatalog, appConfig] = await Promise.all([getCatalog(), getArabicCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
-const coverSrc = bookCoverSrc(catalog.book);
 const urduCount = catalog.book.lectureCount;
 const arabicCount = arabicCatalog.book.lectureCount;
 const totalCount = urduCount + arabicCount;
@@ -51,10 +50,10 @@ const screenshots = [
 
     <div class="flex flex-col md:flex-row gap-8 items-start mb-12">
       <img
-        src={coverSrc}
+        src={BOOK_COVER_SRC}
         alt={en(catalog.book.title)}
         width="200"
-        height="105"
+        height="200"
         class="w-40 md:w-48 rounded-xl border border-[#C9A84C]/30 shadow-lg shrink-0 mx-auto md:mx-0"
         loading="eager"
       />
