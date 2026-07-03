@@ -6,7 +6,6 @@ import {
   getAppConfig,
   en,
   ar,
-  bookCoverSrc,
 } from "../../lib/catalog";
 
 const [catalog, arabicCatalog, appConfig] = await Promise.all([
@@ -49,11 +48,11 @@ const totalCount = urduCount + arabicCount;
         class="group flex gap-4 bg-surface border border-[var(--divider)] rounded-2xl p-5 hover:border-[#C9A84C]/50 hover:bg-surface-hover transition-all"
       >
         <img
-          src={bookCoverSrc(catalog.book)}
-          alt=""
+          src="/sheikh-abdullah-nasir-rahmani.jpg"
+          alt="Shaikh Abdullah Nasir Rahmani"
           width="72"
           height="72"
-          class="w-16 h-16 rounded-xl object-cover shrink-0 border border-[#C9A84C]/20"
+          class="w-16 h-16 rounded-full object-cover shrink-0 border border-[#C9A84C]/20"
           loading="eager"
         />
         <div class="min-w-0">
@@ -77,11 +76,11 @@ const totalCount = urduCount + arabicCount;
         class="group flex gap-4 bg-surface border border-[var(--divider)] rounded-2xl p-5 hover:border-[#C9A84C]/50 hover:bg-surface-hover transition-all"
       >
         <img
-          src={bookCoverSrc(arabicCatalog.book)}
-          alt=""
+          src="/sheikh-fawzan.png"
+          alt="Shaikh Salih al-Fawzan"
           width="72"
           height="72"
-          class="w-16 h-16 rounded-xl object-cover shrink-0 border border-[#C9A84C]/20"
+          class="w-16 h-16 rounded-full object-cover shrink-0 border border-[#C9A84C]/20"
           loading="eager"
         />
         <div class="min-w-0">
