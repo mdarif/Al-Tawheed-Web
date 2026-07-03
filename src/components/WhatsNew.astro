@@ -18,7 +18,7 @@ const {
   </h2>
   <div class="space-y-4">
     {
-      APP_RELEASES.map((release, index) => (
+      APP_RELEASES.slice(0, 1).map((release, index) => (
         <article
           class="bg-surface border border-[var(--divider)] rounded-xl p-5"
           aria-label={`Version ${release.version}`}

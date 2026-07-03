@@ -11,15 +11,6 @@ export interface AppRelease {
 
 export const APP_RELEASES: AppRelease[] = [
   {
-    version: "2.3.1",
-    date: "July 2026",
-    highlights: [
-      "Fixed an issue where lectures could fail to load on first open, even with a working connection",
-      "More reliable loading — the app now retries automatically and recovers as soon as your connection is back",
-      "Minor stability improvements",
-    ],
-  },
-  {
     version: "2.3.0",
     date: "July 2026",
     highlights: [
