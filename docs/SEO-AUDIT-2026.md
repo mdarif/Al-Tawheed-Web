@@ -4,6 +4,16 @@
 **Auditor:** Senior Frontend Engineer & SEO Specialist  
 **Target:** Optimize social sharing across Facebook, WhatsApp, Telegram, X (Twitter), LinkedIn
 
+> **Status update (2026-07-03) — historical snapshot; most items resolved.**
+> This audit predates the two-series relaunch. Since then: `og:site_name`,
+> `og:locale:alternate`, Twitter `@creator`, and JSON-LD (AudioSeries /
+> AudioObject / Course / BreadcrumbList / FAQPage) are all implemented; titles
+> and descriptions were tightened; `hreflang` now emits only on translated
+> pages (no `/ur/` → 404); and the OG image is the **two-series** card used
+> site-wide (lecture/Arabic pages included). A fresh Lighthouse pass scores
+> **SEO/Best-Practices/Performance 100** with CWV all "Good". Treat the
+> gaps table below as a record of what *was* fixed, not open work.
+
 ---
 
 ## 1. AUDIT OF CURRENT METADATA

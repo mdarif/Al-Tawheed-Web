@@ -1,149 +1,115 @@
 # Deploy — kitabattawheed.com (Cloudflare Pages)
 
-Production site: **https://kitabattawheed.com**  
-Build output: `dist/` (Astro static + Pagefind index)
+Production site: **https://kitabattawheed.com**
+Cloudflare Pages project: **`al-tawheed-web`** · Build output: `dist/` (Astro static + Pagefind index)
 
 ---
 
-## One-time Cloudflare setup
+## How deploys work — Cloudflare Pages Git integration
 
-### 1. Create the Pages project
+The Pages project **`al-tawheed-web`** is connected directly to the GitHub repo
+(`mdarif/Al-Tawheed-Web`) with **Automatic deployments enabled**. Cloudflare
+builds and deploys on every push:
 
-1. [Cloudflare Dashboard](https://dash.cloudflare.com) → **Workers & Pages** → **Create** → **Pages** → **Upload assets** (or connect Git later — we deploy via GitHub Actions).
-2. Project name: **`kitabattawheed`** (must match `wrangler.toml` and the workflow).
-3. After first deploy, add custom domain: **kitabattawheed.com** (+ `www` redirect to apex if desired).
+- **Push to `main` → Production** (kitabattawheed.com, www, al-tawheed-web.pages.dev)
+- Push any **other branch → Preview** (`<branch>.al-tawheed-web.pages.dev`, e.g. `v3.al-tawheed-web.pages.dev`)
 
-### 2. API token for GitHub Actions
+Cloudflare runs the build itself: **build command `npm run build`, output `dist`**
+(configured in the Pages project → Settings → Build). No secrets, no GitHub
+Actions deploy. `.github/workflows/ci.yml` **only builds an artifact as a PR
+check — it does not deploy.**
 
-1. **My Profile** → **API Tokens** → **Create Token** → **Edit Cloudflare Workers** template (includes Pages deploy).
-2. Or custom token with permissions:
-   - Account → **Cloudflare Pages** → **Edit**
-   - Zone → **Read** (if using zone-scoped token; optional for Pages-only)
-3. Copy the token.
-
-### 3. Account ID
-
-Dashboard → any zone or Workers & Pages → right sidebar **Account ID** (32-char hex).
-
-### 4. GitHub repository secrets
-
-Repo **Al-Tawheed-Web** → **Settings** → **Secrets and variables** → **Actions**:
-
-| Secret | Value |
-|--------|--------|
-| `CLOUDFLARE_API_TOKEN` | Token from step 2 |
-| `CLOUDFLARE_ACCOUNT_ID` | Account ID from step 3 |
-
-Optional **variable** (not secret):
-
-| Variable | Value |
-|----------|--------|
-| `CLOUDFLARE_PAGES_PROJECT` | Override project name if not `kitabattawheed` |
-
----
-
-## Automatic deploy (CI)
-
-On every push to **`main`**:
-
-1. `npm ci` → `npm run build` (fetches public catalog from CDN)
-2. Upload `dist/` artifact
-3. Deploy to Cloudflare Pages with Wrangler
-
-Pull requests: **build only** (no production deploy).
-
-Manual deploy from your machine:
+### Shipping to production
 
 ```bash
-npm run build
-npm run deploy
-# Requires: npx wrangler login  (once)
+git checkout main
+git merge <your-branch>     # e.g. v3 (usually a fast-forward)
+git push                    # pre-push hook runs the full Playwright suite, then pushes
 ```
+
+The push to `main` triggers the Cloudflare production build automatically. The
+**pre-push hook** (`.githooks/pre-push`, auto-installed by `npm install`) runs
+all Playwright tests first and **aborts the push if any fail** — so untested
+code can't reach `main`. Bypass with `git push --no-verify` only in emergencies.
+
+### Manual fallback (rarely needed)
+
+```bash
+npx wrangler login          # once
+npm run deploy              # = npm run build && wrangler pages deploy dist --project-name=al-tawheed-web
+```
+
+Prefer the Git flow; the manual path is a break-glass option.
 
 ---
 
 ## Cloudflare Web Analytics
 
-Privacy-friendly pageview stats (no Google Analytics, no cookies). Matches [ADR-004](https://github.com/mdarif/Al-Tawheed/blob/main/docs/website-architecture.md).
+Privacy-friendly pageview stats (no Google Analytics, no cookies).
 
-### 1. Get the beacon token
+The site's beacon **token is baked into the code** as a public default
+(`src/layouts/Layout.astro` — it's a client-side site tag, not a secret), so
+analytics is on by default and needs **no Pages env var**. An optional
+`PUBLIC_CF_WEB_ANALYTICS_TOKEN` env var (Pages → Settings → Variables, or a
+local `.env`) overrides the default if you ever rotate the token.
 
-1. [Cloudflare Dashboard](https://dash.cloudflare.com) → **Analytics & Logs** → **Web Analytics**.
-2. Add **kitabattawheed.com** (or select the site if already listed).
-3. Copy the **token** from the install snippet (`data-cf-beacon` → `"token": "…"`).
-
-### 2. Set on Cloudflare Pages (production build)
-
-**Workers & Pages** → **kitabattawheed** (web project) → **Settings** → **Environment variables**:
-
-| Name | Value | Environment |
-|------|--------|-------------|
-| `PUBLIC_CF_WEB_ANALYTICS_TOKEN` | Token from step 1 | Production |
-
-Redeploy after saving (or push a commit). Astro inlines `PUBLIC_*` vars at **build** time.
-
-### 3. Local dev (optional)
-
-```bash
-cp .env.example .env
-# paste token into PUBLIC_CF_WEB_ANALYTICS_TOKEN=
-```
-
-Without the variable, the beacon is omitted in dev and preview builds.
-
-View reports: **Web Analytics** in the Cloudflare dashboard (visits, pages, referrers, countries).
+- Because it's a `PUBLIC_*` build-time var / inlined constant, the beacon only
+  changes on a **new build/deploy**.
+- The Web Analytics site **`kitabattawheed.com`** is registered in the
+  dashboard (JS-snippet mode). Keep it manual-only — do **not** also enable
+  Cloudflare's "Automatic" injection for this host, or pageviews double-count.
+- View reports: **Cloudflare dashboard → Web Analytics → kitabattawheed.com**
+  (visits, page views, referrers, countries) — data appears within minutes of
+  real production traffic.
 
 ---
 
 ## Custom domain checklist
 
-- [ ] `kitabattawheed.com` attached to Pages project (SSL active)
-- [ ] **`www.kitabattawheed.com` attached to the same Pages project** (not DNS-only — an unattached `www` record causes **522** errors in Search Console)
-- [ ] Or: **Bulk Redirect** in Cloudflare → `www.kitabattawheed.com/*` → `https://kitabattawheed.com/$1` (301)
+- [ ] `kitabattawheed.com` attached to the `al-tawheed-web` Pages project (SSL active)
+- [ ] **`www.kitabattawheed.com` attached to the same Pages project** (not DNS-only — an unattached `www` record causes **522** errors in Search Console), or a Bulk Redirect `www.kitabattawheed.com/*` → `https://kitabattawheed.com/$1` (301)
 - [ ] Astro `site` in `astro.config.mjs` is `https://kitabattawheed.com` (canonical URLs)
 - [ ] After deploy, confirm unknown URLs return **404** (not the homepage): e.g. `/no-such-page/` → 404
 
+The site ships `404.html` so Cloudflare Pages does **not** serve the homepage
+(HTTP 200) for missing paths — critical for SEO.
+
 ---
 
-## Google Search Console (after first deploy)
+## After a production deploy — checklist
 
-### Submit sitemap
+- [ ] Hard-reload the live site and smoke-test: `/`, `/lectures/`, `/lectures/urdu/`, `/arabic/`, play a lecture, search "fawzan".
+- [ ] **OG image caches:** social platforms cache the share card by URL. After changing `og-image.png`, force a re-scrape: [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/), X Card Validator, [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/).
+- [ ] **Analytics:** confirm the beacon (`cloudflareinsights.com/beacon.min.js`) is in the live HTML; watch data populate in Web Analytics.
+- [ ] **Search Console:** (re)submit `https://kitabattawheed.com/sitemap-index.xml`. After an IA change, the URLs still resolve (no redirects), but new pages like `/lectures/urdu/` appear in the sitemap.
 
-1. Go to [Google Search Console](https://search.google.com/search-console).
-2. **Add property** → URL prefix: `https://kitabattawheed.com` (use apex, not `www`, unless `www` is fixed)
-3. Verify ownership (HTML file, DNS TXT, or Cloudflare integration).
-4. **Sitemaps** → Submit:
-   ```
-   https://kitabattawheed.com/sitemap-index.xml
-   ```
-5. Optional: request indexing for `/` and `/lectures/` after major launches.
+---
 
-Also confirm `https://kitabattawheed.com/robots.txt` lists the sitemap (it does).
+## Google Search Console
 
-### Common indexing reports (what they mean)
+1. [Search Console](https://search.google.com/search-console) → **Add property** → URL prefix `https://kitabattawheed.com` (apex, not `www`, unless `www` is fixed).
+2. Verify ownership; **Sitemaps** → submit `https://kitabattawheed.com/sitemap-index.xml`.
+3. Optional: URL Inspection → Request indexing for `/`, `/lectures/urdu/`, `/arabic/` after a launch.
+
+`https://kitabattawheed.com/robots.txt` already lists the sitemap.
+
+### Common indexing reports
 
 | Status | Meaning | Action |
 |--------|---------|--------|
-| **Discovered – currently not indexed** | Google knows the URL (sitemap/links) but has not crawled/indexed yet | Normal for a **new** site. Fix `www`/404 issues below, then wait or use URL Inspection → Request indexing for `/` and `/lectures/`. |
-| **Page with redirect** | Non-canonical URL (e.g. without trailing `/`) redirects to the real URL | Expected with `trailingSlash: 'always'`. No fix needed. |
-| **Alternative page with proper canonical** | Duplicate URL correctly points canonical elsewhere | Often a `www` or mistyped `/ur/...` ghost URL. Fix soft-404 + `www`. |
-| **Server error (5xx)** | Crawler got an error | Check **www** (522 if not on Pages) and redeploy if transient. |
-
-**Important:** The site ships `404.html` so Cloudflare Pages does **not** fall back to the homepage for missing paths (without it, every bad URL returned 200 + home — bad for SEO).
+| **Discovered – currently not indexed** | Known but not yet crawled | Normal for new/changed URLs; wait or request indexing. |
+| **Page with redirect** | Non-trailing-slash URL 301s to the canonical | Expected with `trailingSlash: 'always'`. No fix. |
+| **Alternative page with proper canonical** | Duplicate points canonical elsewhere | Usually a `www` or old ghost URL. Fix `www`. |
+| **Server error (5xx)** | Crawler error | Check `www` (522 if not attached to Pages). |
 
 ---
 
-## Rebuild when only content changes
+## Rebuild when only CDN content changes
 
-Lecture metadata lives on the CDN (`catalog.json`). The site rebuilds on **code** pushes to `main`.
-
-When you only update **Al-Tawheed-Content** (new lectures, copy changes):
-
-- Push a commit to `main` (empty commit is fine), or
-- Re-run the **CI** workflow manually (**Actions** → **CI** → **Run workflow**), or
-- Run `npm run build && npm run deploy` locally
-
-Future improvement: webhook from Content repo to trigger `workflow_dispatch`.
+Lecture metadata lives on the CDN. Cloudflare rebuilds on **code** pushes to
+`main`. When only **Al-Tawheed-Content** changes (new lectures, copy), trigger a
+fresh build by either pushing a commit to `main` (an empty commit works) or
+using **Retry deployment** in the Pages dashboard.
 
 ---
 
@@ -151,7 +117,8 @@ Future improvement: webhook from Content repo to trigger `workflow_dispatch`.
 
 | Issue | Fix |
 |-------|-----|
-| Deploy job skipped | Secrets missing or not on `main` branch |
-| `Project not found` | Create Pages project `kitabattawheed` or set `CLOUDFLARE_PAGES_PROJECT` |
-| Build fails in CI | Network must reach `al-tawheed-content.pages.dev` at build time |
-| Search not working on preview URL | Pagefind index is in `dist/pagefind/` — full deploy includes it |
+| Push rejected: "Tests FAILED. Push aborted." | The pre-push Playwright gate found a failure — run `npm test`, fix, retry. |
+| Preview/prod shows an old build | Cloudflare deploys per push; check the Deployments tab. The og:image is absolute to the **production** domain, so a preview's social card shows prod's image until prod is deployed. |
+| `Project not found` on `npm run deploy` | Ensure `--project-name=al-tawheed-web` (the real project) and `wrangler login`. |
+| Build fails in Cloudflare | Network must reach the content CDN at build time; retry a transient timeout. |
+| Search empty on a page | Only `data-pagefind-body` pages are indexed; the index is unified via `forceLanguage` — rebuild + hard-reload. |
