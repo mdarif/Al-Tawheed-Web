@@ -1,0 +1,161 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const updated = "3 July 2026";
+---
+
+<Layout
+  title={"Privacy Policy — Al Marfa Apps"}
+  description="Privacy policy for the Al Quran and Sharah Kitab al-Tawheed mobile apps by Al Marfa Technologies — no accounts, no ads, no analytics, no tracking; your data stays on your device."
+>
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">
+    <nav class="text-xs text-fg-3 mb-6">
+      <a href="/" class="hover:text-[#C9A84C]">Home</a> → Privacy Policy
+    </nav>
+
+    <h1 class="text-3xl font-bold mb-2">Privacy Policy</h1>
+    <p class="text-sm text-fg-3 mb-8">Last updated {updated}</p>
+
+    <section class="mb-10">
+      <p class="text-fg-2 leading-relaxed mb-3">
+        This policy covers the mobile apps published by
+        <strong class="text-fg">Al Marfa Technologies</strong> — currently
+        <strong class="text-fg">Al Quran</strong> and
+        <strong class="text-fg">Sharah Kitab al-Tawheed</strong> — and this
+        website, <a href="https://kitabattawheed.com" class="text-[#C9A84C] hover:underline">kitabattawheed.com</a>.
+        Our apps are built to be private by design: there are
+        <strong class="text-fg">no accounts, no advertising, no analytics or
+        crash-reporting SDKs, and no third-party trackers</strong>. We have no
+        servers that your personal data could be sent to.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">The short version</h2>
+      <ul class="text-fg-2 leading-relaxed mb-3 list-disc pl-5 space-y-1">
+        <li>We collect <strong class="text-fg">nothing</strong>. No personal data leaves your device to us — we have no backend.</li>
+        <li>Everything an app remembers (your place in the text or audio, bookmarks, downloads, and settings) is stored <strong class="text-fg">only on your device</strong>.</li>
+        <li>Your <strong class="text-fg">location never leaves your device</strong> — it is used only by Al Quran to calculate prayer times locally.</li>
+        <li>The only network activity is content you ask for: streaming or downloading audio, and fetching an app's catalog. No identifiers or accounts are sent.</li>
+      </ul>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">What the apps store on your device</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        To make reading and listening comfortable, the apps keep small files
+        locally: your last position, bookmarks, downloaded audio, and your
+        preferences (language, theme, font size, and similar). In
+        <strong class="text-fg">Al Quran</strong> this also includes your
+        reminder and reading-light settings; in
+        <strong class="text-fg">Sharah Kitab al-Tawheed</strong> it includes your
+        lecture progress, downloaded lectures, and study progress. This data
+        stays in the app's private storage, is never transmitted to us or anyone
+        else, and is removed when you uninstall the app.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">When the apps use the internet</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        Both apps work offline. When you actively request online content, the app
+        makes a standard web request to fetch it — nothing is uploaded from your
+        device:
+      </p>
+      <ul class="text-fg-2 leading-relaxed mb-3 list-disc pl-5 space-y-1">
+        <li><strong class="text-fg">Al Quran</strong> — optional verse recitation (Mishary Rashid Alafasy) is streamed on demand from <a href="https://islamic.network" target="_blank" rel="noopener" class="text-[#C9A84C] hover:underline">islamic.network</a>, a free Islamic-services CDN, and cached on your device so replays work offline. If you never play audio, Al Quran makes no network requests at all.</li>
+        <li><strong class="text-fg">Sharah Kitab al-Tawheed</strong> — the lecture catalogue and lecture audio are fetched from our own content network on <a href="https://kitabattawheed.com" class="text-[#C9A84C] hover:underline">kitabattawheed.com</a> (Cloudflare) when you browse, stream, or download a lecture.</li>
+      </ul>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        As with any web request, the server providing that content sees the
+        request's IP address and which file was asked for — this is inherent to
+        how the internet works. The apps send no user identifiers, accounts, or
+        analytics along with these requests. Al Quran's audio provider is a third
+        party; its own practices are described at
+        <a href="https://islamic.network" target="_blank" rel="noopener" class="text-[#C9A84C] hover:underline">islamic.network</a>.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Location (Al Quran only)</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        If you use prayer times in <strong class="text-fg">Al Quran</strong>, the
+        app asks for your device's location. Prayer times are calculated
+        <strong class="text-fg">entirely on your device</strong>; your location is
+        not sent to any server. If you decline the permission, the rest of the app
+        works normally. Sharah Kitab al-Tawheed does not request location at all.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Notifications</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        All notifications are <strong class="text-fg">local</strong> — scheduled
+        and shown by your device, never pushed from a server. Al Quran uses them
+        for Sunnah and prayer-time reminders (and on Android may request the
+        exact-alarm capability so reminders fire on time); Sharah Kitab al-Tawheed
+        uses them for download progress and audio playback controls. No
+        notification data leaves your device, and neither app uses push
+        notifications.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">What we don't do</h2>
+      <ul class="text-fg-2 leading-relaxed mb-3 list-disc pl-5 space-y-1">
+        <li>No analytics or crash-reporting SDKs in the apps.</li>
+        <li>No advertising and no advertising identifiers.</li>
+        <li>No accounts, sign-ins, or cloud sync.</li>
+        <li>No selling, sharing, or processing of personal data — we never receive any.</li>
+      </ul>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">This website</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        This site (kitabattawheed.com) uses
+        <strong class="text-fg">Cloudflare Web Analytics</strong>, which is
+        cookieless and measures only aggregate, anonymous traffic (such as page
+        views and referrers) — it builds no cross-site profile of you and sets no
+        tracking cookies. On-site search runs entirely in your browser. The site
+        shows no ads.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Children</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        Both apps are suitable for all ages. Because they collect no data, they
+        collect no data from children.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Deleting your data</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        All app data lives on your device. Uninstalling an app removes it
+        completely. There is nothing to delete on our side, because we never
+        received anything.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Changes to this policy</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        If a future version of an app changes any of the above (for example, a new
+        online feature), we will update this policy and revise the date above
+        before that version ships.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Contact</h2>
+      <p class="text-fg-2 leading-relaxed">
+        Questions about privacy? Email
+        <a href="mailto:hello@almarfa.co" class="text-[#C9A84C] hover:underline">hello@almarfa.co</a>
+        — <strong class="text-fg">Al Marfa Technologies</strong>,
+        <a href="https://almarfa.co" target="_blank" rel="noopener" class="text-[#C9A84C] hover:underline">almarfa.co</a>.
+      </p>
+    </section>
+  </div>
+</Layout>
