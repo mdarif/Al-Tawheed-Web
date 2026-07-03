@@ -24,7 +24,7 @@ export const en = {
     },
     arabic: {
       title: "The Arabic Series",
-      p1: "The Arabic series is the explanation of Kitab at-Tawheed by Shaikh Ṣāliḥ al-Fawzān Hafizahullah, a senior scholar and member of the Council of Senior Scholars. It presents the book in the original Arabic.",
+      p1: "The Arabic series is the explanation of Kitab at-Tawheed by Shaikh Salih al-Fawzan Hafizahullah, a senior scholar and member of the Council of Senior Scholars. It presents the book in the original Arabic.",
       p2: "It comprises {count} audio duroos, available on the Arabic series page.",
     },
     app: {
