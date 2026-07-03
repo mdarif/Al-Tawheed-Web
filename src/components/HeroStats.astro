@@ -1,0 +1,64 @@
+---
+/**
+ * Hero KPI row: two big gold counts + an "Offline" feature stat, split by
+ * hairline dividers. Pure CSS + one inline SVG; theme-aware via fg/divider
+ * tokens (gold stays constant, per site convention).
+ */
+interface Props {
+  urduCount: number;
+  arabicCount: number;
+  locale?: string;
+}
+const { urduCount, arabicCount, locale = "en" } = Astro.props;
+const isUrdu = locale === "ur";
+const labels = isUrdu
+  ? { urdu: "اردو دروس", arabic: "عربی دروس", offline: "آف لائن" }
+  : { urdu: "Urdu Lectures", arabic: "Arabic Duroos", offline: "Offline" };
+// Numbers are Western digits; only the labels need the Naskh face on /ur/.
+const labelFont = isUrdu
+  ? "font-family:'Noto Naskh Arabic',system-ui,sans-serif"
+  : undefined;
+const numCls = "text-3xl sm:text-4xl font-bold text-[#C9A84C] leading-none";
+const labelCls =
+  "mt-1.5 text-[10px] sm:text-xs text-fg-3 uppercase tracking-wide whitespace-nowrap";
+const cellCls = "flex flex-col items-center px-3 sm:px-8";
+---
+
+<div
+  dir="ltr"
+  role="group"
+  aria-label={`${urduCount} Urdu lectures, ${arabicCount} Arabic duroos, available offline`}
+  class="flex items-stretch justify-center my-4 sm:my-5"
+>
+  <div class={cellCls}>
+    <span class={numCls}>{urduCount}</span>
+    <span class={labelCls} style={labelFont}>{labels.urdu}</span>
+  </div>
+
+  <div class="w-px self-center h-10 bg-[var(--divider)]" aria-hidden="true"></div>
+
+  <div class={cellCls}>
+    <span class={numCls}>{arabicCount}</span>
+    <span class={labelCls} style={labelFont}>{labels.arabic}</span>
+  </div>
+
+  <div class="w-px self-center h-10 bg-[var(--divider)]" aria-hidden="true"></div>
+
+  <div class={cellCls}>
+    <svg
+      class="w-7 h-7 sm:w-8 sm:h-8 text-[#C9A84C]"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="7 10 12 15 17 10"></polyline>
+      <line x1="12" y1="15" x2="12" y2="3"></line>
+    </svg>
+    <span class={labelCls} style={labelFont}>{labels.offline}</span>
+  </div>
+</div>

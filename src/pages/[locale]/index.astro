@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import ContinueListening from "../../components/ContinueListening.astro";
 import DailyBenefitCard from "../../components/DailyBenefitCard.astro";
+import HeroStats from "../../components/HeroStats.astro";
 import { getCatalog, getArabicCatalog, getAppConfig, playStoreUrl } from "../../lib/catalog";
 import { t, tx, getLocalePaths } from "../../lib/i18n";
 
@@ -43,14 +44,11 @@ const i18n = t(locale);
     >
       {catalog.book.title.ur ?? "شرح کتاب التوحید"}
     </h1>
-    <p class="text-fg-2 text-base sm:text-lg mb-4 px-1 font-urdu">
-      {
-        tx(i18n.hero.description, {
-          count: catalog.book.lectureCount,
-          arabicCount,
-        })
-      }
-    </p>
+    <HeroStats
+      urduCount={catalog.book.lectureCount}
+      arabicCount={arabicCount}
+      locale={locale}
+    />
 
     <div class="flex justify-center mb-6">
       <div
