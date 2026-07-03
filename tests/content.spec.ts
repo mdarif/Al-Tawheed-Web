@@ -220,18 +220,15 @@ test.describe("Download page", () => {
     await expect(section.locator(":scope > .grid > div")).toHaveCount(6);
   });
 
-  test("what's new section shows latest app version", async ({ page }) => {
+  test("what's new shows a single latest card (Arabic series)", async ({ page }) => {
     await page.goto("/download/");
     const section = page.locator("section[aria-labelledby='whats-new-heading']");
     await expect(section.getByRole("heading", { name: "What's New" })).toBeVisible();
     await expect(section.getByText("Latest")).toBeVisible();
-    await expect(section.getByText("v2.3.1")).toBeVisible();
-    await expect(
-      section.getByText("lectures could fail to load on first open")
-    ).toBeVisible();
-    // The two-series (Arabic) release is present in the history.
     await expect(section.getByText("v2.3.0")).toBeVisible();
     await expect(section.getByText("New Arabic series")).toBeVisible();
+    // Only the single latest card is shown — older versions are not listed.
+    await expect(section.getByText("v2.2.0")).toHaveCount(0);
   });
 
   test("app screenshots are present", async ({ page }) => {
