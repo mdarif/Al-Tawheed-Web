@@ -1,9 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import FaqSection from "../components/FaqSection.astro";
-import { getCatalog, getAppConfig } from "../lib/catalog";
+import { getCatalog, getArabicCatalog, getAppConfig } from "../lib/catalog";
 
-const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const [catalog, arabicCatalog, appConfig] = await Promise.all([
+  getCatalog(),
+  getArabicCatalog(),
+  getAppConfig(),
+]);
+const urduCount = catalog.book.lectureCount;
+const arabicCount = arabicCatalog.book.lectureCount;
 
 const faq = [
   {
@@ -18,7 +24,11 @@ const faq = [
   },
   {
     question: "Is there an Urdu explanation available?",
-    answer: `Yes. Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah has recorded a complete sharah (explanation) — ${catalog.book.lectureCount} Urdu lectures in 15 classes, free on this website and the Android app.`,
+    answer: `Yes. Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah has recorded a complete sharah (explanation) — ${urduCount} Urdu lectures in 15 classes, free on this website and the Android app.`,
+  },
+  {
+    question: "Is there an Arabic explanation available?",
+    answer: `Yes. Shaikh Salih al-Fawzan Hafizahullah explains Kitab at-Tawheed in ${arabicCount} Arabic audio duroos, free on this website and the Android app.`,
   },
   {
     question: "How should I study Kitab al-Tawheed?",
@@ -29,8 +39,8 @@ const faq = [
 ---
 
 <Layout
-  title="What is Kitab al-Tawheed? — Summary & Free Urdu Sharah"
-  description="Learn what Kitab al-Tawheed is, who wrote it, and listen to a complete free Urdu sharah by Shaikh Abdullah Nasir Rahmani — 50 lectures online."
+  title="What is Kitab al-Tawheed? — Summary & Free Urdu + Arabic Sharah"
+  description={`Learn what Kitab al-Tawheed is and who wrote it, then listen free: a complete Urdu sharah by Shaikh Abdullah Nasir Rahmani (${urduCount} lectures) and an Arabic explanation by Shaikh Salih al-Fawzan (${arabicCount} duroos).`}
   {appConfig}
   faqItems={faq}
 >
@@ -60,29 +70,44 @@ const faq = [
       types of worship, and common errors that contradict Tawheed.
     </p>
 
-    <section
-      class="bg-surface border border-[var(--divider)] rounded-xl p-5 mb-8"
-    >
-      <h2 class="text-lg font-bold text-[#C9A84C] mb-2">Urdu Sharah</h2>
-      <p class="text-sm text-fg-2 mb-4">
-        <strong class="text-fg"
-          >Shaikh Abdullah Nasir Rahmani Hafizahullah</strong
-        > explains the full book in {catalog.book.lectureCount} Urdu audio lectures
-        across 15 classes.
-      </p>
-      <div class="flex flex-wrap gap-3">
-        <a
-          href="/lectures/urdu/"
-          class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]"
-          >Browse lectures</a
-        >
-        <a
-          href="/search/"
-          class="border border-[var(--divider-lg)] px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover"
-          >Search</a
-        >
-      </div>
-    </section>
+    <h2 class="text-xl font-bold mb-4">Listen free on this site — two series</h2>
+    <div class="grid sm:grid-cols-2 gap-4 mb-8">
+      <section class="bg-surface border border-[var(--divider)] rounded-xl p-5">
+        <h3 class="text-lg font-bold text-[#C9A84C] mb-2">Urdu Sharah</h3>
+        <p class="text-sm text-fg-2 mb-4">
+          <strong class="text-fg"
+            >Shaikh Abdullah Nasir Rahmani Hafizahullah</strong
+          > explains the full book in {urduCount} Urdu audio lectures across 15 classes.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="/lectures/urdu/"
+            class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]"
+            >Browse Urdu series</a
+          >
+          <a
+            href="/search/"
+            class="border border-[var(--divider-lg)] px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover"
+            >Search</a
+          >
+        </div>
+      </section>
+
+      <section class="bg-surface border border-[var(--divider)] rounded-xl p-5">
+        <h3 class="text-lg font-bold text-[#C9A84C] mb-2">Arabic Duroos</h3>
+        <p class="text-sm text-fg-2 mb-4">
+          <strong class="text-fg">Shaikh Salih al-Fawzan Hafizahullah</strong> explains
+          Kitab at-Tawheed in {arabicCount} Arabic audio duroos.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="/arabic/"
+            class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]"
+            >Browse Arabic series</a
+          >
+        </div>
+      </section>
+    </div>
 
     <FaqSection items={faq} />
   </article>

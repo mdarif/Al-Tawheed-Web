@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getCatalog, getAppConfig } from "../../lib/catalog";
+import { getCatalog, getArabicCatalog, getAppConfig } from "../../lib/catalog";
 import { t, tx, getLocalePaths } from "../../lib/i18n";
 
 export function getStaticPaths() {
@@ -8,13 +8,14 @@ export function getStaticPaths() {
 }
 
 const { locale } = Astro.params;
-const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const [catalog, arabicCatalog, appConfig] = await Promise.all([getCatalog(), getArabicCatalog(), getAppConfig()]);
+const arabicCount = arabicCatalog.book.lectureCount;
 const i18n = t(locale);
 ---
 
 <Layout
-  title={locale === "ur" ? "کتاب التوحید کیا ہے؟ — خلاصہ اور مفت اردو شرح" : "What is Kitab al-Tawheed? — Summary & Free Urdu Sharah"}
-  description={locale === "ur" ? "کتاب التوحید کیا ہے، کس نے لکھی، اور شیخ عبداللہ ناصر رحمانی کی مکمل اردو شرح — ۵۰ دروس آن لائن مفت۔" : "Learn what Kitab al-Tawheed is and listen to the free Urdu sharah by Shaikh Abdullah Nasir Rahmani."}
+  title={locale === "ur" ? "کتاب التوحید کیا ہے؟ — خلاصہ اور مفت اردو و عربی شرح" : "What is Kitab al-Tawheed? — Summary & Free Urdu + Arabic Sharah"}
+  description={locale === "ur" ? "کتاب التوحید کیا ہے، کس نے لکھی، اور مفت سنیں: شیخ عبداللہ ناصر رحمانی کی اردو شرح اور شیخ صالح الفوزان کی عربی دروس۔" : "Learn what Kitab al-Tawheed is and listen free: the Urdu sharah by Shaikh Abdullah Nasir Rahmani and the Arabic duroos by Shaikh Salih al-Fawzan."}
   {appConfig}
   faqItems={i18n.kitab.faq}
 >
@@ -32,21 +33,38 @@ const i18n = t(locale);
       {i18n.kitab.p2}
     </p>
 
-    <section class="bg-surface border border-[var(--divider)] rounded-xl p-5 mb-8">
-      <h2 class="text-lg font-bold text-[#C9A84C] mb-2 font-urdu">{i18n.kitab.freeSection.title}</h2>
-      <p class="text-sm text-fg-2 mb-4 font-urdu">
-        <strong class="text-fg">{locale === "ur" ? "شیخ عبداللہ ناصر رحمانی" : "Shaikh Abdullah Nasir Rahmani"}</strong>{" "}
-        {tx(i18n.kitab.freeSection.description, { count: catalog.book.lectureCount })}
-      </p>
-      <div dir="ltr" class="flex flex-wrap gap-3">
-        <a href="/lectures/urdu/" class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">
-          Browse lectures
-        </a>
-        <a href="/search/" class="border border-[var(--divider-lg)] px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover">
-          Search
-        </a>
-      </div>
-    </section>
+    <div class="grid sm:grid-cols-2 gap-4 mb-8">
+      <section class="bg-surface border border-[var(--divider)] rounded-xl p-5">
+        <h2 class="text-lg font-bold text-[#C9A84C] mb-2 font-urdu">{locale === "ur" ? "اردو شرح" : "Urdu Sharah"}</h2>
+        <p class="text-sm text-fg-2 mb-4 font-urdu">
+          <strong class="text-fg">{locale === "ur" ? "شیخ عبداللہ ناصر رحمانی" : "Shaikh Abdullah Nasir Rahmani"}</strong>{" "}
+          {tx(i18n.kitab.freeSection.description, { count: catalog.book.lectureCount })}
+        </p>
+        <div dir="ltr" class="flex flex-wrap gap-3">
+          <a href="/lectures/urdu/" class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">
+            Browse Urdu series
+          </a>
+          <a href="/search/" class="border border-[var(--divider-lg)] px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover">
+            Search
+          </a>
+        </div>
+      </section>
+
+      <section class="bg-surface border border-[var(--divider)] rounded-xl p-5">
+        <h2 class="text-lg font-bold text-[#C9A84C] mb-2 font-urdu">{locale === "ur" ? "عربی دروس" : "Arabic Duroos"}</h2>
+        <p class="text-sm text-fg-2 mb-4 font-urdu">
+          <strong class="text-fg">{locale === "ur" ? "شیخ صالح الفوزان" : "Shaikh Salih al-Fawzan"}</strong>{" "}
+          {locale === "ur"
+            ? `کتاب التوحید کی ${arabicCount} عربی آڈیو دروس میں شرح کرتے ہیں۔`
+            : `explains Kitab at-Tawheed in ${arabicCount} Arabic audio duroos.`}
+        </p>
+        <div dir="ltr" class="flex flex-wrap gap-3">
+          <a href="/arabic/" class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">
+            Browse Arabic series
+          </a>
+        </div>
+      </section>
+    </div>
 
     <section>
       <h2 class="text-xl font-bold mb-4 font-urdu">
@@ -60,7 +78,7 @@ const i18n = t(locale);
               <span class="text-fg-3 text-lg shrink-0 group-open:rotate-45 transition-transform">+</span>
             </summary>
             <p class="px-5 pb-4 text-fg-2 text-sm leading-relaxed font-urdu">
-              {answer.includes("{count}") ? tx(answer, { count: catalog.book.lectureCount }) : answer}
+              {tx(answer, { count: catalog.book.lectureCount, arabicCount })}
             </p>
           </details>
         ))}

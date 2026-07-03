@@ -62,6 +62,11 @@ export const en = {
           "Yes. Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah has recorded a complete sharah (explanation) — {count} Urdu lectures in 15 classes, free on this website and the Android app.",
       },
       {
+        question: "Is there an Arabic explanation available?",
+        answer:
+          "Yes. Shaikh Salih al-Fawzan Hafizahullah explains Kitab at-Tawheed in {arabicCount} Arabic audio duroos, free on this website and the Android app.",
+      },
+      {
         question: "How should I study Kitab al-Tawheed?",
         answer:
           "Listen class by class in order. The Android app offers Study Mode with progress tracking; this website lets you stream every lecture without an account.",
