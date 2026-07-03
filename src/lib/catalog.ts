@@ -79,10 +79,15 @@ export function bookCoverSrc(book?: Book): string {
   return book?.coverImageUrl ?? CDN_COVER_URL;
 }
 
-export function bookCoverOgUrl(book?: Book): string {
-  const src = bookCoverSrc(book);
-  if (src.startsWith('http')) return src;
-  return new URL(src, SITE_URL).toString();
+/**
+ * Social / structured-data image for content pages (lecture + Arabic pages).
+ * Uses the site's own two-series `og-image.png` card, NOT the CDN `cover.jpg`
+ * (which is an older single-series Urdu banner — both catalogs point at it, so
+ * Arabic shares were showing the wrong series). Keeping this in the web repo
+ * means shares always reflect the current, deployed card.
+ */
+export function bookCoverOgUrl(_book?: Book): string {
+  return `${SITE_URL}/og-image.png`;
 }
 
 export async function getCatalog(): Promise<Catalog> {
