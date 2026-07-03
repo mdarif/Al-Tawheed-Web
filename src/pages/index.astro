@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import ContinueListening from "../components/ContinueListening.astro";
 import DailyBenefitCard from "../components/DailyBenefitCard.astro";
+import HeroStats from "../components/HeroStats.astro";
 import { getCatalog, getArabicCatalog, getAppConfig, en, playStoreUrl } from "../lib/catalog";
 
 const [catalog, arabicCatalog, appConfig] = await Promise.all([getCatalog(), getArabicCatalog(), getAppConfig()]);
@@ -36,9 +37,10 @@ const arabicCount = arabicCatalog.book.lectureCount;
     >
       {catalog.book.title.ur ?? "شرح کتاب التوحید"}
     </p>
-    <p class="text-fg-2 text-base sm:text-lg mb-4 px-1">
-      {catalog.book.lectureCount} Urdu Lectures · {arabicCount} Arabic Duroos · Free
-    </p>
+    <HeroStats
+      urduCount={catalog.book.lectureCount}
+      arabicCount={arabicCount}
+    />
 
     <div class="flex justify-center mb-6">
       <div

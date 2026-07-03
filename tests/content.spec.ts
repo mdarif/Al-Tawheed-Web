@@ -13,6 +13,13 @@ test.describe("Homepage", () => {
     await expect(page.locator("h1").first()).toBeVisible();
   });
 
+  test("hero stats KPI row shows counts + Offline", async ({ page }) => {
+    await page.goto("/");
+    const stats = page.getByRole("group", { name: /available offline/i });
+    await expect(stats).toBeVisible();
+    await expect(stats.getByText("Offline", { exact: true })).toBeVisible();
+  });
+
   test("trust badge is visible", async ({ page }) => {
     await page.goto("/");
     await expect(
