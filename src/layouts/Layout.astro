@@ -69,8 +69,12 @@ const urUrl = locale === "ur" ? canonicalUrl : new URL(altPath, SITE_URL).toStri
 // Only emit hreflang alternates for pages that actually have an Urdu version;
 // otherwise the ur alternate would point to a nonexistent /ur/ page (404).
 const hasUrdu = hasTranslation(Astro.url.pathname);
+// Cloudflare Web Analytics site tag. This is a PUBLIC token (it's exposed in
+// the client beacon to every visitor — not a secret), so it's safe to commit
+// as the default; a PUBLIC_CF_WEB_ANALYTICS_TOKEN env var overrides it if set.
 const cfAnalyticsToken =
-  import.meta.env.PUBLIC_CF_WEB_ANALYTICS_TOKEN?.trim() ?? "";
+  import.meta.env.PUBLIC_CF_WEB_ANALYTICS_TOKEN?.trim() ||
+  "af51cc49863e475e94633e27f3b21ecf";
 const fbAppId = import.meta.env.PUBLIC_FB_APP_ID?.trim() ?? "";
 const twitterCreator = import.meta.env.PUBLIC_TWITTER_CREATOR?.trim() ?? "";
 
