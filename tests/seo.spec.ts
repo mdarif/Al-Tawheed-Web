@@ -3,6 +3,7 @@
  * hreflang, JSON-LD structured data.
  */
 import { test, expect } from "@playwright/test";
+import { getFirstLectureHref } from "./helpers";
 
 const SEO_PAGES = [
   "/",
@@ -108,6 +109,41 @@ test("no hreflang on pages without an Urdu version", async ({ page }) => {
   await expect(
     page.locator('link[rel="alternate"][hreflang="ur"]')
   ).toHaveCount(0);
+});
+
+// ── Per-page OG images ────────────────────────────────────────────────────────
+
+test.describe("Per-page OG images", () => {
+  test("lecture page uses a distinct og:image, not the site-wide default", async ({
+    page,
+  }) => {
+    const href = await getFirstLectureHref(page);
+    await page.goto(href);
+    const ogImage = await page
+      .locator('meta[property="og:image"]')
+      .getAttribute("content");
+    expect(ogImage).toBeTruthy();
+    expect(ogImage).not.toMatch(/\/og-image\.png$/);
+    expect(ogImage).toMatch(/^https?:\/\//);
+  });
+
+  test("Arabic dars page uses a distinct og:image, not the site-wide default", async ({
+    page,
+  }) => {
+    await page.goto("/arabic/");
+    const href = await page
+      .locator("main a[href^='/arabic/dars-']")
+      .first()
+      .getAttribute("href");
+    expect(href).toBeTruthy();
+    await page.goto(href!);
+    const ogImage = await page
+      .locator('meta[property="og:image"]')
+      .getAttribute("content");
+    expect(ogImage).toBeTruthy();
+    expect(ogImage).not.toMatch(/\/og-image\.png$/);
+    expect(ogImage).toMatch(/^https?:\/\//);
+  });
 });
 
 // ── JSON-LD structured data ───────────────────────────────────────────────────

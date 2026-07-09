@@ -5,6 +5,24 @@
 import { test, expect } from "@playwright/test";
 import { getFirstChapterHref, getFirstLectureHref } from "./helpers";
 
+// ── Skip link ─────────────────────────────────────────────────────────────────
+
+test.describe("Skip link", () => {
+  test("first Tab from a fresh load focuses the skip link", async ({ page }) => {
+    await page.goto("/");
+    await page.keyboard.press("Tab");
+    await expect(page.locator(".skip-link")).toBeFocused();
+  });
+
+  test("activating it moves focus to #main-content", async ({ page }) => {
+    await page.goto("/");
+    await page.locator(".skip-link").focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("#main-content")).toBeVisible();
+    await expect(page).toHaveURL(/#main-content$/);
+  });
+});
+
 // ── Header — desktop nav ──────────────────────────────────────────────────────
 
 test.describe("Header — desktop nav", () => {
@@ -101,6 +119,13 @@ test.describe("Footer", () => {
       const res = await request.get(href);
       expect(res.status(), `Footer link "${href}" returned ${res.status()}`).toBeLessThan(400);
     }
+  });
+
+  test("links to Al Quran (cross-promo)", async ({ page }) => {
+    await page.goto("/");
+    await expect(
+      page.locator('footer a[href="https://alquranreader.com"]')
+    ).toBeVisible();
   });
 });
 

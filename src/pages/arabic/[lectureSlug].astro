@@ -10,6 +10,7 @@ import {
   arabicLectureSlug,
   playStoreUrl,
   bookCoverOgUrl,
+  arabicLectureOgImageUrl,
   SITE_URL,
 } from "../../lib/catalog";
 import { arUI } from "../../i18n/ar";
@@ -71,7 +72,9 @@ const ogDescription = `${lectureTitle} من كتاب التوحيد — الشي
   title={ogTitle}
   description={ogDescription}
   {appConfig}
-  ogImage={coverUrl}
+  ogImage={arabicLectureOgImageUrl(lecture)}
+  ogImageWidth={1200}
+  ogImageHeight={630}
   ogImageAlt={`${lectureTitle} — كتاب التوحيد`}
   ogType="article"
   lang="ar"

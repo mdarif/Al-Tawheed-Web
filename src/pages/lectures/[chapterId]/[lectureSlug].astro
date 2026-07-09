@@ -11,6 +11,7 @@ import {
   lectureSlug,
   playStoreUrl,
   bookCoverOgUrl,
+  lectureOgImageUrl,
   nextChapter,
   firstLectureInChapter,
 } from "../../../lib/catalog";
@@ -85,7 +86,9 @@ const articleTags = [
   title={ogTitle}
   description={ogDescription}
   {appConfig}
-  ogImage={bookCoverOgUrl(catalog.book)}
+  ogImage={lectureOgImageUrl(lecture, chapter)}
+  ogImageWidth={1200}
+  ogImageHeight={630}
   ogImageAlt={`${en(lecture.title)} — Sharah Kitab At-Tawheed`}
   ogType="article"
   {articleTags}
@@ -263,7 +266,7 @@ const articleTags = [
         rel="noopener"
         class="shrink-0 w-full sm:w-auto text-center bg-[#C9A84C] text-black font-bold px-4 py-3 sm:py-2 rounded-lg text-sm sm:text-xs hover:bg-[#D4B55C] transition-colors min-h-[44px] sm:min-h-0 flex items-center justify-center"
       >
-        Get App
+        Get the app
       </a>
     </div>
 

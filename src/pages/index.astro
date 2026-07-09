@@ -3,6 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import ContinueListening from "../components/ContinueListening.astro";
 import DailyBenefitCard from "../components/DailyBenefitCard.astro";
 import HeroStats from "../components/HeroStats.astro";
+import AlQuranPromo from "../components/AlQuranPromo.astro";
+import AppDownloadBadge from "../components/AppDownloadBadge.astro";
 import { getCatalog, getArabicCatalog, getAppConfig, en, playStoreUrl } from "../lib/catalog";
 
 const [catalog, arabicCatalog, appConfig] = await Promise.all([getCatalog(), getArabicCatalog(), getAppConfig()]);
@@ -64,18 +66,7 @@ const arabicCount = arabicCatalog.book.lectureCount;
     <div
       class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8"
     >
-      <a
-        href={storeUrl}
-        target="_blank"
-        rel="noopener"
-        class="hover:opacity-90 transition-opacity"
-      >
-        <img
-          src="/google-play-badge.png"
-          alt="Get it on Google Play"
-          class="w-[220px] h-auto"
-        />
-      </a>
+      <AppDownloadBadge href={storeUrl} eager />
       <a
         href="/lectures/urdu/"
         class="w-full sm:w-auto border border-[var(--divider-lg)] font-semibold px-8 py-4 rounded-xl text-base hover:bg-surface-hover transition-colors"
@@ -224,18 +215,7 @@ const arabicCount = arabicCatalog.book.lectureCount;
     </div>
 
     <div class="text-center mt-10">
-      <a
-        href={storeUrl}
-        target="_blank"
-        rel="noopener"
-        class="inline-block hover:opacity-90 transition-opacity"
-      >
-        <img
-          src="/google-play-badge.png"
-          alt="Get it on Google Play"
-          class="w-[200px] h-auto mx-auto"
-        />
-      </a>
+      <AppDownloadBadge href={storeUrl} />
     </div>
   </section>
 
@@ -296,7 +276,7 @@ const arabicCount = arabicCatalog.book.lectureCount;
               </div>
             </div>
             <p class="text-fg-2 text-base leading-relaxed flex-1">"{text}"</p>
-            <p class="text-fg-4 text-xs">
+            <p class="text-fg-3 text-xs">
               {helpful} people found this helpful · {date}
             </p>
           </div>
@@ -331,9 +311,9 @@ const arabicCount = arabicCatalog.book.lectureCount;
           <li>✓ Stream 141 lessons (Urdu + Arabic)</li>
           <li>✓ No account needed</li>
           <li>✓ Resume in this browser</li>
-          <li class="text-fg-4">✗ Requires internet</li>
-          <li class="text-fg-4">✗ No Study Mode</li>
-          <li class="text-fg-4">✗ No background play</li>
+          <li class="text-fg-3">✗ Requires internet</li>
+          <li class="text-fg-3">✗ No Study Mode</li>
+          <li class="text-fg-3">✗ No background play</li>
         </ul>
       </div>
       <div
@@ -355,16 +335,9 @@ const arabicCount = arabicCatalog.book.lectureCount;
       </div>
     </div>
     <div
-      class="text-center mt-6 flex flex-col sm:flex-row gap-3 justify-center"
+      class="text-center mt-6 flex flex-col sm:flex-row items-center gap-3 justify-center"
     >
-      <a
-        href={storeUrl}
-        target="_blank"
-        rel="noopener"
-        class="inline-block bg-[#C9A84C] text-black font-bold px-8 py-3 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors"
-      >
-        Download Free — Google Play
-      </a>
+      <AppDownloadBadge href={storeUrl} />
       <a
         href="/download/"
         class="inline-block border border-[#C9A84C]/40 text-[#C9A84C] font-semibold px-8 py-3 rounded-xl text-sm hover:bg-[#C9A84C]/10 transition-colors"
@@ -412,4 +385,6 @@ const arabicCount = arabicCatalog.book.lectureCount;
       >Read more →</a
     >
   </section>
+
+  <AlQuranPromo />
 </Layout>

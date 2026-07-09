@@ -1,9 +1,5 @@
 ---
-interface Props {
-  storeUrl: string;
-}
-
-const { storeUrl } = Astro.props;
+import { ALQURAN_SITE_URL } from "../lib/catalog";
 
 const links = [
   { href: '/', label: 'Home' },
@@ -15,17 +11,14 @@ const links = [
   { href: '/tawheed/', label: 'Tawheed' },
   { href: '/about/', label: 'About' },
   { href: '/privacy/', label: 'Privacy Policy' },
-  { href: storeUrl, label: 'Google Play', external: true },
 ];
 ---
 
 <footer class="mt-12 border-t border-[var(--divider)] pt-8 pb-[calc(2rem+env(safe-area-inset-bottom,0px))] md:pb-8 px-4 text-center text-xs text-fg-3">
   <nav class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 max-w-lg mx-auto mb-3" aria-label="Footer">
-    {links.map(({ href, label, external }) => (
+    {links.map(({ href, label }) => (
       <a
         href={href}
-        target={external ? '_blank' : undefined}
-        rel={external ? 'noopener' : undefined}
         class={label === 'Home' ? 'text-[#C9A84C] hover:underline' : 'hover:text-fg-2'}
       >
         {label}
@@ -36,7 +29,10 @@ const links = [
     Presented by <a href="https://www.youtube.com/@almarfaduroos" target="_blank" rel="noopener" class="hover:text-fg-2 transition-colors">Al Marfa Duroos</a>
     · Free Urdu &amp; Arabic Islamic lectures · No ads · Privacy-friendly analytics
   </p>
-  <p class="mt-1 text-fg-4">
-    Powered by <a href="http://almarfa.co" target="_blank" rel="noopener" class="hover:text-fg-3 transition-colors">Al Marfa Technologies</a>
+  <p class="mt-1 text-fg-3">
+    Powered by <a href="http://almarfa.co" target="_blank" rel="noopener" class="hover:text-fg-2 transition-colors">Al Marfa Technologies</a>
+  </p>
+  <p class="mt-1 text-fg-3">
+    Also by Al Marfa — <a href={ALQURAN_SITE_URL} target="_blank" rel="noopener" class="hover:text-fg-2 transition-colors">Al Quran</a>, a free Quran reader &amp; audio app
   </p>
 </footer>

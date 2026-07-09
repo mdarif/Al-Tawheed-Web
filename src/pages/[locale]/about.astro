@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import AppDownloadBadge from "../../components/AppDownloadBadge.astro";
 import { getCatalog, getArabicCatalog, getAppConfig, en, playStoreUrl } from "../../lib/catalog";
 import { t, tx, getLocalePaths } from "../../lib/i18n";
 
@@ -62,12 +63,10 @@ const i18n = t(locale);
         <strong class="text-fg">{locale === "ur" ? "کتاب التوحید اینڈرائیڈ ایپ" : "Kitab al-Tawheed Android app"}</strong>{" "}
         {i18n.about.app.p1}
       </p>
-      <div dir="ltr" class="flex flex-wrap gap-3">
-        <a href={storeUrl} target="_blank" rel="noopener" class="inline-block bg-[#C9A84C] text-black font-bold px-6 py-3 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors">
-          Download Free on Google Play
-        </a>
-        <a href={`/${locale}/download/`} class="block mt-1 text-[#C9A84C] text-sm hover:underline self-center">
-          App features & screenshots →
+      <div dir="ltr" class="flex flex-wrap items-center gap-3">
+        <AppDownloadBadge href={storeUrl} />
+        <a href={`/${locale}/download/`} class="inline-block border border-[#C9A84C]/40 text-[#C9A84C] font-semibold px-6 py-3 rounded-xl text-sm hover:bg-[#C9A84C]/10 transition-colors">
+          See app features →
         </a>
       </div>
     </section>

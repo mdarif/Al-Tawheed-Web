@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import WhatsNew from "../../components/WhatsNew.astro";
+import AppDownloadBadge from "../../components/AppDownloadBadge.astro";
 import { getCatalog, getArabicCatalog, getAppConfig, en, playStoreUrl, BOOK_COVER_SRC } from "../../lib/catalog";
 import { t, tx, getLocalePaths } from "../../lib/i18n";
 
@@ -64,9 +65,7 @@ const screenshots = [
           {totalCount} {locale === "ur" ? "دروس" : "lessons"} · {locale === "ur" ? "دو سلسلے (اردو اور عربی)" : "Two series (Urdu & Arabic)"}
         </p>
         <div dir="ltr" class="flex flex-col items-center md:items-start gap-2">
-          <a href={storeUrl} target="_blank" rel="noopener" class="inline-block hover:opacity-90 transition-opacity">
-            <img src="/google-play-badge.png" alt="Get it on Google Play" class="w-[220px] h-auto" />
-          </a>
+          <AppDownloadBadge href={storeUrl} eager />
           <p class="text-xs text-fg-3 font-urdu">
             {i18n.download.streamNote}{" "}
             <a href="/lectures/" class="text-[#C9A84C] hover:underline">
@@ -117,9 +116,7 @@ const screenshots = [
         {tx(i18n.download.ctaDesc, { appName: appConfig.about.appName, count: totalCount })}
       </p>
       <div class="flex flex-col items-center gap-3">
-        <a href={storeUrl} target="_blank" rel="noopener" class="hover:opacity-90 transition-opacity">
-          <img src="/google-play-badge.png" alt="Get it on Google Play" class="w-[200px] h-auto mx-auto" />
-        </a>
+        <AppDownloadBadge href={storeUrl} />
       </div>
     </section>
   </div>

@@ -12,6 +12,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "deploy": "npm run build && wrangler pages deploy dist --project-name=al-tawheed-web",
+    "og": "node scripts/make-og-lectures.mjs",
     "astro": "astro",
     "test": "playwright test",
     "test:report": "playwright show-report"

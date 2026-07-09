@@ -14,7 +14,7 @@
   --color-surface-gold: var(--surface-gold, #1E1A0F);
   --color-fg:           var(--fg, #F0EDE4);
   --color-fg-2:         var(--fg-2, #A09880);
-  --color-fg-3:         var(--fg-3, #6B6458);
+  --color-fg-3:         var(--fg-3, #8B8272);
   --color-fg-4:         var(--fg-4, #4A4440);
 }
 
@@ -27,12 +27,14 @@
   --surface-gold:  #1E1A0F;
   --fg:            #F0EDE4;
   --fg-2:          #A09880;
-  --fg-3:          #6B6458;
+  /* AA (4.5:1) against --surface, the harder of the two dark backgrounds */
+  --fg-3:          #8B8272;
   --fg-4:          #4A4440;
   --divider:       rgba(255,255,255,0.10);
   --divider-sm:    rgba(255,255,255,0.05);
   --divider-md:    rgba(255,255,255,0.15);
   --divider-lg:    rgba(255,255,255,0.20);
+  --accent:        #C9A84C;
 }
 
 /* Light theme */
@@ -44,12 +46,14 @@
   --surface-gold:  #FBF3E0;
   --fg:            #1C1C1E;
   --fg-2:          #6C6256;
-  --fg-3:          #9E8E7E;
+  /* AA (4.5:1) against --bg, the harder of the two light backgrounds */
+  --fg-3:          #7F6F60;
   --fg-4:          #BFB0A0;
   --divider:       rgba(0,0,0,0.10);
   --divider-sm:    rgba(0,0,0,0.05);
   --divider-md:    rgba(0,0,0,0.15);
   --divider-lg:    rgba(0,0,0,0.20);
+  --accent:        #C9A84C;
 }
 
 /* Pagefind light theme */
@@ -65,6 +69,32 @@
   --pf-outline-focus: #d4af37;
   --pf-skeleton: #e8e2d8;
   --pf-skeleton-shine: #f0ece4;
+}
+
+/* ── Accessibility ────────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transform: translateY(-160%);
+  transition: transform 0.15s ease-out;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 /* ── Base / overflow ─────────────────────────────────────────────────────── */

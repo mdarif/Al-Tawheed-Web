@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
+import AppDownloadBadge from '../../../components/AppDownloadBadge.astro';
 import { getCatalog, getAppConfig, formatDuration, en, chapterSlug, lectureSlug, playStoreUrl } from '../../../lib/catalog';
 
 export async function getStaticPaths() {
@@ -59,11 +60,9 @@ const storeUrl = playStoreUrl(appConfig);
       <p class="font-semibold mb-1">Want offline access?</p>
       <p class="text-sm text-fg-2 mb-4">Download the free Android app — listen without internet, track your progress, enable Study Mode.</p>
       <div class="flex flex-col items-center gap-3">
-        <a href={storeUrl} target="_blank" rel="noopener" class="hover:opacity-90 transition-opacity">
-          <img src="/google-play-badge.png" alt="Get it on Google Play" class="w-[180px] h-auto" />
-        </a>
+        <AppDownloadBadge href={storeUrl} size="compact" />
         <a href="/download/" class="text-[#C9A84C] text-sm hover:underline">
-          App details →
+          See app features →
         </a>
       </div>
     </div>

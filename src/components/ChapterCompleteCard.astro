@@ -27,11 +27,21 @@ const { chapter, nextChapter, nextChapterHref, playStoreUrl } = Astro.props;
         Continue to {en(nextChapter.title)} →
       </a>
     )}
+    {/*
+      Outline/secondary when paired with "Continue to next chapter" (that's
+      the primary action). Solid/primary when this is the sole CTA (course
+      complete) — intentional exception to "app CTA = row-constrained text
+      button everywhere," not something to "fix" back to always-outline.
+    */}
     <a
       href={playStoreUrl}
       target="_blank"
       rel="noopener"
-      class={`text-center border border-[#C9A84C]/40 text-[#C9A84C] font-semibold px-5 py-3 rounded-xl text-sm hover:bg-[#C9A84C]/10 transition-colors ${nextChapter ? 'flex-1' : 'inline-block w-full sm:w-auto'}`}
+      class={
+        nextChapter
+          ? 'flex-1 text-center border border-[#C9A84C]/40 text-[#C9A84C] font-semibold px-5 py-3 rounded-xl text-sm hover:bg-[#C9A84C]/10 transition-colors'
+          : 'inline-block w-full sm:w-auto text-center bg-[#C9A84C] text-black font-bold px-5 py-3 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors'
+      }
     >
       Get the app
     </a>

@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import WhatsNew from "../components/WhatsNew.astro";
+import AppDownloadBadge from "../components/AppDownloadBadge.astro";
 import {
   getCatalog,
   getArabicCatalog,
@@ -118,18 +119,7 @@ const features = [
         <p class="text-fg-2 mb-3">
           {totalCount} Lessons · Two Series (Urdu & Arabic) · Free
         </p>
-        <a
-          href={storeUrl}
-          target="_blank"
-          rel="noopener"
-          class="inline-block hover:opacity-90 transition-opacity"
-        >
-          <img
-            src="/google-play-badge.png"
-            alt="Get it on Google Play"
-            class="w-[220px] h-auto"
-          />
-        </a>
+        <AppDownloadBadge href={storeUrl} eager />
         <p class="text-xs text-fg-3 mt-3">
           Prefer streaming? <a
             href="/lectures/"
@@ -183,18 +173,7 @@ const features = [
         {appConfig.about.appName} — {totalCount} free audio lessons across two
         series.
       </p>
-      <a
-        href={storeUrl}
-        target="_blank"
-        rel="noopener"
-        class="inline-block hover:opacity-90 transition-opacity"
-      >
-        <img
-          src="/google-play-badge.png"
-          alt="Get it on Google Play"
-          class="w-[200px] h-auto mx-auto"
-        />
-      </a>
+      <AppDownloadBadge href={storeUrl} />
     </section>
   </div>
 </Layout>

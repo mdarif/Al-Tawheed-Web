@@ -1,0 +1,41 @@
+---
+interface Props {
+  href: string;
+  /** standalone = hero/download-page/promo-card use; compact = a card with a full row but not hero real estate. */
+  size?: "standalone" | "compact";
+  alt?: string;
+  /** Set for above-the-fold placements (hero) to skip lazy-loading. */
+  eager?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  size = "standalone",
+  alt = "Get it on Google Play",
+  eager = false,
+  class: className,
+} = Astro.props;
+
+// Badge asset is 880x572 (1.539:1) — height is derived, not hardcoded, so it
+// never drifts out of sync with the actual image.
+const BADGE_ASPECT = 572 / 880;
+const width = size === "compact" ? 160 : 200;
+const height = Math.round(width * BADGE_ASPECT);
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noopener"
+  class={`inline-block hover:opacity-90 transition-opacity ${className ?? ""}`}
+>
+  <img
+    src="/google-play-badge.png"
+    alt={alt}
+    width={width}
+    height={height}
+    style={`width:${width}px;height:auto`}
+    loading={eager ? "eager" : "lazy"}
+  />
+</a>

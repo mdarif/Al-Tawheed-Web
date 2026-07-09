@@ -3,7 +3,7 @@ import "../styles/global.css";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import type { AppConfig } from "../lib/catalog";
-import { SITE_URL, playStoreUrl } from "../lib/catalog";
+import { SITE_URL } from "../lib/catalog";
 import { altLocaleUrl, hasTranslation } from "../lib/i18n";
 
 interface Props {
@@ -34,7 +34,6 @@ interface Props {
 const {
   title,
   description = "50 Urdu + 91 Arabic Audio Lessons on Kitab al-Tawheed • Free • Online & Offline",
-  appConfig,
   ogImageAlt = "Kitab al-Tawheed — complete audio series in Arabic & Urdu, by Shaikh Salih al-Fawzan and Shaikh Abdullah Nasir Rahmani",
   ogSiteName = "Al Marfa Duroos",
   ogType = "website",
@@ -55,11 +54,11 @@ const resolvedOgImageWidth =
 const resolvedOgImageHeight =
   ogImageHeight ?? (Astro.props.ogImage ? undefined : 630);
 
-const storeUrl = appConfig
-  ? playStoreUrl(appConfig)
-  : "https://play.google.com/store/apps/details?id=com.almarfa.tawheed";
 const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).toString();
 const locale = Astro.currentLocale ?? "en";
+// Chrome "Get the app" CTAs navigate to the on-site download page (which then
+// carries the Google Play badge); only the badge itself jumps to the store.
+const downloadHref = locale === "ur" ? "/ur/download/" : "/download/";
 const htmlLang = langProp ?? locale;
 const htmlDir = dirProp ?? (locale === "ur" ? "rtl" : undefined);
 const isArabicPage = htmlLang === "ar";
@@ -185,7 +184,8 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     {twitterCreator && <meta name="twitter:creator" content={twitterCreator} />}
 
     <!-- Icons -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
@@ -247,9 +247,11 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
   <body
     class="site-body bg-bg text-fg font-sans antialiased min-h-dvh flex flex-col"
   >
-    <SiteHeader {storeUrl} />
+    <a href="#main-content" class="skip-link">Skip to content</a>
 
-    <main class="flex-1 w-full min-w-0 main-with-mobile-cta">
+    <SiteHeader />
+
+    <main id="main-content" class="flex-1 w-full min-w-0 main-with-mobile-cta">
       <slot />
     </main>
 
@@ -269,17 +271,15 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
           </p>
         </div>
         <a
-          href={storeUrl}
-          target="_blank"
-          rel="noopener"
+          href={downloadHref}
           class="shrink-0 bg-[#C9A84C] text-black font-bold px-4 py-2.5 rounded-lg text-xs hover:bg-[#D4B55C] transition-colors"
         >
-          Google Play
+          Get the app
         </a>
       </div>
     </div>
 
-    <SiteFooter {storeUrl} />
+    <SiteFooter />
 
     {
       cfAnalyticsToken && (
@@ -291,5 +291,13 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
         />
       )
     }
+
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' });
+        });
+      }
+    </script>
   </body>
 </html>

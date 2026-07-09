@@ -65,6 +65,41 @@ test("OG image exists", async ({ request }) => {
   expect(res.status()).toBe(200);
 });
 
+test("per-lecture OG image exists", async ({ page, request }) => {
+  const href = await getFirstLectureHref(page);
+  await page.goto(href);
+  const ogImage = await page
+    .locator('meta[property="og:image"]')
+    .getAttribute("content");
+  expect(ogImage, "og:image missing on lecture page").toBeTruthy();
+  const ogPath = new URL(ogImage!).pathname;
+  expect(ogPath, `unexpected og:image path for ${href}`).toMatch(
+    /^\/og\/lectures\/.+\.jpg$/
+  );
+  const res = await request.get(ogPath);
+  expect(res.status()).toBe(200);
+});
+
+test("per-dars OG image exists (Arabic series)", async ({ page, request }) => {
+  await page.goto("/arabic/");
+  const href = await page
+    .locator("main a[href^='/arabic/dars-']")
+    .first()
+    .getAttribute("href");
+  expect(href, "No dars links found on /arabic/").toBeTruthy();
+  await page.goto(href!);
+  const ogImage = await page
+    .locator('meta[property="og:image"]')
+    .getAttribute("content");
+  expect(ogImage, "og:image missing on dars page").toBeTruthy();
+  const ogPath = new URL(ogImage!).pathname;
+  expect(ogPath, `unexpected og:image path for ${href}`).toMatch(
+    /^\/og\/arabic\/.+\.jpg$/
+  );
+  const res = await request.get(ogPath);
+  expect(res.status()).toBe(200);
+});
+
 test("Google Play badge image exists", async ({ request }) => {
   const res = await request.get("/google-play-badge.png");
   expect(res.status()).toBe(200);

@@ -1,0 +1,51 @@
+---
+import { ALQURAN_SITE_URL, ALQURAN_PLAY_URL } from "../lib/catalog";
+import AppDownloadBadge from "./AppDownloadBadge.astro";
+
+interface Props {
+  locale?: "en" | "ur";
+}
+
+const { locale = "en" } = Astro.props;
+const isUrdu = locale === "ur";
+---
+
+<section class="mx-auto max-w-3xl px-4 py-10" dir={isUrdu ? "rtl" : "ltr"}>
+  <div
+    class="bg-surface border border-[var(--divider)] rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6"
+  >
+    <img
+      src="/al-quran-mark.svg"
+      alt=""
+      width="64"
+      height="64"
+      class="w-16 h-16 rounded-xl shrink-0"
+    />
+    <div class={`min-w-0 flex-1 text-center sm:text-${isUrdu ? "right" : "left"} ${isUrdu ? "font-urdu" : ""}`}>
+      <p class="text-[10px] font-semibold uppercase tracking-widest text-fg-3 mb-1">
+        {isUrdu ? "المرفع کی ایک اور ایپ" : "Also by Al Marfa"}
+      </p>
+      <h2 class="text-lg font-bold mb-1">
+        {isUrdu ? "القرآن — مفت قرآن ریڈر اور آڈیو" : "Al Quran — Free Quran Reader & Audio"}
+      </h2>
+      <p class="text-fg-2 text-sm leading-relaxed mb-4">
+        {
+          isUrdu
+            ? "عربی متن، اردو اور ہندی ترجمے کے ساتھ مکمل قرآن مفت پڑھیں اور سنیں — بغیر اشتہارات، بغیر اکاؤنٹ۔"
+            : "Read and listen to the full Quran online — Arabic text, Urdu & Hindi translations, verse-by-verse audio. Free, no ads, no account."
+        }
+      </p>
+      <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+        <AppDownloadBadge href={ALQURAN_PLAY_URL} size="compact" />
+        <a
+          href={ALQURAN_SITE_URL}
+          target="_blank"
+          rel="noopener"
+          class="inline-block border border-[#C9A84C]/40 text-[#C9A84C] font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-[#C9A84C]/10 transition-colors"
+        >
+          {isUrdu ? "← alquranreader.com دیکھیں" : "Visit alquranreader.com →"}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

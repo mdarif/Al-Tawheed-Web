@@ -7,7 +7,7 @@ export const arUI = {
     lessons: 'دروس',
   },
   player: {
-    getApp: 'تحميل التطبيق',
+    getApp: 'احصل على التطبيق',
     continueOnApp: 'تابع على التطبيق',
     offlineFeatures: 'بدون إنترنت · متابعة التقدم · تشغيل خلفي',
     duration: 'المدة',

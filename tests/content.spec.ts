@@ -65,6 +65,13 @@ test.describe("Homepage", () => {
     const badge = page.locator('img[alt*="Google Play"]').first();
     await expect(badge).toBeVisible();
   });
+
+  test("Al Quran cross-promo links to alquranreader.com", async ({ page }) => {
+    await page.goto("/");
+    await expect(
+      page.locator('main a[href="https://alquranreader.com"]').first()
+    ).toBeVisible();
+  });
 });
 
 // ── Lectures page ─────────────────────────────────────────────────────────────
@@ -181,12 +188,26 @@ test.describe("About page", () => {
 
   test("App section is present", async ({ page }) => {
     await page.goto("/about/");
-    await expect(page.locator('text=The App').or(page.locator('text=ایپ'))).toBeVisible();
+    // Scope to main headings — "Get the app" CTA text elsewhere on the page
+    // is a case-insensitive substring match for "The App" too.
+    await expect(
+      page.locator('main h2').filter({ hasText: /The App|ایپ/ }).first()
+    ).toBeVisible();
   });
 
   test("contact email link is present", async ({ page }) => {
     await page.goto("/about/");
     await expect(page.locator('a[href^="mailto:"]')).toBeVisible();
+  });
+
+  test("Also by Al Marfa section links to Al Quran", async ({ page }) => {
+    await page.goto("/about/");
+    await expect(
+      page.locator('main h2').filter({ hasText: 'Also by Al Marfa' })
+    ).toBeVisible();
+    await expect(
+      page.locator('main a[href="https://alquranreader.com"]')
+    ).toBeVisible();
   });
 });
 
@@ -325,6 +346,13 @@ test.describe("Urdu homepage", () => {
   test("Google Play badge is present", async ({ page }) => {
     await page.goto("/ur/");
     await expect(page.locator('img[alt*="Google Play"]').first()).toBeVisible();
+  });
+
+  test("Al Quran cross-promo links to alquranreader.com", async ({ page }) => {
+    await page.goto("/ur/");
+    await expect(
+      page.locator('main a[href="https://alquranreader.com"]').first()
+    ).toBeVisible();
   });
 });
 

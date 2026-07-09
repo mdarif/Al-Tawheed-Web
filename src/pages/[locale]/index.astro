@@ -3,6 +3,8 @@ import Layout from "../../layouts/Layout.astro";
 import ContinueListening from "../../components/ContinueListening.astro";
 import DailyBenefitCard from "../../components/DailyBenefitCard.astro";
 import HeroStats from "../../components/HeroStats.astro";
+import AlQuranPromo from "../../components/AlQuranPromo.astro";
+import AppDownloadBadge from "../../components/AppDownloadBadge.astro";
 import { getCatalog, getArabicCatalog, getAppConfig, playStoreUrl } from "../../lib/catalog";
 import { t, tx, getLocalePaths } from "../../lib/i18n";
 
@@ -74,18 +76,7 @@ const i18n = t(locale);
       dir="ltr"
       class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8"
     >
-      <a
-        href={storeUrl}
-        target="_blank"
-        rel="noopener"
-        class="hover:opacity-90 transition-opacity"
-      >
-        <img
-          src="/google-play-badge.png"
-          alt="Get it on Google Play"
-          class="w-[220px] h-auto"
-        />
-      </a>
+      <AppDownloadBadge href={storeUrl} eager />
       <a
         href="/lectures/"
         class="w-full sm:w-auto border border-[var(--divider-lg)] font-semibold px-8 py-4 rounded-xl text-base hover:bg-surface-hover transition-colors"
@@ -231,18 +222,7 @@ const i18n = t(locale);
       }
     </div>
     <div class="text-center mt-10">
-      <a
-        href={storeUrl}
-        target="_blank"
-        rel="noopener"
-        class="inline-block hover:opacity-90 transition-opacity"
-      >
-        <img
-          src="/google-play-badge.png"
-          alt="Get it on Google Play"
-          class="w-[200px] h-auto mx-auto"
-        />
-      </a>
+      <AppDownloadBadge href={storeUrl} />
     </div>
   </section>
 
@@ -303,7 +283,7 @@ const i18n = t(locale);
               </div>
             </div>
             <p class="text-fg-2 text-base leading-relaxed flex-1">"{text}"</p>
-            <p class="text-fg-4 text-xs">
+            <p class="text-fg-3 text-xs">
               {helpful} people found this helpful · {date}
             </p>
           </div>
@@ -340,18 +320,18 @@ const i18n = t(locale);
               <li>✓ تمام ۱۴۱ دروس اسٹریم کریں (اردو + عربی)</li>
               <li>✓ کوئی اکاؤنٹ نہیں</li>
               <li>✓ اسی براؤزر میں جاری رکھیں</li>
-              <li class="text-fg-4">✗ انٹرنیٹ ضروری ہے</li>
-              <li class="text-fg-4">✗ اسٹڈی موڈ نہیں</li>
-              <li class="text-fg-4">✗ بیک گراؤنڈ پلے نہیں</li>
+              <li class="text-fg-3">✗ انٹرنیٹ ضروری ہے</li>
+              <li class="text-fg-3">✗ اسٹڈی موڈ نہیں</li>
+              <li class="text-fg-3">✗ بیک گراؤنڈ پلے نہیں</li>
             </>
           ) : (
             <>
               <li>✓ Stream 141 lessons (Urdu + Arabic)</li>
               <li>✓ No account needed</li>
               <li>✓ Resume in this browser</li>
-              <li class="text-fg-4">✗ Requires internet</li>
-              <li class="text-fg-4">✗ No Study Mode</li>
-              <li class="text-fg-4">✗ No background play</li>
+              <li class="text-fg-3">✗ Requires internet</li>
+              <li class="text-fg-3">✗ No Study Mode</li>
+              <li class="text-fg-3">✗ No background play</li>
             </>
           )}
         </ul>
@@ -385,16 +365,9 @@ const i18n = t(locale);
       </div>
     </div>
     <div
-      class="text-center mt-6 flex flex-col sm:flex-row gap-3 justify-center"
+      class="text-center mt-6 flex flex-col sm:flex-row items-center gap-3 justify-center"
     >
-      <a
-        href={storeUrl}
-        target="_blank"
-        rel="noopener"
-        class="inline-block bg-[#C9A84C] text-black font-bold px-8 py-3 rounded-xl text-sm hover:bg-[#D4B55C] transition-colors"
-      >
-        Download Free — Google Play
-      </a>
+      <AppDownloadBadge href={storeUrl} />
       <a
         href={`/${locale}/download/`}
         class="inline-block border border-[#C9A84C]/40 text-[#C9A84C] font-semibold px-8 py-3 rounded-xl text-sm hover:bg-[#C9A84C]/10 transition-colors"
@@ -444,6 +417,8 @@ const i18n = t(locale);
       {i18n.index.readMore}
     </a>
   </section>
+
+  <AlQuranPromo locale={locale === "ur" ? "ur" : "en"} />
 </Layout>
 
 <style>

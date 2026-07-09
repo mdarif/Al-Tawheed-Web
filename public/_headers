@@ -4,9 +4,16 @@
 # assets (images, manifest, feed) revalidate on every request, so returning
 # visitors always get the latest after a deploy. Astro's content-hashed build
 # assets (/_astro/*) change filename on any change, so they cache forever.
+#
+# Also carries conservative, low-risk security headers site-wide (no CSP/HSTS —
+# just the well-understood, unlikely-to-break-anything set).
 
 /*
   Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
 
 # Content-hashed by Astro — safe to cache immutably (rule placed last so it
 # wins over /* for these paths).
