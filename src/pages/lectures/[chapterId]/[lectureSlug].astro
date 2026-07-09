@@ -53,6 +53,15 @@ const followingChapterHref = followingChapter
     })()
   : undefined;
 
+// Continuous-play targets: next part in this class, else the next class's first
+// part; undefined at the very last lesson (class 15). prev stays within the class.
+const nextHref = next
+  ? `/lectures/${chapterSlug(chapter.id)}/${lectureSlug(next)}/`
+  : followingChapterHref;
+const prevHref = prev
+  ? `/lectures/${chapterSlug(chapter.id)}/${lectureSlug(prev)}/`
+  : undefined;
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AudioObject",
@@ -249,16 +258,18 @@ const articleTags = [
       audioUrl={lecture.audioUrl}
       durationSeconds={lecture.durationSeconds}
       speaker={en(catalog.book.speaker)}
-      playStoreUrl={storeUrl}
+      seriesTitle="Sharah Kitab al-Tawheed"
       coverImageUrl="/sheikh-abdullah-nasir-rahmani.jpg"
+      {nextHref}
+      {prevHref}
     />
 
     <div
       class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
     >
       <div class="min-w-0">
-        <p class="text-sm font-semibold text-[#C9A84C]">Continue On The App</p>
-        <p class="text-xs text-fg-2">Offline · Study Mode · Background Play</p>
+        <p class="text-sm font-semibold text-[#C9A84C]">Also in the free app</p>
+        <p class="text-xs text-fg-2">Offline downloads · Study Mode · the full book</p>
       </div>
       <a
         href={storeUrl}

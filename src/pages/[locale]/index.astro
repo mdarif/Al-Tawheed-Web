@@ -87,10 +87,10 @@ const i18n = t(locale);
 
     <!-- App feature chips stay English -->
     <p class="text-xs text-fg-3 mb-4 max-w-md mx-auto" dir="ltr">
-      Features below are available in the <a
+      Stream all 141 lessons free here — the <a
         href="/download/"
         class="text-[#C9A84C] hover:underline">Android app</a
-      >.
+      > adds even more:
     </p>
     <div
       dir="ltr"
@@ -306,59 +306,59 @@ const i18n = t(locale);
     </a>
   </div>
 
-  <!-- Web vs App -->
+  <!-- Listen free on the web -->
   <section class="mx-auto max-w-3xl px-4 py-12">
     <h2 class="text-xl font-bold text-center mb-8 font-urdu">
-      {locale === "ur" ? "ویب بمقابلہ اینڈرائیڈ ایپ" : "Web vs Android App"}
+      {locale === "ur" ? "ویب پر مفت سنیں" : "Listen free on the web"}
     </h2>
     <div class="grid sm:grid-cols-2 gap-4">
       <div class="bg-surface border border-[var(--divider)] rounded-xl p-5" dir="rtl">
-        <h3 class="font-semibold mb-3 text-fg-2 font-urdu">🌐 {locale === "ur" ? "براؤزر میں سنیں" : "Listen in Browser"}</h3>
+        <h3 class="font-semibold mb-3 text-fg-2 font-urdu">🌐 {locale === "ur" ? "ویب پر — مفت، مکمل رسائی" : "On the web — free, full access"}</h3>
         <ul class="text-sm space-y-2 text-fg-2 font-urdu">
           {locale === "ur" ? (
             <>
               <li>✓ تمام ۱۴۱ دروس اسٹریم کریں (اردو + عربی)</li>
               <li>✓ کوئی اکاؤنٹ نہیں</li>
-              <li>✓ اسی براؤزر میں جاری رکھیں</li>
-              <li class="text-fg-3">✗ انٹرنیٹ ضروری ہے</li>
-              <li class="text-fg-3">✗ اسٹڈی موڈ نہیں</li>
-              <li class="text-fg-3">✗ بیک گراؤنڈ پلے نہیں</li>
+              <li>✓ اگلا حصہ خودبخود چلتا ہے</li>
+              <li>✓ لاک اسکرین اور بیک گراؤنڈ کنٹرول</li>
+              <li>✓ جہاں چھوڑا وہیں سے جاری رکھیں</li>
+              <li>✓ رفتار قابلِ ترتیب (۰.۷۵×–۲×)</li>
             </>
           ) : (
             <>
-              <li>✓ Stream 141 lessons (Urdu + Arabic)</li>
-              <li>✓ No account needed</li>
-              <li>✓ Resume in this browser</li>
-              <li class="text-fg-3">✗ Requires internet</li>
-              <li class="text-fg-3">✗ No Study Mode</li>
-              <li class="text-fg-3">✗ No background play</li>
+              <li>✓ Stream all 141 lessons (Urdu + Arabic)</li>
+              <li>✓ No account, no sign-up</li>
+              <li>✓ Autoplay through the class & series</li>
+              <li>✓ Lock-screen & background controls</li>
+              <li>✓ Resume where you left off</li>
+              <li>✓ Adjustable speed (0.75×–2×)</li>
             </>
           )}
         </ul>
       </div>
       <div class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-5 relative" dir="rtl">
         <span class="absolute -top-2.5 right-4 text-[10px] bg-[#C9A84C] text-black font-bold px-2 py-0.5 rounded-full font-urdu">
-          {locale === "ur" ? "تجویز کردہ" : "RECOMMENDED"}
+          {locale === "ur" ? "مزید" : "EVEN MORE"}
         </span>
-        <h3 class="font-semibold mb-3 text-[#C9A84C] font-urdu">📱 {locale === "ur" ? "اینڈرائیڈ ایپ" : "Android App"}</h3>
+        <h3 class="font-semibold mb-3 text-[#C9A84C] font-urdu">📱 {locale === "ur" ? "مفت ایپ میں" : "In the free app"}</h3>
         <ul class="text-sm space-y-2 font-urdu">
           {locale === "ur" ? (
             <>
-              <li>✓ <strong>۵۰ اردو + ۹۱ عربی دروس</strong></li>
-              <li>✓ <strong>آف لائن ڈاؤنلوڈ</strong></li>
-              <li>✓ <strong>پیشرفت ٹریکنگ</strong></li>
-              <li>✓ <strong>اسٹڈی موڈ</strong></li>
-              <li>✓ <strong>بیک گراؤنڈ پلے بیک</strong></li>
-              <li>✓ <strong>اردو اور عربی</strong></li>
+              <li>✓ <strong>ویب کی ہر چیز، مزید کے ساتھ:</strong></li>
+              <li>✓ <strong>حقیقی آف لائن ڈاؤنلوڈ</strong></li>
+              <li>✓ <strong>اسٹڈی موڈ (اردو سلسلہ)</strong></li>
+              <li>✓ <strong>ان-ایپ کتاب (مکمل عربی متن)</strong></li>
+              <li>✓ <strong>آلات کے درمیان پیشرفت</strong></li>
+              <li>✓ <strong>مقامی اردو اور عربی انٹرفیس</strong></li>
             </>
           ) : (
             <>
-              <li>✓ <strong>50 Urdu + 91 Arabic Lessons</strong></li>
-              <li>✓ <strong>Offline Downloads</strong></li>
-              <li>✓ <strong>Progress Tracking</strong></li>
-              <li>✓ <strong>Study Mode</strong></li>
-              <li>✓ <strong>Background Playback</strong></li>
-              <li>✓ <strong>Arabic & Urdu</strong></li>
+              <li>✓ <strong>Everything on the web, plus:</strong></li>
+              <li>✓ <strong>True offline downloads</strong></li>
+              <li>✓ <strong>Study Mode (Urdu series)</strong></li>
+              <li>✓ <strong>In-app Book (full Arabic text)</strong></li>
+              <li>✓ <strong>Cross-device progress</strong></li>
+              <li>✓ <strong>Native Arabic & Urdu UI</strong></li>
             </>
           )}
         </ul>

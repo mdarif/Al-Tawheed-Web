@@ -34,6 +34,10 @@ const next = sortedLectures[currentIdx + 1];
 const lecturePath = `/arabic/${arabicLectureSlug(lecture)}/`;
 const coverUrl = bookCoverOgUrl(catalog.book);
 
+// Continuous-play targets across the flat Arabic series; undefined at dars-91 / dars-01.
+const nextHref = next ? `/arabic/${arabicLectureSlug(next)}/` : undefined;
+const prevHref = prev ? `/arabic/${arabicLectureSlug(prev)}/` : undefined;
+
 const lectureTitle = ar(lecture.title) || en(lecture.title);
 const speakerName = ar(catalog.book.speaker) || en(catalog.book.speaker);
 
@@ -183,9 +187,11 @@ const ogDescription = `${lectureTitle} من كتاب التوحيد — الشي
       audioUrl={lecture.audioUrl}
       durationSeconds={lecture.durationSeconds}
       speaker={speakerName}
-      playStoreUrl={storeUrl}
+      seriesTitle="كتاب التوحيد"
       coverImageUrl="/sheikh-fawzan.png"
       audioLangLabel={arUI.player.audioLabel}
+      {nextHref}
+      {prevHref}
     />
 
     <!-- Get App CTA -->

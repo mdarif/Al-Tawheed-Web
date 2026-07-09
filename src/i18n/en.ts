@@ -29,7 +29,7 @@ export const en = {
     },
     app: {
       title: "The App",
-      p1: "provides the best experience for studying both series — switch between the Urdu and Arabic series anytime, with offline downloads, progress tracking, Study Mode (Urdu series), an in-app Book tab with the full Arabic text, and background playback.",
+      p1: "adds even more for studying both series — switch between the Urdu and Arabic series anytime, with true offline downloads, Study Mode (Urdu series), an in-app Book tab with the full Arabic text, and cross-device progress.",
     },
     contact: {
       title: "Contact",
@@ -69,7 +69,7 @@ export const en = {
       {
         question: "How should I study Kitab al-Tawheed?",
         answer:
-          "Listen class by class in order. The Android app offers Study Mode with progress tracking; this website lets you stream every lecture without an account.",
+          "Listen class by class in order — the website plays every lecture free with autoplay and lock-screen controls, and the free app adds Study Mode for structured, offline study.",
       },
     ],
   },
@@ -119,7 +119,7 @@ export const en = {
     previewTitle: "App preview",
     ctaFree: "Free · No ads · No account",
     ctaDesc: "{appName} — {count} free audio lessons across two series.",
-    streamNote: "Prefer streaming?",
+    streamNote: "Rather listen on the web?",
     features: [
       { desc: "Both the Urdu series (Shaikh Abdullah Nasir Rahmani) and the Arabic series (Shaikh Salih al-Fawzan) — switch anytime." },
       { desc: "Save lessons for travel or poor connectivity. Wi-Fi-only mode and one-tap cleanup keep storage tidy." },

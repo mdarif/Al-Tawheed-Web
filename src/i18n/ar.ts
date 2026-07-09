@@ -8,8 +8,8 @@ export const arUI = {
   },
   player: {
     getApp: 'احصل على التطبيق',
-    continueOnApp: 'تابع على التطبيق',
-    offlineFeatures: 'بدون إنترنت · متابعة التقدم · تشغيل خلفي',
+    continueOnApp: 'أيضاً في التطبيق المجاني',
+    offlineFeatures: 'تحميل بدون إنترنت · الوضع الدراسي · الكتاب كاملاً',
     duration: 'المدة',
     share: 'مشاركة',
     audioLabel: 'عربي',

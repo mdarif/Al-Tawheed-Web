@@ -8,9 +8,13 @@ interface Props {
   audioUrl: string;
   durationSeconds: number;
   speaker: string;
-  playStoreUrl: string;
   coverImageUrl: string;
   audioLangLabel?: string;
+  /** Series/album name for lock-screen (MediaSession) metadata. */
+  seriesTitle?: string;
+  /** Next / previous lesson URLs — drive autoplay-next + lock-screen next/prev. */
+  nextHref?: string;
+  prevHref?: string;
 }
 
 const {
@@ -20,14 +24,16 @@ const {
   audioUrl,
   durationSeconds,
   speaker,
-  playStoreUrl,
   coverImageUrl,
   audioLangLabel = 'Urdu',
+  seriesTitle = 'Sharah Kitab al-Tawheed',
+  nextHref,
+  prevHref,
 } = Astro.props;
 const coverSrc = coverImageUrl;
 ---
 
-<div class="bg-surface border border-[var(--divider)] rounded-2xl p-4 sm:p-5 mb-6 min-w-0" data-lecture-player data-play-store-url={playStoreUrl}>
+<div class="bg-surface border border-[var(--divider)] rounded-2xl p-4 sm:p-5 mb-6 min-w-0" data-lecture-player>
   <div class="flex gap-3 sm:gap-4 mb-4 min-w-0">
     <img
       src={coverSrc}
@@ -67,57 +73,41 @@ const coverSrc = coverImageUrl;
     data-lecture-path={lecturePath}
     data-lecture-title={lectureTitle}
     data-duration-seconds={durationSeconds}
+    data-speaker={speaker}
+    data-series-title={seriesTitle}
+    data-cover-url={coverSrc}
+    data-next-href={nextHref}
+    data-prev-href={prevHref}
   >
     Your browser does not support audio. <a href={audioUrl} class="text-[#C9A84C] underline">Download MP3</a>
   </audio>
   <p class="text-xs text-fg-3 mt-2 text-center px-1">
-    {formatDuration(durationSeconds)} · {audioLangLabel} audio · Progress saved in this browser
-    {import.meta.env.DEV && (
-      <span class="block mt-1 text-fg-3/80">
-        Dev: nudge after 30s audio (~15s at 2×). Dismiss is per visit; refresh to test again.
-      </span>
-    )}
+    {formatDuration(durationSeconds)} · {audioLangLabel} audio · Autoplays the next part · Progress saved in this browser
   </p>
 
-  <div
-    data-listen-nudge
-    class="hidden mt-4 bg-surface-gold border border-[#C9A84C]/40 rounded-xl p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+  <!-- Shown only if the browser blocks autoplay-next (no user gesture on the
+       fresh page). For active listeners, media engagement lets playback resume
+       automatically and this stays hidden. -->
+  <button
+    type="button"
+    data-autoplay-continue
+    class="hidden mt-3 w-full text-center bg-[#C9A84C] text-black font-bold px-4 py-3 rounded-lg text-sm hover:bg-[#D4B55C] transition-colors min-h-[44px]"
   >
-    <div class="min-w-0">
-      <p class="text-sm font-semibold text-[#C9A84C]">Enjoying the lecture?</p>
-      <p class="text-xs text-fg-2">Continue offline with progress tracking on the free app.</p>
-    </div>
-    <div class="flex gap-2 shrink-0 w-full sm:w-auto">
-      <a
-        data-nudge-app
-        href={playStoreUrl}
-        target="_blank"
-        rel="noopener"
-        class="flex-1 sm:flex-none text-center bg-[#C9A84C] text-black font-bold px-4 py-3 sm:py-2 rounded-lg text-sm sm:text-xs hover:bg-[#D4B55C] min-h-[44px] sm:min-h-0 flex items-center justify-center"
-      >
-        Get the app
-      </a>
-      <button
-        type="button"
-        data-nudge-dismiss
-        class="text-sm sm:text-xs text-fg-3 px-4 py-3 sm:py-2 hover:text-fg-2 min-h-[44px] sm:min-h-0"
-      >
-        Dismiss
-      </button>
-    </div>
-  </div>
+    ▶ Continue playing
+  </button>
 </div>
 
 <script>
   import { initLecturePlayer } from '../scripts/playback-progress';
   import { initLecturePlayerUi } from '../scripts/lecture-player-ui';
+  import { initAutoplayNext } from '../scripts/autoplay-next';
+  import { initMediaSession } from '../scripts/media-session';
 
   const audio = document.querySelector('audio[data-lecture-id]');
   if (audio instanceof HTMLAudioElement) {
     initLecturePlayer(audio);
-    const root = audio.closest('[data-lecture-player]');
-    const storeUrl = root?.getAttribute('data-play-store-url') ?? '';
-    const lectureId = audio.dataset.lectureId ?? '';
-    initLecturePlayerUi(audio, storeUrl, lectureId);
+    initLecturePlayerUi(audio);
+    initAutoplayNext(audio);
+    initMediaSession(audio);
   }
 </script>

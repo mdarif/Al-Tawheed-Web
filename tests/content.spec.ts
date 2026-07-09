@@ -48,10 +48,13 @@ test.describe("Homepage", () => {
     expect(await reviews.count()).toBeGreaterThanOrEqual(2);
   });
 
-  test("Web vs Android App comparison is present", async ({ page }) => {
+  test("web/app comparison is present (web framed as full)", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator('text=Web vs Android App')).toBeVisible();
-    await expect(page.locator('text=RECOMMENDED')).toBeVisible();
+    await expect(page.locator('text=Listen free on the web')).toBeVisible();
+    await expect(page.getByText('EVEN MORE', { exact: true })).toBeVisible();
+    // The web column must no longer frame itself as limited.
+    await expect(page.locator('text=No background play')).toHaveCount(0);
+    await expect(page.locator('text=Requires internet')).toHaveCount(0);
   });
 
   test("ContinueListening card is hidden on fresh visit", async ({ page }) => {
@@ -155,11 +158,20 @@ test.describe("Lecture player", () => {
     await expect(page.locator("h1")).toBeVisible();
   });
 
-  test("app download CTA is present", async ({ page }) => {
+  test("app promo (softened) is present", async ({ page }) => {
     const href = await getFirstLectureHref(page);
     await page.goto(href);
-    // Scoped to main to avoid matching nav/footer "Download App" links
-    await expect(page.locator('main').getByText('Continue On The App')).toBeVisible();
+    // Softened, positive app mention — no longer "Continue On The App".
+    await expect(page.locator('main').getByText('Also in the free app')).toBeVisible();
+  });
+
+  test("player wires autoplay-next on a non-last lesson", async ({ page }) => {
+    const href = await getFirstLectureHref(page);
+    await page.goto(href);
+    const nextHref = await page
+      .locator("audio[data-lecture-id]")
+      .getAttribute("data-next-href");
+    expect(nextHref, "first lecture should have a next lesson to autoplay").toBeTruthy();
   });
 
   test("chapter overview / all parts list is present", async ({ page }) => {
