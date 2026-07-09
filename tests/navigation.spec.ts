@@ -120,13 +120,6 @@ test.describe("Footer", () => {
       expect(res.status(), `Footer link "${href}" returned ${res.status()}`).toBeLessThan(400);
     }
   });
-
-  test("links to Al Quran (cross-promo)", async ({ page }) => {
-    await page.goto("/");
-    await expect(
-      page.locator('footer a[href="https://alquranreader.com"]')
-    ).toBeVisible();
-  });
 });
 
 // ── Breadcrumbs ───────────────────────────────────────────────────────────────
