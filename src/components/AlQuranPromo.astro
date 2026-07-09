@@ -10,11 +10,18 @@ const { locale = "en" } = Astro.props;
 const isUrdu = locale === "ur";
 ---
 
-<section class="mx-auto max-w-3xl px-4 py-10" dir={isUrdu ? "rtl" : "ltr"}>
+<section class="mx-auto max-w-3xl px-4 pt-10 pb-6" dir={isUrdu ? "rtl" : "ltr"}>
   <div
-    class="bg-surface border border-[var(--divider)] rounded-xl p-6 sm:p-8"
+    class="bg-surface border border-[var(--divider)] rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6"
   >
-    <div class={`min-w-0 ${isUrdu ? "font-urdu" : ""}`}>
+    <img
+      src="/al-quran-mark.svg"
+      alt=""
+      width="64"
+      height="64"
+      class="w-16 h-16 rounded-xl shrink-0"
+    />
+    <div class:list={["min-w-0 flex-1 text-center", isUrdu ? "sm:text-right font-urdu" : "sm:text-left"]}>
       <p class="text-[10px] font-semibold uppercase tracking-widest text-fg-3 mb-1">
         {isUrdu ? "المرفع کی ایک اور ایپ" : "Also by Al Marfa"}
       </p>

@@ -115,9 +115,11 @@
   }
 }
 
-/* Space for fixed mobile app CTA + home indicator */
+/* The fixed mobile CTA bar overlaps the footer (the last element), so the
+   footer — not <main> — carries the clearance (see SiteFooter). <main> keeps a
+   small buffer above the footer; a large pad here just created dead space. */
 .main-with-mobile-cta {
-  padding-bottom: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  padding-bottom: 0.5rem;
 }
 
 @media (min-width: 768px) {
