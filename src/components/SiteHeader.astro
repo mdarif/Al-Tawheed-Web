@@ -28,11 +28,20 @@ const links = [
   <div class="mx-auto max-w-5xl flex items-center justify-between gap-2 px-4 py-3 min-w-0">
     <a
       href={locale === "ur" ? "/ur/" : "/"}
-      class="hover:opacity-80 transition-opacity min-w-0 shrink flex flex-col leading-tight"
+      class="hover:opacity-80 transition-opacity min-w-0 shrink flex items-center gap-2.5"
     >
-      <span class="hidden md:block text-[10px] text-fg-3 font-medium tracking-widest uppercase">Al Marfa Duroos</span>
-      <span class="text-[#C9A84C] font-semibold text-sm tracking-wide md:hidden">Kitab al-Tawheed</span>
-      <span class="text-[#C9A84C] font-semibold text-sm tracking-wide hidden md:inline">Sharah Kitab al-Tawheed</span>
+      <img
+        src="/icons/icon-192.png"
+        alt=""
+        width="34"
+        height="34"
+        class="w-[34px] h-[34px] rounded-lg shrink-0"
+      />
+      <span class="flex flex-col leading-tight min-w-0">
+        <span class="hidden md:block text-[10px] text-fg-3 font-medium tracking-widest uppercase">Al Marfa Duroos</span>
+        <span class="text-[#C9A84C] font-semibold text-sm tracking-wide md:hidden">Kitab al-Tawheed</span>
+        <span class="text-[#C9A84C] font-semibold text-sm tracking-wide hidden md:inline">Sharah Kitab al-Tawheed</span>
+      </span>
     </a>
 
     <nav class="hidden md:flex items-center gap-4 lg:gap-5 text-sm text-fg-2 shrink-0" aria-label="Main">
