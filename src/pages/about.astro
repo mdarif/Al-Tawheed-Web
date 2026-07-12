@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import AppDownloadBadge from "../components/AppDownloadBadge.astro";
-import { getCatalog, getArabicCatalog, getAppConfig, playStoreUrl, ALQURAN_SITE_URL } from "../lib/catalog";
+import { getCatalog, getArabicCatalog, getAppConfig, playStoreUrl, ALQURAN_SITE_URL, ALQURAN_PLAY_URL } from "../lib/catalog";
 
 const [catalog, arabicCatalog, appConfig] = await Promise.all([
   getCatalog(),
@@ -119,16 +119,35 @@ const totalCount = urduCount + arabicCount;
 
     <section class="mb-10">
       <h2 class="text-xl font-bold text-[#C9A84C] mb-3">Also by Al Marfa</h2>
-      <p class="text-fg-2 leading-relaxed">
-        <a
-          href={ALQURAN_SITE_URL}
-          target="_blank"
-          rel="noopener"
-          class="text-[#C9A84C] hover:underline font-semibold"
-          >Al Quran</a
-        > — a free Quran reader with Arabic text, Urdu &amp; Hindi translations,
-        and verse-by-verse audio recitation.
-      </p>
+      <div
+        class="bg-surface border border-[var(--divider)] rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6"
+      >
+        <img
+          src="/al-quran-mark.svg"
+          alt=""
+          width="96"
+          height="96"
+          class="w-24 h-24 rounded-2xl shrink-0"
+        />
+        <div class="min-w-0 flex-1 text-center sm:text-left">
+          <h3 class="text-lg font-bold mb-1">Al Quran — A distraction-free Qur'an</h3>
+          <p class="text-fg-2 text-sm leading-relaxed mb-4">
+            A calm, fully-offline Qur'an experience — Uthmani Arabic, Urdu ·
+            Hindi · English translations, and verse-by-verse recitation. No ads,
+            no accounts, no cookies.
+          </p>
+          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+            <AppDownloadBadge href={ALQURAN_PLAY_URL} size="compact" />
+            <a
+              href={ALQURAN_SITE_URL}
+              target="_blank"
+              rel="noopener"
+              class="inline-block border border-[#C9A84C]/40 text-[#C9A84C] font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-[#C9A84C]/10 transition-colors"
+              >Visit alquranreader.com →</a
+            >
+          </div>
+        </div>
+      </div>
     </section>
 
     <section>

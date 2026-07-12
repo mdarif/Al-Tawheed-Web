@@ -17,22 +17,22 @@ const isUrdu = locale === "ur";
     <img
       src="/al-quran-mark.svg"
       alt=""
-      width="64"
-      height="64"
-      class="w-16 h-16 rounded-xl shrink-0"
+      width="96"
+      height="96"
+      class="w-24 h-24 rounded-2xl shrink-0"
     />
     <div class:list={["min-w-0 flex-1 text-center", isUrdu ? "sm:text-right font-urdu" : "sm:text-left"]}>
       <p class="text-[10px] font-semibold uppercase tracking-widest text-fg-3 mb-1">
         {isUrdu ? "المرفع کی ایک اور ایپ" : "Also by Al Marfa"}
       </p>
       <h2 class="text-lg font-bold mb-1">
-        {isUrdu ? "القرآن — مفت قرآن ریڈر اور آڈیو" : "Al Quran — Free Quran Reader & Audio"}
+        {isUrdu ? "القرآن — بلا خلفشار قرآن" : "Al Quran — A distraction-free Qur'an"}
       </h2>
       <p class="text-fg-2 text-sm leading-relaxed mb-4">
         {
           isUrdu
-            ? "عربی متن، اردو اور ہندی ترجمے کے ساتھ مکمل قرآن مفت پڑھیں اور سنیں — بغیر اشتہارات، بغیر اکاؤنٹ۔"
-            : "Read and listen to the full Quran online — Arabic text, Urdu & Hindi translations, verse-by-verse audio. Free, no ads, no account."
+            ? "ایک پُرسکون، مکمل آف لائن قرآن کا تجربہ — عثمانی عربی متن، اردو · ہندی · انگریزی ترجمے، اور آیت بہ آیت تلاوت۔ بغیر اشتہارات، بغیر اکاؤنٹ، بغیر کوکیز۔"
+            : "A calm, fully-offline Qur'an experience — Uthmani Arabic, Urdu · Hindi · English translations, and verse-by-verse recitation. No ads, no accounts, no cookies."
         }
       </p>
       <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">
