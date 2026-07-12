@@ -66,7 +66,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "AudioObject",
   name: en(lecture.title),
-  description: `${en(lecture.title)} from Sharah Kitab al-Tawheed by Shaikh Abdullah Nasir Rahmani Hafizaullah`,
+  description: `${en(lecture.title)} from Sharah Kitab at-Tawheed by Shaikh Abdullah Nasir Rahmani Hafizahullah`,
   duration: `PT${Math.floor(lecture.durationSeconds / 60)}M${lecture.durationSeconds % 60}S`,
   encodingFormat: "audio/mpeg",
   contentUrl: lecture.audioUrl,
@@ -75,12 +75,12 @@ const jsonLd = {
   isPartOf: {
     "@type": "Course",
     name: en(catalog.book.title),
-    description: "Complete audio series on Kitab al-Tawheed",
+    description: "Complete audio series on Kitab at-Tawheed",
   },
 };
 
 // Dynamic OG metadata for individual lessons — optimized for social sharing
-const ogTitle = `Part ${String(lecture.number).padStart(2, "0")}: ${en(lecture.title)} — Kitab At-Tawheed`;
+const ogTitle = `Part ${String(lecture.number).padStart(2, "0")}: ${en(lecture.title)} — Kitab at-Tawheed`;
 const ogDescription = `${en(lecture.title)} from the complete Sharah by Shaikh Abdullah Nasir Rahmani. ${formatDuration(lecture.durationSeconds)} of free Urdu Islamic education. Listen online free—no app required.`;
 const articleTags = [
   "Tawheed",
@@ -98,7 +98,7 @@ const articleTags = [
   ogImage={lectureOgImageUrl(lecture, chapter)}
   ogImageWidth={1200}
   ogImageHeight={630}
-  ogImageAlt={`${en(lecture.title)} — Sharah Kitab At-Tawheed`}
+  ogImageAlt={`${en(lecture.title)} — Sharah Kitab at-Tawheed`}
   ogType="article"
   {articleTags}
 >
@@ -238,7 +238,7 @@ const articleTags = [
             if (navigator.share) {
               navigator.share({
                 title: document.title,
-                text: 'Free Urdu Islamic lecture — Sharah Kitab al-Tawheed',
+                text: 'Free Urdu Islamic lecture — Sharah Kitab at-Tawheed',
                 url: location.href,
               }).catch(function (e) {
                 if (e.name !== 'AbortError') copyFallback();
@@ -258,7 +258,7 @@ const articleTags = [
       audioUrl={lecture.audioUrl}
       durationSeconds={lecture.durationSeconds}
       speaker={en(catalog.book.speaker)}
-      seriesTitle="Sharah Kitab al-Tawheed"
+      seriesTitle="Sharah Kitab at-Tawheed"
       coverImageUrl="/sheikh-abdullah-nasir-rahmani.jpg"
       {nextHref}
       {prevHref}

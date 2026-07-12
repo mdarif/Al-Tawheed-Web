@@ -110,22 +110,36 @@ export function arabicLectureOgImageUrl(lecture: Lecture): string {
   return `${SITE_URL}/og/arabic/${arabicLectureSlug(lecture)}.jpg`;
 }
 
-export async function getCatalog(): Promise<Catalog> {
-  const res = await fetch(`${CONTENT_BASE}/catalog.json`);
-  if (!res.ok) throw new Error(`Failed to fetch catalog: ${res.status}`);
-  return res.json();
+// Every page frontmatter awaits these independently, so memoize at module
+// level: one CDN round-trip per file per build instead of dozens, and a
+// smaller failure surface. A failed fetch clears its slot so a retry (e.g.
+// dev-server reload) isn't stuck with a rejected promise forever.
+const fetchCache = new Map<string, Promise<unknown>>();
+
+function fetchJsonCached<T>(url: string, what: string): Promise<T> {
+  let promise = fetchCache.get(url) as Promise<T> | undefined;
+  if (!promise) {
+    promise = (async () => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Failed to fetch ${what}: ${res.status}`);
+      return res.json() as Promise<T>;
+    })();
+    promise.catch(() => fetchCache.delete(url));
+    fetchCache.set(url, promise);
+  }
+  return promise;
 }
 
-export async function getArabicCatalog(): Promise<Catalog> {
-  const res = await fetch(`${ARABIC_CONTENT_BASE}/catalog.json`);
-  if (!res.ok) throw new Error(`Failed to fetch Arabic catalog: ${res.status}`);
-  return res.json();
+export function getCatalog(): Promise<Catalog> {
+  return fetchJsonCached<Catalog>(`${CONTENT_BASE}/catalog.json`, 'catalog');
 }
 
-export async function getAppConfig(): Promise<AppConfig> {
-  const res = await fetch(`${CONTENT_BASE}/app-config.json`);
-  if (!res.ok) throw new Error(`Failed to fetch app-config: ${res.status}`);
-  return res.json();
+export function getArabicCatalog(): Promise<Catalog> {
+  return fetchJsonCached<Catalog>(`${ARABIC_CONTENT_BASE}/catalog.json`, 'Arabic catalog');
+}
+
+export function getAppConfig(): Promise<AppConfig> {
+  return fetchJsonCached<AppConfig>(`${CONTENT_BASE}/app-config.json`, 'app-config');
 }
 
 /** Format seconds → "35m 57s" or "1h 23m" */
@@ -145,6 +159,16 @@ function asI18n(field: string | I18nField | undefined): I18nField | null {
 }
 
 /**
+ * The site standardized on the assimilated transliteration "Kitab at-Tawheed",
+ * but the content CDN's catalog still says "Kitab al-Tawheed". Normalize at
+ * the display boundary so every catalog-derived string matches, until the
+ * Al-Tawheed-Content repo is updated (see BACKLOG.md).
+ */
+function normalizeTitleSpelling(s: string): string {
+  return s.replace(/Kitab [Aa][lt]-Tawheed/g, 'Kitab at-Tawheed');
+}
+
+/**
  * Resolve multilingual content (same fallback chain as Flutter LanguageProvider).
  * roman → ur → en; ur → en; en is terminal.
  */
@@ -156,10 +180,10 @@ export function resolve(
   if (!map) return '';
 
   const primary = map[locale];
-  if (primary?.trim()) return primary;
+  if (primary?.trim()) return normalizeTitleSpelling(primary);
 
-  if (locale === 'roman' && map.ur?.trim()) return map.ur;
-  return map.en ?? '';
+  if (locale === 'roman' && map.ur?.trim()) return normalizeTitleSpelling(map.ur);
+  return normalizeTitleSpelling(map.en ?? '');
 }
 
 /** English string for SEO meta, JSON-LD, and primary headings. */
@@ -170,13 +194,6 @@ export function en(field: string | I18nField | undefined): string {
 /** Arabic string for RTL UI on Arabic pages. */
 export function ar(field: string | I18nField | undefined): string {
   return resolve(field, 'ar');
-}
-
-/** Urdu subtitle when present (for bilingual UI under English titles). */
-export function urduSubtitle(field: string | I18nField | undefined): string | undefined {
-  const map = asI18n(field);
-  const ur = map?.ur?.trim();
-  return ur || undefined;
 }
 
 /** Slug from chapter id: "class-01" → "class-01" (already a slug) */

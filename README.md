@@ -1,8 +1,8 @@
 # Kitab at-Tawheed Web
 
-Static site for [kitabattawheed.com](https://kitabattawheed.com) — SEO-friendly lecture pages and app download funnel for the **Kitab al-Tawheed** Android app. The app (and this site) offer **two audio series**:
+Static site for [kitabattawheed.com](https://kitabattawheed.com) — SEO-friendly lecture pages and app download funnel for the **Kitab at-Tawheed** Android app. The app (and this site) offer **two audio series**:
 
-- **Urdu** — *Sharah Kitab al-Tawheed* by Shaikh Abdullah Nasir Rahmani (50 lectures / 15 classes)
+- **Urdu** — *Sharah Kitab at-Tawheed* by Shaikh Abdullah Nasir Rahmani (50 lectures / 15 classes)
 - **Arabic** — *Kitab at-Tawheed* by Shaikh Salih al-Fawzan (91 duroos)
 
 ## Stack

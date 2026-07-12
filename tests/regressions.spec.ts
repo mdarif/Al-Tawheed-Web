@@ -41,7 +41,7 @@ test("about page — speaker name appears only once (Urdu)", async ({ page }) =>
 test("about page — app name appears only once (EN)", async ({ page }) => {
   await page.goto("/about/");
   const text = await page.locator("main").textContent();
-  const occurrences = (text?.match(/Kitab al-Tawheed Android app/gi) ?? []).length;
+  const occurrences = (text?.match(/Kitab at-Tawheed Android app/gi) ?? []).length;
   expect(occurrences, `App name appeared ${occurrences} times — expected 1`).toBe(1);
 });
 

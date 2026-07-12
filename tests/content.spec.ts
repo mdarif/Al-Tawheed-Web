@@ -13,6 +13,15 @@ test.describe("Homepage", () => {
     await expect(page.locator("h1").first()).toBeVisible();
   });
 
+  test("hero h1 uses the standardized 'Kitab at-Tawheed' spelling", async ({ page }) => {
+    // The title comes from the content CDN, which still says "al-Tawheed" —
+    // normalizeTitleSpelling() in src/lib/catalog.ts fixes it at display time.
+    await page.goto("/");
+    const h1 = page.locator("h1").first();
+    await expect(h1).toContainText("Kitab at-Tawheed");
+    await expect(h1).not.toContainText("Kitab al-Tawheed");
+  });
+
   test("hero stats KPI row shows counts + Offline", async ({ page }) => {
     await page.goto("/");
     const stats = page.getByRole("group", { name: /available offline/i });
@@ -186,10 +195,10 @@ test.describe("Lecture player", () => {
 // ── About page ────────────────────────────────────────────────────────────────
 
 test.describe("About page", () => {
-  test("Kitab al-Tawheed section is present", async ({ page }) => {
+  test("Kitab at-Tawheed section is present", async ({ page }) => {
     await page.goto("/about/");
     // Scope to main headings — header logo also contains this text (hidden on desktop)
-    await expect(page.locator('main h2').filter({ hasText: 'Kitab al-Tawheed' }).first()).toBeVisible();
+    await expect(page.locator('main h2').filter({ hasText: 'Kitab at-Tawheed' }).first()).toBeVisible();
   });
 
   test("both series sections are present", async ({ page }) => {
@@ -309,9 +318,9 @@ test.describe("Tawheed page", () => {
   });
 });
 
-// ── Kitab al-Tawheed page ─────────────────────────────────────────────────────
+// ── Kitab at-Tawheed page ─────────────────────────────────────────────────────
 
-test.describe("Kitab al-Tawheed page", () => {
+test.describe("Kitab at-Tawheed page", () => {
   test("page heading is visible", async ({ page }) => {
     await page.goto("/kitab-al-tawheed/");
     await expect(page.locator("h1")).toBeVisible();

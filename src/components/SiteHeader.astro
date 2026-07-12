@@ -34,8 +34,8 @@ const links = [
       />
       <span class="flex flex-col leading-tight min-w-0">
         <span class="hidden md:block text-[10px] text-fg-3 font-medium tracking-widest uppercase">Al Marfa Duroos</span>
-        <span class="text-[#C9A84C] font-semibold text-sm tracking-wide md:hidden">Kitab al-Tawheed</span>
-        <span class="text-[#C9A84C] font-semibold text-sm tracking-wide hidden md:inline">Sharah Kitab al-Tawheed</span>
+        <span class="text-[#C9A84C] font-semibold text-sm tracking-wide md:hidden">Kitab at-Tawheed</span>
+        <span class="text-[#C9A84C] font-semibold text-sm tracking-wide hidden md:inline">Sharah Kitab at-Tawheed</span>
       </span>
     </a>
 
@@ -142,6 +142,10 @@ const links = [
     } else {
       delete html.dataset.theme;
     }
+    // Keep the browser/PWA chrome color in sync with the active theme
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', theme === 'light' ? '#FAF8F5' : '#1A1A1C');
     // Update sun/moon icons on both buttons
     ['', '-m'].forEach(suffix => {
       const sun  = document.getElementById(`icon-sun${suffix}`);

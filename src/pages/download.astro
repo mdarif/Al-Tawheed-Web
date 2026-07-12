@@ -24,7 +24,7 @@ const totalCount = urduCount + arabicCount;
 const screenshots = [
   {
     src: "/app-screenshots/01-welcome.png",
-    alt: "Welcome — Sharah Kitab al-Tawheed",
+    alt: "Welcome — Sharah Kitab at-Tawheed",
   },
   {
     src: "/app-screenshots/02-choose-series.png",
@@ -91,8 +91,8 @@ const features = [
 ---
 
 <Layout
-  title="Download App — Kitab al-Tawheed | Free Android"
-  description={`Download the free Android app for Kitab al-Tawheed — ${totalCount} audio lessons across two series (${urduCount} Urdu + ${arabicCount} Arabic), offline mode, Study Mode, and progress tracking.`}
+  title="Download App — Kitab at-Tawheed | Free Android"
+  description={`Download the free Android app for Kitab at-Tawheed — ${totalCount} audio lessons across two series (${urduCount} Urdu + ${arabicCount} Arabic), offline mode, Study Mode, and progress tracking.`}
   {appConfig}
 >
   <div class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">
@@ -111,7 +111,7 @@ const features = [
       />
       <div class="flex-1 text-center md:text-left">
         <h1 class="text-3xl font-bold mb-2">
-          Kitab al-Tawheed Mobile App
+          Kitab at-Tawheed Mobile App
         </h1>
         <p class="text-[#C9A84C] text-lg mb-1" dir="rtl" lang="ur">
           {catalog.book.title.ur ?? "شرح کتاب التوحید"}
@@ -170,7 +170,7 @@ const features = [
     >
       <p class="font-semibold mb-2">Free · No ads · No account</p>
       <p class="text-sm text-fg-2 mb-4">
-        {appConfig.about.appName} — {totalCount} free audio lessons across two
+        {en(appConfig.about.appName)} — {totalCount} free audio lessons across two
         series.
       </p>
       <AppDownloadBadge href={storeUrl} />

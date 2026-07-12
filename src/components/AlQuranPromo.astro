@@ -4,13 +4,24 @@ import AppDownloadBadge from "./AppDownloadBadge.astro";
 
 interface Props {
   locale?: "en" | "ur";
+  /**
+   * standalone (default) — self-contained section with its own "Also by Al
+   * Marfa" eyebrow and an h2 (homepage use).
+   * embedded — bare card with an h3 and no eyebrow, for placement inside a
+   * section that already carries its own heading (About page use).
+   */
+  variant?: "standalone" | "embedded";
 }
 
-const { locale = "en" } = Astro.props;
+const { locale = "en", variant = "standalone" } = Astro.props;
 const isUrdu = locale === "ur";
+const Heading = variant === "embedded" ? "h3" : "h2";
 ---
 
-<section class="mx-auto max-w-3xl px-4 pt-10 pb-6" dir={isUrdu ? "rtl" : "ltr"}>
+<section
+  class:list={[variant === "standalone" && "mx-auto max-w-3xl px-4 pt-10 pb-6"]}
+  dir={isUrdu ? "rtl" : "ltr"}
+>
   <div
     class="bg-surface border border-[var(--divider)] rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6"
   >
@@ -22,17 +33,19 @@ const isUrdu = locale === "ur";
       class="w-24 h-24 rounded-2xl shrink-0"
     />
     <div class:list={["min-w-0 flex-1 text-center", isUrdu ? "sm:text-right font-urdu" : "sm:text-left"]}>
-      <p class="text-[10px] font-semibold uppercase tracking-widest text-fg-3 mb-1">
-        {isUrdu ? "المرفع کی ایک اور ایپ" : "Also by Al Marfa"}
-      </p>
-      <h2 class="text-lg font-bold mb-1">
-        {isUrdu ? "القرآن — بلا خلفشار قرآن" : "Al Quran — A distraction-free Qur'an"}
-      </h2>
+      {variant === "standalone" && (
+        <p class="text-[10px] font-semibold uppercase tracking-widest text-fg-3 mb-1">
+          {isUrdu ? "المرفع کی ایک اور ایپ" : "Also by Al Marfa"}
+        </p>
+      )}
+      <Heading class="text-lg font-bold mb-1">
+        {isUrdu ? "القرآن — بلا خلفشار قرآن" : "Al Quran — A distraction-free Quran"}
+      </Heading>
       <p class="text-fg-2 text-sm leading-relaxed mb-4">
         {
           isUrdu
             ? "ایک پُرسکون، مکمل آف لائن قرآن کا تجربہ — عثمانی عربی متن، اردو · ہندی · انگریزی ترجمے، اور آیت بہ آیت تلاوت۔ بغیر اشتہارات، بغیر اکاؤنٹ، بغیر کوکیز۔"
-            : "A calm, fully-offline Qur'an experience — Uthmani Arabic, Urdu · Hindi · English translations, and verse-by-verse recitation. No ads, no accounts, no cookies."
+            : "A calm, fully-offline Quran experience — Uthmani Arabic, Urdu · Hindi · English translations, and verse-by-verse recitation. No ads, no accounts, no cookies."
         }
       </p>
       <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3">

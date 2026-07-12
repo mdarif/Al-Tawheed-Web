@@ -28,7 +28,7 @@ const featureTitles = [
 const featureIcons = ["📖", "⬇️", "📚", "📕", "📊", "🎵"];
 
 const screenshots = [
-  { src: "/app-screenshots/01-welcome.png", alt: "Welcome — Sharah Kitab al-Tawheed" },
+  { src: "/app-screenshots/01-welcome.png", alt: "Welcome — Sharah Kitab at-Tawheed" },
   { src: "/app-screenshots/02-choose-series.png", alt: "Choose series — Urdu or Arabic" },
   { src: "/app-screenshots/03-welcome-ar.png", alt: "Arabic series welcome" },
   { src: "/app-screenshots/04-book-ar.png", alt: "Arabic Book tab — full text in-app" },
@@ -40,8 +40,8 @@ const screenshots = [
 ---
 
 <Layout
-  title={locale === "ur" ? "ایپ ڈاؤنلوڈ کریں — شرح کتاب التوحید | مفت اینڈرائیڈ" : "Download App — Sharah Kitab al-Tawheed | Free Android"}
-  description={locale === "ur" ? `کتاب التوحید کی مفت اینڈرائیڈ ایپ ڈاؤنلوڈ کریں — دو سلسلوں میں ${totalCount} آڈیو دروس (${urduCount} اردو + ${arabicCount} عربی)، آف لائن موڈ، اسٹڈی موڈ۔` : `Download the free Android app for Kitab al-Tawheed — ${totalCount} audio lessons across two series (${urduCount} Urdu + ${arabicCount} Arabic), offline mode, Study Mode.`}
+  title={locale === "ur" ? "ایپ ڈاؤنلوڈ کریں — شرح کتاب التوحید | مفت اینڈرائیڈ" : "Download App — Sharah Kitab at-Tawheed | Free Android"}
+  description={locale === "ur" ? `کتاب التوحید کی مفت اینڈرائیڈ ایپ ڈاؤنلوڈ کریں — دو سلسلوں میں ${totalCount} آڈیو دروس (${urduCount} اردو + ${arabicCount} عربی)، آف لائن موڈ، اسٹڈی موڈ۔` : `Download the free Android app for Kitab at-Tawheed — ${totalCount} audio lessons across two series (${urduCount} Urdu + ${arabicCount} Arabic), offline mode, Study Mode.`}
   {appConfig}
 >
   <div class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" dir="rtl">
@@ -113,7 +113,7 @@ const screenshots = [
     <section class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-6 text-center">
       <p class="font-semibold mb-2 font-urdu">{i18n.download.ctaFree}</p>
       <p class="text-sm text-fg-2 mb-4 font-urdu">
-        {tx(i18n.download.ctaDesc, { appName: appConfig.about.appName, count: totalCount })}
+        {tx(i18n.download.ctaDesc, { appName: en(appConfig.about.appName), count: totalCount })}
       </p>
       <div class="flex flex-col items-center gap-3">
         <AppDownloadBadge href={storeUrl} />

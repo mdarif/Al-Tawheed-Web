@@ -7,36 +7,36 @@ const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
 
 const faq = [
   {
-    question: 'Who is Sheikh Abdullah Nasir Rahmani?',
+    question: 'Who is Shaikh Abdullah Nasir Rahmani?',
     answer:
       'Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah is a respected Indian scholar known for clear Urdu explanations of classical Islamic texts, rooted in Quran and Sunnah.',
   },
   {
-    question: 'What lectures by Sheikh Rahmani are available here?',
-    answer: `This site hosts his complete sharah of Kitab al-Tawheed — ${catalog.book.lectureCount} Urdu audio lectures in 15 classes, totalling over ${Math.floor(catalog.book.totalDurationSeconds / 3600)} hours.`,
+    question: 'What lectures by Shaikh Rahmani are available here?',
+    answer: `This site hosts his complete sharah of Kitab at-Tawheed — ${catalog.book.lectureCount} Urdu audio lectures in 15 classes, totalling over ${Math.floor(catalog.book.totalDurationSeconds / 3600)} hours.`,
   },
   {
-    question: "Are Sheikh Rahmani's lectures free?",
+    question: "Are Shaikh Rahmani's lectures free?",
     answer:
       'Yes. All lectures stream free on this website. The Android app adds offline downloads, progress tracking, and Study Mode — also free, with no ads.',
   },
   {
     question: 'In which language are the lectures?',
     answer:
-      'The audio is in Urdu. The website shows English titles; the app supports Urdu and Roman Urdu interfaces.',
+      'The audio is in Urdu. The website shows English titles; the app has a native Arabic & Urdu interface and also carries the Arabic series by Shaikh Salih al-Fawzan.',
   },
 ];
 ---
 
 <Layout
-  title="Sheikh Abdullah Nasir Rahmani — Kitab al-Tawheed Lectures"
-  description={`Listen to free Urdu lectures by Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah — complete sharah of Kitab al-Tawheed, ${catalog.book.lectureCount} parts online.`}
+  title="Shaikh Abdullah Nasir Rahmani — Kitab at-Tawheed Lectures"
+  description={`Listen to free Urdu lectures by Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah — complete sharah of Kitab at-Tawheed, ${catalog.book.lectureCount} parts online.`}
   appConfig={appConfig}
   faqItems={faq}
 >
   <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
     <nav class="text-xs text-fg-3 mb-6">
-      <a href="/" class="hover:text-[#C9A84C]">Home</a> → Sheikh Rahmani
+      <a href="/" class="hover:text-[#C9A84C]">Home</a> → Shaikh Rahmani
     </nav>
 
     <h1 class="text-3xl font-bold mb-4">Fazilat Shaikh Abdullah Nasir Rahmani</h1>
@@ -46,7 +46,7 @@ const faq = [
       <strong class="text-fg">Shaikh Abdullah Nasir Rahmani Hafizahullah</strong> is a scholar based in India whose accessible Urdu teaching has benefited students across South Asia and beyond. His method emphasises evidence from the Quran and authentic Sunnah rather than opinion without proof.
     </p>
     <p class="text-fg-2 leading-relaxed mb-4">
-      On <strong class="text-fg">kitabattawheed.com</strong> you can hear his complete explanation of <a href="/kitab-al-tawheed/" class="text-[#C9A84C] hover:underline">Kitab al-Tawheed</a> — {en(catalog.book.title)} — organised into 15 classes with {catalog.book.lectureCount} parts.
+      On <strong class="text-fg">kitabattawheed.com</strong> you can hear his complete explanation of <a href="/kitab-al-tawheed/" class="text-[#C9A84C] hover:underline">Kitab at-Tawheed</a> — {en(catalog.book.title)} — organised into 15 classes with {catalog.book.lectureCount} parts.
     </p>
 
     <section class="bg-surface border border-[var(--divider)] rounded-xl p-5 mb-8">

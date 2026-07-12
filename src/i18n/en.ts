@@ -7,29 +7,29 @@ export const en = {
   index: {
     aboutTitle: "About This Site",
     aboutBody:
-      "is a foundational text on Islamic monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah ibn Sulayman al-Tamimi Al Najdi. We offer two complete audio series on this book — free, online, and in the Android app.",
+      "is a foundational text on Islamic monotheism by Shaikh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah ibn Sulayman al-Tamimi Al Najdi. We offer two complete audio series on this book — free, online, and in the Android app.",
     readMore: "Read more →",
   },
   about: {
     pageTitle: "About These Series",
     kitab: {
-      title: "Kitab al-Tawheed",
-      p1: '(كتاب التوحيد — "The Book of Islamic Monotheism") is one of the most important works in Islamic theology, written by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah (1703–1792). It is widely studied in Islamic institutes and seminaries worldwide.',
+      title: "Kitab at-Tawheed",
+      p1: '(كتاب التوحيد — "The Book of Islamic Monotheism") is one of the most important works in Islamic theology, written by Shaikh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah (1703–1792). It is widely studied in Islamic institutes and seminaries worldwide.',
       p2: "The book covers the foundation of Islamic faith — Tawheed (the oneness of Allah) — drawing exclusively from the Quran and authentic Sunnah. It addresses the three categories of Tawheed, the dangers of shirk (associating partners with Allah), and the obligations upon every Muslim to understand and implement Tawheed in their daily lives.",
     },
     speaker: {
       title: "The Urdu Series",
       p1: "is a respected Islamic scholar, known for his clear and accessible Urdu explanations of classical Islamic texts. His teaching style — rooted in evidence from Quran and Sunnah — has benefited hundreds of thousands of Muslims across South Asia and beyond.",
-      p2: "This series is his complete Urdu explanation of Kitab al-Tawheed — {count} lectures totalling over {hours} hours, delivered across 15 classes.",
+      p2: "This series is his complete Urdu explanation of Kitab at-Tawheed — {count} lectures totalling over {hours} hours, delivered across 15 classes.",
     },
     arabic: {
       title: "The Arabic Series",
-      p1: "The Arabic series is the explanation of Kitab at-Tawheed by Shaikh Salih al-Fawzan Hafizahullah, a senior scholar and member of the Council of Senior Scholars. It presents the book in the original Arabic.",
+      p1: "The Arabic series is the explanation of Kitab at-Tawheed by Shaikh Salih al-Fawzan Hafizahullah, a senior scholar and member of the Council of Senior Scholars. It presents the book in the original Arabic for students and Arabic-speaking listeners.",
       p2: "It comprises {count} audio duroos, available on the Arabic series page.",
     },
     app: {
       title: "The App",
-      p1: "adds even more for studying both series — switch between the Urdu and Arabic series anytime, with true offline downloads, Study Mode (Urdu series), an in-app Book tab with the full Arabic text, and cross-device progress.",
+      p1: "provides the best experience for studying both series — switch between the Urdu and Arabic series anytime, with offline downloads, progress tracking, Study Mode (Urdu series), an in-app Book tab with the full Arabic text, and background playback.",
     },
     contact: {
       title: "Contact",
@@ -37,8 +37,8 @@ export const en = {
     },
   },
   kitab: {
-    pageTitle: "What is Kitab al-Tawheed?",
-    p1: '"Kitab al-Tawheed ("The Book of Islamic Monotheism") is among the most important works on aqeedah (Islamic creed). It clarifies the rights of Allah upon His creation: to worship Him alone, avoid shirk (associating partners with Him), and understand Tawheed as the Prophets taught it.',
+    pageTitle: "What is Kitab at-Tawheed?",
+    p1: 'Kitab at-Tawheed ("The Book of Islamic Monotheism") is among the most important works on aqeedah (Islamic creed). It clarifies the rights of Allah upon His creation: to worship Him alone, avoid shirk (associating partners with Him), and understand Tawheed as the Prophets taught it.',
     p2: "relied exclusively on the Quran and Sunnah. The book is structured for students — each chapter builds understanding of Allah's names, attributes, types of worship, and common errors that contradict Tawheed.",
     freeSection: {
       title: "Free Urdu sharah on this site",
@@ -47,14 +47,14 @@ export const en = {
     },
     faq: [
       {
-        question: "What is Kitab al-Tawheed?",
+        question: "What is Kitab at-Tawheed?",
         answer:
-          "Kitab al-Tawheed (كتاب التوحيد) is a foundational Islamic text on monotheism by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah. It explains Tawheed — the oneness of Allah — using evidence from the Quran and authentic Sunnah.",
+          "Kitab at-Tawheed (كتاب التوحيد) is a foundational Islamic text on monotheism by Shaikh ul Islam al-Imam Muhammad ibn Abd al-Wahhab Rahimahullah. It explains Tawheed — the oneness of Allah — using evidence from the Quran and authentic Sunnah.",
       },
       {
-        question: "Who wrote Kitab al-Tawheed?",
+        question: "Who wrote Kitab at-Tawheed?",
         answer:
-          "It was written by Shaykh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah (1703–1792). The book is widely taught in institutes and seminaries across the Muslim world.",
+          "It was written by Shaikh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman al-Tamimi Al Najdi Rahimahullah (1703–1792). The book is widely taught in institutes and seminaries across the Muslim world.",
       },
       {
         question: "Is there an Urdu explanation available?",
@@ -67,7 +67,7 @@ export const en = {
           "Yes. Shaikh Salih al-Fawzan Hafizahullah explains Kitab at-Tawheed in {arabicCount} Arabic audio duroos, free on this website and the Android app.",
       },
       {
-        question: "How should I study Kitab al-Tawheed?",
+        question: "How should I study Kitab at-Tawheed?",
         answer:
           "Listen class by class in order — the website plays every lecture free with autoplay and lock-screen controls, and the free app adds Study Mode for structured, offline study.",
       },
@@ -103,16 +103,16 @@ export const en = {
       },
       {
         question: "What is shirk?",
-        answer: "Shirk is associating partners with Allah in worship or attributes that belong only to Him. Kitab al-Tawheed warns against major and minor shirk so Muslims can protect their faith.",
+        answer: "Shirk is associating partners with Allah in worship or attributes that belong only to Him. Kitab at-Tawheed warns against major and minor shirk so Muslims can protect their faith.",
       },
       {
         question: "Where can I learn Tawheed in Urdu?",
-        answer: "Listen to the free sharah of Kitab al-Tawheed on this site — {count} lectures by Shaikh Abdullah Nasir Rahmani, or use the Android app for offline study.",
+        answer: "Listen to the free sharah of Kitab at-Tawheed on this site — {count} lectures by Shaikh Abdullah Nasir Rahmani, or use the Android app for offline study.",
       },
     ],
   },
   download: {
-    pageTitle: "Kitab al-Tawheed App",
+    pageTitle: "Kitab at-Tawheed App",
     whatsNewTitle: "What's New",
     allReleases: "All releases on GitHub",
     whyTitle: "Why use the app?",
@@ -132,6 +132,8 @@ export const en = {
   footer: {
     tagline: "Free Islamic lectures · No ads · Privacy-friendly analytics",
   },
-} as const;
+};
 
+// Shape-only type: ur.ts must mirror every key, but with its own strings.
+// (No `as const` — literal types would demand the English text verbatim.)
 export type Translations = typeof en;

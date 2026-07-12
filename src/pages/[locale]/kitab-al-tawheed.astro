@@ -14,14 +14,14 @@ const i18n = t(locale);
 ---
 
 <Layout
-  title={locale === "ur" ? "کتاب التوحید کیا ہے؟ — خلاصہ اور مفت اردو و عربی شرح" : "What is Kitab al-Tawheed? — Summary & Free Urdu + Arabic Sharah"}
-  description={locale === "ur" ? "کتاب التوحید کیا ہے، کس نے لکھی، اور مفت سنیں: شیخ عبداللہ ناصر رحمانی کی اردو شرح اور شیخ صالح الفوزان کی عربی دروس۔" : "Learn what Kitab al-Tawheed is and listen free: the Urdu sharah by Shaikh Abdullah Nasir Rahmani and the Arabic duroos by Shaikh Salih al-Fawzan."}
+  title={locale === "ur" ? "کتاب التوحید کیا ہے؟ — خلاصہ اور مفت اردو و عربی شرح" : "What is Kitab at-Tawheed? — Summary & Free Urdu + Arabic Sharah"}
+  description={locale === "ur" ? "کتاب التوحید کیا ہے، کس نے لکھی، اور مفت سنیں: شیخ عبداللہ ناصر رحمانی کی اردو شرح اور شیخ صالح الفوزان کی عربی دروس۔" : "Learn what Kitab at-Tawheed is and listen free: the Urdu sharah by Shaikh Abdullah Nasir Rahmani and the Arabic duroos by Shaikh Salih al-Fawzan."}
   {appConfig}
   faqItems={i18n.kitab.faq}
 >
   <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" dir="rtl" data-pagefind-body>
     <nav class="text-xs text-fg-3 mb-6" dir="ltr">
-      <a href={`/${locale}/`} class="hover:text-[#C9A84C]">Home</a> → Kitab al-Tawheed
+      <a href={`/${locale}/`} class="hover:text-[#C9A84C]">Home</a> → Kitab at-Tawheed
     </nav>
 
     <h1 class="text-3xl font-bold mb-4 font-urdu">{i18n.kitab.pageTitle}</h1>
@@ -42,7 +42,7 @@ const i18n = t(locale);
         </p>
         <div dir="ltr" class="flex flex-wrap gap-3">
           <a href="/lectures/urdu/" class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">
-            Browse Urdu series
+            Browse the Urdu series
           </a>
         </div>
       </section>
@@ -57,7 +57,7 @@ const i18n = t(locale);
         </p>
         <div dir="ltr" class="flex flex-wrap gap-3">
           <a href="/arabic/" class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">
-            Browse Arabic series
+            Browse the Arabic series
           </a>
         </div>
       </section>

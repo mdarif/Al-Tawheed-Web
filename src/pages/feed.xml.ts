@@ -20,7 +20,7 @@ export const GET: APIRoute = async () => {
       <title>${escapeXml(en(lecture.title))}</title>
       <link>${url}</link>
       <guid isPermaLink="true">${url}</guid>
-      <description>${escapeXml(`${en(lecture.title)} — ${en(chapter.title)}, Sharah Kitab al-Tawheed`)}</description>
+      <description>${escapeXml(`${en(lecture.title)} — ${en(chapter.title)}, Sharah Kitab at-Tawheed`)}</description>
       <enclosure url="${escapeXml(lecture.audioUrl)}" length="${lecture.fileSizeBytes}" type="audio/mpeg"/>
       <pubDate>${new Date(updated).toUTCString()}</pubDate>
     </item>`;
@@ -31,7 +31,7 @@ export const GET: APIRoute = async () => {
   <channel>
     <title>${escapeXml(en(catalog.book.title))}</title>
     <link>${SITE_URL}/</link>
-    <description>${escapeXml(`${catalog.book.lectureCount} Urdu Audio Lessons (Sharah Kitab al-Tawheed by Shaikh Abdullah Nasir Rahmani) • ${totalHours}+ Hours • Online & Offline. An Arabic series is also available in the app and at ${SITE_URL}/arabic/.`)}</description>
+    <description>${escapeXml(`${catalog.book.lectureCount} Urdu Audio Lessons (Sharah Kitab at-Tawheed by Shaikh Abdullah Nasir Rahmani) • ${totalHours}+ Hours • Online & Offline. An Arabic series is also available in the app and at ${SITE_URL}/arabic/.`)}</description>
     <language>ur</language>
     <lastBuildDate>${new Date(updated).toUTCString()}</lastBuildDate>
     <image>

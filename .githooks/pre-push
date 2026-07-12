@@ -5,9 +5,17 @@
 # (git config core.hooksPath .githooks). Bypass in a pinch: git push --no-verify
 
 echo ""
-echo "Running Playwright suite before push (builds site first, ~1-3 min)..."
+echo "Running astro check + Playwright suite before push (builds site first, ~1-3 min)..."
 echo "Skip with: git push --no-verify"
 echo ""
+
+npx astro check
+
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "Type check FAILED. Push aborted — nothing deployed."
+  exit 1
+fi
 
 npx playwright test --reporter=list
 

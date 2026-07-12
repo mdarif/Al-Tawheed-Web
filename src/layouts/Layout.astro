@@ -4,7 +4,7 @@ import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import type { AppConfig } from "../lib/catalog";
 import { SITE_URL } from "../lib/catalog";
-import { altLocaleUrl, hasTranslation } from "../lib/i18n";
+import { altLocaleUrl, hasTranslation, TRANSLATED_PATHS } from "../lib/i18n";
 
 interface Props {
   title: string;
@@ -33,8 +33,8 @@ interface Props {
 
 const {
   title,
-  description = "50 Urdu + 91 Arabic Audio Lessons on Kitab al-Tawheed • Free • Online & Offline",
-  ogImageAlt = "Kitab al-Tawheed — complete audio series in Arabic & Urdu, by Shaikh Salih al-Fawzan and Shaikh Abdullah Nasir Rahmani",
+  description = "50 Urdu + 91 Arabic Audio Lessons on Kitab at-Tawheed • Free • Online & Offline",
+  ogImageAlt = "Kitab at-Tawheed — complete audio series in Arabic & Urdu, by Shaikh Salih al-Fawzan and Shaikh Abdullah Nasir Rahmani",
   ogSiteName = "Al Marfa Duroos",
   ogType = "website",
   articleTags = [],
@@ -68,6 +68,13 @@ const urUrl = locale === "ur" ? canonicalUrl : new URL(altPath, SITE_URL).toStri
 // Only emit hreflang alternates for pages that actually have an Urdu version;
 // otherwise the ur alternate would point to a nonexistent /ur/ page (404).
 const hasUrdu = hasTranslation(Astro.url.pathname);
+// og:locale must match the page's actual language; the alternate is only
+// meaningful when a translated counterpart exists.
+const ogLocale = isArabicPage ? "ar_SA" : locale === "ur" ? "ur_PK" : "en_US";
+const ogLocaleAlternate = locale === "ur" ? "en_US" : "ur_PK";
+// The AudioSeries JSON-LD describes the site's flagship series, so it belongs
+// on the homepage only — not on utility pages like /privacy/ or /404.
+const isHomepage = Astro.url.pathname === "/" || Astro.url.pathname === "/ur/";
 // Cloudflare Web Analytics site tag. This is a PUBLIC token (it's exposed in
 // the client beacon to every visitor — not a secret), so it's safe to commit
 // as the default; a PUBLIC_CF_WEB_ANALYTICS_TOKEN env var overrides it if set.
@@ -93,8 +100,9 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
         if (t === "light") document.documentElement.dataset.theme = "light";
       })();
     </script>
-    <!-- Enforce saved locale preference before first paint -->
-    <script is:inline>
+    <!-- Enforce saved locale preference before first paint.
+         urduPages is injected from TRANSLATED_PATHS so there's one source of truth. -->
+    <script is:inline define:vars={{ urduPages: TRANSLATED_PATHS }}>
       (function () {
         var pref = localStorage.getItem("tawheed:locale");
         if (pref !== "ur") return;
@@ -102,7 +110,6 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
         var isUrdu = path === "/ur/" || path === "/ur" || path.startsWith("/ur/");
         if (isUrdu) return;
         // Only redirect for pages that have actual translated versions
-        var urduPages = ["/", "/about/", "/kitab-al-tawheed/", "/tawheed/", "/download/"];
         if (urduPages.indexOf(path) !== -1) {
           window.location.replace("/ur" + (path === "/" ? "/" : path));
         }
@@ -141,8 +148,8 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={ogSiteName} />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:locale:alternate" content="ur_PK" />
+    <meta property="og:locale" content={ogLocale} />
+    {hasUrdu && <meta property="og:locale:alternate" content={ogLocaleAlternate} />}
     <meta property="og:image" content={absoluteOgImage} />
     <meta property="og:image:type" content="image/png" />
     {
@@ -193,21 +200,21 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="Sharah Kitab al-Tawheed"
+      title="Sharah Kitab at-Tawheed"
       href="/feed.xml"
     />
 
     <!-- JSON-LD Structured Data -->
     {
-      ogType === "website" && !isArabicPage && (
+      isHomepage && (
         <script
           is:inline
           type="application/ld+json"
           set:html={JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AudioSeries",
-            name: "Sharah Kitab At-Tawheed",
-            description: "Complete Urdu audio explanation (sharah) of Kitab al-Tawheed by Shaikh Abdullah Nasir Rahmani — 50 lectures across 15 classes, free. An Arabic series by Shaikh Salih al-Fawzan is also available.",
+            name: "Sharah Kitab at-Tawheed",
+            description: "Complete Urdu audio explanation (sharah) of Kitab at-Tawheed by Shaikh Abdullah Nasir Rahmani — 50 lectures across 15 classes, free. An Arabic series by Shaikh Salih al-Fawzan is also available.",
             url: "https://kitabattawheed.com",
             image: `${SITE_URL}/og-image.png`,
             creator: {

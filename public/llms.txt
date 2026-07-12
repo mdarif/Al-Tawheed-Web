@@ -1,6 +1,6 @@
-# Kitab al-Tawheed — kitabattawheed.com
+# Kitab at-Tawheed — kitabattawheed.com
 
-> Free audio explanation of Kitab al-Tawheed in two series: a 50-lecture Urdu series (15 classes, ~27 hours) by Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah, and a 91-duroos Arabic series by Shaikh Salih al-Fawzan Hafizahullah. Stream online or use the Android app for offline listening, Study Mode, and an in-app Book reader.
+> Free audio explanation of Kitab at-Tawheed in two series: a 50-lecture Urdu series (15 classes, ~27 hours) by Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah, and a 91-duroos Arabic series by Shaikh Salih al-Fawzan Hafizahullah. Stream online or use the Android app for offline listening, Study Mode, and an in-app Book reader.
 
 ## Primary content
 
@@ -13,7 +13,7 @@
 
 ## Topic guides
 
-- What is Kitab al-Tawheed: https://kitabattawheed.com/kitab-al-tawheed/
+- What is Kitab at-Tawheed: https://kitabattawheed.com/kitab-al-tawheed/
 - What is Tawheed in Islam: https://kitabattawheed.com/tawheed/
 - Sheikh Abdullah Nasir Rahmani: https://kitabattawheed.com/sheikh-rahmani/
 
@@ -28,7 +28,7 @@
 
 ## App
 
-- Google Play: com.almarfa.tawheed (Kitab al-Tawheed — Al Marfa Duroos)
+- Google Play: com.almarfa.tawheed (Kitab at-Tawheed — Al Marfa Duroos)
 - Two series (Urdu + Arabic) with a series switcher
 - Features: offline downloads, progress tracking, Study Mode (Urdu series), in-app Book reader (Arabic series), background playback, Urdu / Roman Urdu UI
 

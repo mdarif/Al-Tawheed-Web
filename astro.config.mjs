@@ -31,28 +31,31 @@ export default defineConfig({
     // so one search box covers both series and all languages.
     pagefind({ indexConfig: { forceLanguage: "en" } }),
     sitemap({
+      // /offline/ is noindex (PWA fallback) — a noindex URL in the sitemap
+      // triggers "Submitted URL marked noindex" errors in Search Console.
+      filter: (page) => !page.includes('/offline/'),
       serialize(item) {
         if (item.url.includes('/arabic/')) {
           item.lastmod = arabicLastmod;
           const segments = item.url.split('/').filter(Boolean);
           if (segments[segments.length - 1] === 'arabic') {
-            item.changefreq = 'monthly';
+            item.changefreq = /** @type {import('sitemap').EnumChangefreq} */ ('monthly');
             item.priority = 0.9;
           } else {
-            item.changefreq = 'monthly';
+            item.changefreq = /** @type {import('sitemap').EnumChangefreq} */ ('monthly');
             item.priority = 0.8;
           }
           return item;
         }
         item.lastmod = catalogLastmod;
         if (item.url === 'https://kitabattawheed.com/') {
-          item.changefreq = 'weekly';
+          item.changefreq = /** @type {import('sitemap').EnumChangefreq} */ ('weekly');
           item.priority = 1;
         } else if (item.url.includes('/lectures/') && item.url.split('/').filter(Boolean).length >= 4) {
-          item.changefreq = 'monthly';
+          item.changefreq = /** @type {import('sitemap').EnumChangefreq} */ ('monthly');
           item.priority = 0.8;
         } else if (item.url.includes('/lectures/')) {
-          item.changefreq = 'monthly';
+          item.changefreq = /** @type {import('sitemap').EnumChangefreq} */ ('monthly');
           item.priority = 0.85;
         }
         return item;
