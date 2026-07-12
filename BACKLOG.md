@@ -24,19 +24,22 @@ Site copy is standardized on **Kitab at-Tawheed** (URL slugs, the domain, and
 `/kitab-al-tawheed/` routes intentionally unchanged; the explainer page carries
 an "also written Kitab al-Tawheed" alias for search).
 
-- [ ] **Al-Tawheed-Content** (live CDN, feeds web + mobile):
-      `tawheed/catalog.json:6,8` book.title en/roman; `tawheed/app-config.json:12,15`
-      feedback-email "Kitab Al-Tawheed" (capital Al) + `:18` appName; `README.md:26`
-      + "Hafizaullah" typo at `:27`. Fixing this makes the web's
-      `normalizeTitleSpelling()` a no-op.
-- [ ] **al-quran-web** `src/components/TawheedPromo.astro:9-10` — cross-promo title/body
-      say "Kitab al-Tawheed" (user-facing on alquranreader.com).
-- [ ] **Al-Tawheed app**: `lib/app.dart:249`, `lib/main.dart:26` (notification channel),
-      `lib/l10n/*` appTitle strings; tests/docs are a 3-way al-/At-/Al- mix;
-      `docs/play-store-listing.md:66` codifies the OLD al- rule — invert it.
-      `README.md:31` also has the stale "English, Urdu, Roman Urdu interface" claim.
-- [ ] **alquran-app** docs (3 references, internal only).
-- [ ] Play Store listing name ("Kitab al-Tawheed") — manual Play Console edit.
+- [x] **Al-Tawheed-Content** — catalog.json, app-config.json (incl. capital-Al
+      feedback email), README + Hafizahullah typo. *Edited 2026-07-12; pending
+      commit + push (deploys the CDN → web hero fixed at source, app name +
+      feedback email update in live installs). Then the web's
+      `normalizeTitleSpelling()` becomes a no-op guard.*
+- [x] **al-quran-web** `TawheedPromo.astro` — cross-promo title/body. *Edited
+      2026-07-12; pending commit + push (deploys alquranreader.com).*
+- [x] **Al-Tawheed app** — lib strings (app title, notification channel,
+      welcome/player fallbacks), l10n .arb + generated files, tests, docs,
+      local catalog.json copy; play-store-listing.md guidance now names at- as
+      canon. *Edited 2026-07-12; pending commit; reaches users with the next
+      app release. `README.md:31` "English, Urdu, Roman Urdu interface" claim
+      still to verify against the shipped app.*
+- [x] **alquran-app** docs. *Edited 2026-07-12; pending commit.*
+- [ ] Play Store listing name — manual Play Console edit to
+      "Sharah Kitab at-Tawheed" (store qualifier suffix as needed).
 - [x] almarfa-platform — already uses "Kitab at-Tawheed", no action.
 
 ## Smaller items
