@@ -1,33 +1,72 @@
 ---
-const links = [
-  { href: '/', label: 'Home' },
-  { href: '/lectures/urdu/', label: 'Urdu Series' },
-  { href: '/arabic/', label: 'Arabic Series' },
-  { href: '/search/', label: 'Search' },
-  { href: '/download/', label: 'Download App' },
-  { href: '/kitab-al-tawheed/', label: 'Kitab al-Tawheed' },
-  { href: '/tawheed/', label: 'Tawheed' },
-  { href: '/about/', label: 'About' },
-  { href: '/privacy/', label: 'Privacy Policy' },
+import { localizePath } from "../lib/i18n";
+
+const locale = Astro.currentLocale ?? "en";
+const localize = (path: string) => localizePath(path, locale);
+
+// Grouped sitemap. Labels are kept consistent with the header; the header
+// carries the primary tasks, the footer the fuller set. Only the translated
+// paths (About / Download / Kitab al-Tawheed / Tawheed) get a /ur prefix —
+// the rest have no Urdu counterpart and stay on their English routes.
+const groups = [
+  {
+    title: 'Listen',
+    links: [
+      { href: '/lectures/urdu/', label: 'Urdu Series' },
+      { href: '/arabic/', label: 'Arabic Series' },
+      { href: '/lectures/', label: 'All Lectures' },
+    ],
+  },
+  {
+    title: 'Learn',
+    links: [
+      { href: '/tawheed/', label: 'What is Tawheed?' },
+      { href: '/kitab-al-tawheed/', label: 'Kitab al-Tawheed' },
+      { href: '/sheikh-rahmani/', label: 'Shaikh Rahmani' },
+    ],
+  },
+  {
+    title: 'More',
+    links: [
+      { href: '/about/', label: 'About' },
+      { href: '/download/', label: 'Download' },
+      { href: '/search/', label: 'Search' },
+      { href: '/privacy/', label: 'Privacy' },
+    ],
+  },
 ];
 ---
 
-<footer class="mt-8 md:mt-12 border-t border-[var(--divider)] pt-8 pb-[calc(6rem+env(safe-area-inset-bottom,0px))] md:pb-8 px-4 text-center text-xs text-fg-3">
-  <nav class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 max-w-lg mx-auto mb-3" aria-label="Footer">
-    {links.map(({ href, label }) => (
-      <a
-        href={href}
-        class={label === 'Home' ? 'text-[#C9A84C] hover:underline' : 'hover:text-fg-2'}
-      >
-        {label}
-      </a>
+<footer class="mt-8 md:mt-12 border-t border-[var(--divider)] pt-8 pb-[calc(6rem+env(safe-area-inset-bottom,0px))] md:pb-8 px-4 text-xs text-fg-3">
+  <nav
+    class="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 max-w-md mx-auto mb-8 text-left"
+    aria-label="Footer"
+  >
+    {groups.map((group) => (
+      <div>
+        <p class="text-[10px] font-semibold uppercase tracking-widest text-fg-3 mb-2.5">
+          {group.title}
+        </p>
+        <ul class="space-y-1.5">
+          {group.links.map(({ href, label }) => (
+            <li>
+              <a href={localize(href)} class="hover:text-[#C9A84C] transition-colors">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     ))}
   </nav>
-  <p>
-    Presented by <a href="https://www.youtube.com/@almarfaduroos" target="_blank" rel="noopener" class="hover:text-fg-2 transition-colors">Al Marfa Duroos</a>
-    · Free Urdu &amp; Arabic Islamic lectures · No ads · Privacy-friendly analytics
-  </p>
-  <p class="mt-1 text-fg-3">
-    Powered by <a href="http://almarfa.co" target="_blank" rel="noopener" class="hover:text-fg-2 transition-colors">Al Marfa Technologies</a>
-  </p>
+
+  <div class="text-center border-t border-[var(--divider-sm)] pt-6">
+    <p>
+      Presented by <a href="https://www.youtube.com/@almarfaduroos" target="_blank" rel="noopener" class="hover:text-fg-2 transition-colors">Al Marfa Duroos</a>
+      · Free Urdu &amp; Arabic Islamic lectures · No ads · Privacy-friendly analytics
+    </p>
+    <p class="mt-1 text-fg-3">
+      Powered by <a href="http://almarfa.co" target="_blank" rel="noopener" class="hover:text-fg-2 transition-colors">Al Marfa Technologies</a>
+    </p>
+  </div>
 </footer>

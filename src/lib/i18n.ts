@@ -37,6 +37,12 @@ export const TRANSLATED_PATHS = [
   "/tawheed/",
 ];
 
+/** Prefix an English path with /ur when it has an Urdu counterpart; else leave it. */
+export function localizePath(path: string, locale: string | undefined): string {
+  if (locale !== "ur") return path;
+  return TRANSLATED_PATHS.includes(path) ? `/ur${path === "/" ? "/" : path}` : path;
+}
+
 /** Does the given path (en or /ur-prefixed) have an Urdu counterpart? */
 export function hasTranslation(pathname: string): boolean {
   const enPath = pathname.replace(/^\/ur(?=\/|$)/, "") || "/";

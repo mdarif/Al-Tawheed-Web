@@ -1,26 +1,21 @@
 ---
 import LangSelector from "./LangSelector.astro";
+import { localizePath } from "../lib/i18n";
 
 const locale = Astro.currentLocale ?? "en";
-
-// Only pages that have actual translated versions get the locale prefix
-const urduVersions = new Set(["/about/", "/kitab-al-tawheed/", "/tawheed/", "/download/"]);
-function localize(path: string): string {
-  if (locale !== "ur") return path;
-  return urduVersions.has(path) ? `/ur${path}` : path;
-}
+const localize = (path: string) => localizePath(path, locale);
 
 const downloadHref = localize("/download/");
 
+// The two audio series are the primary content, surfaced as explicit, symmetric
+// links. The /lectures/ hub and the SEO explainer pages live in the footer.
 // The gold "Get the app" pill is the download entry point, so there's no
 // separate "Download App" text link (it would be a second link to the same page).
 const links = [
-  { href: localize("/lectures/"), label: 'Lectures' },
-  { href: '/arabic/', label: 'العربية' },
+  { href: localize("/lectures/urdu/"), label: 'Urdu Series' },
+  { href: '/arabic/', label: 'Arabic Series' },
   { href: localize("/search/"), label: 'Search' },
   { href: localize("/about/"), label: 'About' },
-  { href: localize("/kitab-al-tawheed/"), label: 'Kitab al-Tawheed' },
-  { href: localize("/tawheed/"), label: 'Tawheed' },
 ];
 ---
 
@@ -45,7 +40,7 @@ const links = [
     </a>
 
     <nav class="hidden md:flex items-center gap-4 lg:gap-5 text-sm text-fg-2 shrink-0" aria-label="Main">
-      {links.slice(0, 3).map(({ href, label }) => (
+      {links.map(({ href, label }) => (
         <a href={href} class="hover:text-fg transition-colors whitespace-nowrap">{label}</a>
       ))}
       <LangSelector />
