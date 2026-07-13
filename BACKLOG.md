@@ -42,6 +42,22 @@ an "also written Kitab al-Tawheed" alias for search).
       "Sharah Kitab at-Tawheed" (store qualifier suffix as needed).
 - [x] almarfa-platform — already uses "Kitab at-Tawheed", no action.
 
+## Arabic book (matn) — keep in sync with the app
+
+The Arabic Kitab at-Tawheed text at `/arabic/book/` (+ per-chapter `ch-00…ch-66`)
+is a committed copy of the mobile app's bundled matn
+(`src/data/book_tawheed-ar.json`, sourced from `Al-Tawheed`'s
+`assets/content/book_tawheed-ar.json`). It is matn-only (no `فِيهِ مَسَائِلُ`
+lists) and Arabic-only, matching the app.
+
+- [ ] When the app edits the matn, run `npm run sync:book` (expects the app repo
+      as a sibling `../Al-Tawheed`, or pass `APP_REPO=`), eyeball a chapter, then
+      re-run tests. Same discipline as syncing "What's New" with app releases.
+- [ ] Optional SEO: per-chapter OG social cards (currently all book pages reuse
+      the site-wide `og-image.png`) — extend `scripts/make-og-lectures.mjs`.
+- [ ] Optional: an Urdu matn reader — the app also ships
+      `book_tawheed-ur.json`, but it's a 2-chapter stub today.
+
 ## Smaller items
 
 - [ ] `AudioObject` JSON-LD lacks `uploadDate` (Google-recommended) — needs

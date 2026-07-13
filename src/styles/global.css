@@ -35,6 +35,10 @@
   --divider-md:    rgba(255,255,255,0.15);
   --divider-lg:    rgba(255,255,255,0.20);
   --accent:        #C9A84C;
+  /* Kitab at-Tawheed matn markers — mirror the mobile app reader (dark). */
+  --book-verse:    #66BB6A; /* Quranic ayah */
+  --book-hadith:   #FFB74D; /* narration / hadith */
+  --book-citation: #4DD0E1; /* surah:ayah citation */
 }
 
 /* Light theme */
@@ -54,6 +58,10 @@
   --divider-md:    rgba(0,0,0,0.15);
   --divider-lg:    rgba(0,0,0,0.20);
   --accent:        #C9A84C;
+  /* Kitab at-Tawheed matn markers — mirror the mobile app reader (light). */
+  --book-verse:    #1B5E20; /* Quranic ayah */
+  --book-hadith:   #BF360C; /* narration / hadith */
+  --book-citation: #006064; /* surah:ayah citation */
 }
 
 /* Pagefind light theme */

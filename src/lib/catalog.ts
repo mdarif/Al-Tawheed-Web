@@ -227,3 +227,71 @@ export function firstLectureInChapter(catalog: Catalog, chapterId: string): Lect
     .filter((l) => l.chapterId === chapterId)
     .sort((a, b) => a.number - b.number)[0];
 }
+
+// ── Kitab at-Tawheed matn (Arabic book text) ───────────────────────────────
+//
+// The book text is authored/edited in the mobile app (Al-Tawheed) and shipped
+// there as a bundled asset. We commit an identical copy under src/data/ and
+// keep it in sync with `npm run sync:book`. The matn is Arabic-only and never
+// translated. See BACKLOG.md.
+import bookArData from '../data/book_tawheed-ar.json';
+
+export interface BookMeta {
+  title: string;
+  author: string;
+}
+
+export interface BookChapter {
+  /** "ch-00" … "ch-66" — also the URL slug. */
+  id: string;
+  number: number;
+  /** Arabic bab title (fully vocalized). */
+  title: string;
+  /** Plain text, \n-separated blocks, with {verse} / ((hadith)) / [citation] markers. */
+  text: string;
+}
+
+export interface ArabicBook {
+  book: BookMeta;
+  chapters: BookChapter[];
+}
+
+/** The bundled Arabic matn — 67 chapters (ch-00 opening + ch-01…ch-66 babs). */
+export function getArabicBook(): ArabicBook {
+  return bookArData as ArabicBook;
+}
+
+const HTML_ESCAPE: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+};
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => HTML_ESCAPE[c]);
+}
+
+/**
+ * Render a chapter's plain-text matn to trusted HTML, mirroring the mobile app
+ * reader's three-token parse:
+ *   {…}   → verse   (ornate mushaf brackets ﴾…﴿, green)
+ *   ((…)) → hadith  (guillemets «…», amber)
+ *   […]   → citation (surah:ayah, cyan)
+ * Blocks split on \n become <p> paragraphs. Input is escaped first, so the only
+ * markup in the output is the spans this function emits.
+ */
+export function bookChapterHtml(text: string): string {
+  const markup = escapeHtml(text)
+    .replace(/\{([^{}]+)\}/g, '<span class="ayah">﴾$1﴿</span>')
+    .replace(/\(\(([^()]+)\)\)/g, '<span class="hadith">«$1»</span>')
+    .replace(/\[([^[\]]+)\]/g, '<span class="citation">[$1]</span>');
+
+  return markup
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .map((line) => `<p>${line}</p>`)
+    .join('\n');
+}

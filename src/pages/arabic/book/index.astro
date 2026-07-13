@@ -1,0 +1,153 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import {
+  getArabicBook,
+  getAppConfig,
+  playStoreUrl,
+  bookCoverOgUrl,
+  SITE_URL,
+} from "../../../lib/catalog";
+import { arUI } from "../../../i18n/ar";
+
+const [{ book, chapters }, appConfig] = await Promise.all([
+  Promise.resolve(getArabicBook()),
+  getAppConfig(),
+]);
+const storeUrl = playStoreUrl(appConfig);
+const coverUrl = bookCoverOgUrl();
+const sorted = chapters.slice().sort((a, b) => a.number - b.number);
+// Chapters are numbered sequentially from the first entry (كتاب التوحيد = 1).
+const chapterCount = sorted.length;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Book",
+  name: book.title,
+  alternateName: "Kitab at-Tawheed",
+  author: { "@type": "Person", name: book.author },
+  inLanguage: "ar",
+  url: `${SITE_URL}/arabic/book/`,
+  image: coverUrl,
+  numberOfPages: chapterCount,
+  about: "Islamic monotheism (Tawheed)",
+  publisher: { "@type": "Organization", name: "Al Marfa Duroos" },
+  hasPart: sorted.map((c, i) => ({
+    "@type": "Chapter",
+    name: c.title,
+    position: i + 1,
+    url: `${SITE_URL}/arabic/book/${c.id}/`,
+  })),
+};
+---
+
+<Layout
+  title="كتاب التوحيد — النص الكامل (المتن) | محمد بن عبد الوهاب"
+  description={`النص الكامل لكتاب التوحيد لمحمد بن عبد الوهاب — ${chapterCount} فصلاً مع الآيات والأحاديث. اقرأ المتن مجاناً بالعربية.`}
+  {appConfig}
+  ogImage={coverUrl}
+  ogImageAlt="كتاب التوحيد — المتن الكامل"
+  lang="ar"
+  dir="rtl"
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+    slot="head"
+  />
+
+  <div
+    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-12 font-arabic"
+    dir="rtl"
+    lang="ar"
+    data-pagefind-body
+  >
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-fg-3 mb-6" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-[#C9A84C]" dir="ltr">Home</a>
+      <span class="mx-1">←</span>
+      <a href="/arabic/" class="hover:text-[#C9A84C]">{arUI.series.eyebrow}</a>
+      <span class="mx-1">←</span>
+      <span class="text-fg-2">{arUI.book.fullBook}</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-8">
+      <p
+        class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-3"
+        dir="ltr"
+      >
+        Kitab at-Tawheed · Full Text
+      </p>
+      <h1 class="text-2xl sm:text-3xl font-bold leading-snug mb-2">
+        {book.title}
+      </h1>
+      <p class="text-fg-2 text-sm mb-1">{book.author}</p>
+      <p class="text-fg-3 text-xs">
+        {chapterCount} {arUI.book.chapters}
+      </p>
+
+      <p class="text-fg-2 text-sm leading-loose mt-4">
+        النص الكامل لكتاب التوحيد، مرتّباً باباً باباً مع آياته وأحاديثه. النص
+        عربيّ كما في التطبيق.
+      </p>
+
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a
+          href={`/arabic/book/${sorted[0].id}/`}
+          class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C] transition-colors"
+        >
+          {arUI.book.readBook}
+        </a>
+        <a
+          href="/arabic/"
+          class="border border-[var(--divider)] text-fg-2 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover transition-colors"
+        >
+          {arUI.book.audioSeries}
+        </a>
+        <a
+          href={storeUrl}
+          target="_blank"
+          rel="noopener"
+          class="border border-[var(--divider)] text-fg-2 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover transition-colors"
+        >
+          {arUI.player.getApp}
+        </a>
+      </div>
+    </div>
+
+    <!-- Chapter index -->
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-sm font-bold text-fg-2 uppercase tracking-widest">
+        {arUI.book.chapters}
+      </h2>
+      <span class="text-xs text-fg-3">{chapterCount}</span>
+    </div>
+
+    <div class="space-y-1.5">
+      {
+        sorted.map((c, i) => (
+          <a
+            href={`/arabic/book/${c.id}/`}
+            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm hover:bg-surface-hover transition-all border border-transparent hover:border-[#C9A84C]/20"
+          >
+            <span
+              class="text-[#C9A84C] text-xs font-bold shrink-0 w-8 text-left"
+              dir="ltr"
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span class="block min-w-0 text-fg leading-relaxed">{c.title}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .font-arabic {
+    font-family: "Noto Naskh Arabic", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.8;
+  }
+</style>
