@@ -241,14 +241,24 @@ export interface BookMeta {
   author: string;
 }
 
+/** The chapter's summary points (masāʾil) — present in the Urdu edition, which
+ *  keeps them as structured data outside the matn. Absent for the Arabic
+ *  (matn-only) book. */
+export interface BookMasail {
+  heading: string;
+  items: string[];
+}
+
 export interface BookChapter {
   /** "ch-00" … "ch-66" — also the URL slug. */
   id: string;
   number: number;
   /** Arabic bab title (fully vocalized). */
   title: string;
-  /** Plain text, \n-separated blocks, with {verse} / ((hadith)) / [citation] markers. */
+  /** Matn text: \n-separated blocks, with {verse} / ((hadith)) / [citation] markers. */
   text: string;
+  /** Urdu edition only: the "…اہم مسائل" points, kept out of the matn. */
+  masail?: BookMasail;
 }
 
 export interface ArabicBook {
@@ -306,16 +316,26 @@ function escapeHtml(s: string): string {
  * Blocks split on \n become <p> paragraphs. Input is escaped first, so the only
  * markup in the output is the spans this function emits.
  */
-export function bookChapterHtml(text: string): string {
-  const markup = escapeHtml(text)
-    .replace(/\{([^{}]+)\}/g, '<span class="ayah">﴾$1﴿</span>')
+/**
+ * Convert one line's inline markers to spans (no block wrapping):
+ *   {…}   → verse   (ornate Mushaf brackets ﴿…﴾ — U+FD3F opens, U+FD3E closes)
+ *   ((…)) → hadith  (guillemets «…»)
+ *   […]   → citation (surah:ayah)
+ * Escapes first, so the only markup emitted is these spans.
+ */
+export function bookInlineHtml(line: string): string {
+  return escapeHtml(line)
+    .replace(/\{([^{}]+)\}/g, '<span class="ayah">﴿$1﴾</span>')
     .replace(/\(\(([^()]+)\)\)/g, '<span class="hadith">«$1»</span>')
     .replace(/\[([^[\]]+)\]/g, '<span class="citation">[$1]</span>');
+}
 
-  return markup
+/** Render matn text (\n-separated blocks) to trusted <p> HTML. */
+export function bookChapterHtml(text: string): string {
+  return text
     .split('\n')
     .map((line) => line.trim())
     .filter((line) => line.length > 0)
-    .map((line) => `<p>${line}</p>`)
+    .map((line) => `<p>${bookInlineHtml(line)}</p>`)
     .join('\n');
 }

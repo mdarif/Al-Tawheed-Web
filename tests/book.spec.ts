@@ -92,31 +92,30 @@ test.describe("Chapter reader — /arabic/book/ch-*", () => {
     expect(await nav.count()).toBeGreaterThan(10);
   });
 
-  test("font-size control adjusts, persists, and clamps at bounds", async ({ page }) => {
+  test("font-size control adjusts, resets on reload, and clamps at bounds", async ({ page }) => {
     await page.goto("/arabic/book/ch-03/");
     const matn = page.locator(".book-matn");
     const size = () =>
       matn.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
 
-    // Default is 20px (matches the app).
-    expect(await size()).toBe(20);
+    // Default matn size is 22px.
+    expect(await size()).toBe(22);
 
-    // A+ grows by 2px and persists to localStorage.
+    // A+ / A− adjust by 2px within the view.
     await page.locator("#font-inc").click();
+    expect(await size()).toBe(24);
+    await page.locator("#font-dec").click();
+    expect(await size()).toBe(22);
+
+    // NOT persisted: bump, navigate away, and it resets to the default; and
+    // nothing is written to localStorage.
+    await page.locator("#font-inc").click(); // 24 for this view only
+    await page.goto("/arabic/book/ch-04/");
     expect(await size()).toBe(22);
     const stored = await page.evaluate(() =>
       localStorage.getItem("tawheed:bookFontSize")
     );
-    expect(stored).toBe("22");
-
-    // A− shrinks back.
-    await page.locator("#font-dec").click();
-    expect(await size()).toBe(20);
-
-    // Persists across navigation to another chapter.
-    await page.locator("#font-inc").click(); // 22
-    await page.goto("/arabic/book/ch-04/");
-    expect(await size()).toBe(22);
+    expect(stored).toBeNull();
 
     // Clamps at the max (32) and disables A+ there.
     for (
@@ -169,11 +168,18 @@ test.describe("Urdu book sample — /urdu/book/", () => {
 
   test("chapter has the shared font-size control", async ({ page }) => {
     await page.goto("/urdu/book/ch-00/");
-    await page.locator("#font-inc").click();
+    await page.locator("#font-inc").click(); // default 22 → 24
     const size = await page
       .locator(".book-matn")
       .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
-    expect(size).toBe(22);
+    expect(size).toBe(24);
+  });
+
+  test("bilingual: Arabic āyāt and coupled Urdu translations both render", async ({ page }) => {
+    await page.goto("/urdu/book/ch-00/");
+    // Green Arabic āyah spans, plus the tagged Urdu translation paragraphs.
+    expect(await page.locator(".book-matn .ayah").count()).toBeGreaterThan(0);
+    expect(await page.locator(".book-matn p.tr").count()).toBeGreaterThan(0);
   });
 });
 

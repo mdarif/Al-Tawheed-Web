@@ -4,6 +4,7 @@ import {
   getUrduBook,
   getAppConfig,
   bookChapterHtml,
+  bookInlineHtml,
   playStoreUrl,
   bookCoverOgUrl,
   toUrduDigits,
@@ -53,8 +54,16 @@ const next = sorted[idx + 1];
 const position = idx + 1;
 const total = sorted.length;
 
-// Urdu numerals everywhere (matches the mobile reader for the Urdu book).
-const bodyHtml = bookChapterHtml(toUrduDigits(chapter.text));
+// Matn and masāʾil are separate fields in the JSON (the masāʾil sit outside the
+// core matn), so the reader just renders what the data gives it. Urdu numerals
+// everywhere, matching the mobile reader.
+// Each Urdu āyah translation is a paragraph wrapped in “curly quotes”; tag those
+// so the layout can couple them to the Arabic āyah directly above.
+const bodyHtml = bookChapterHtml(toUrduDigits(chapter.text)).replace(
+  /<p>(“)/g,
+  '<p class="tr">$1',
+);
+const masail = chapter.masail;
 const isOpening = chapter.number === 0;
 const ogTitle = isOpening
   ? "کتاب التوحید — مکمل اردو متن"
@@ -73,19 +82,9 @@ const ogTitle = isOpening
 >
   <!-- Sample content pending scholarly proof — keep it out of the index. -->
   <meta name="robots" content="noindex, nofollow" slot="head" />
-  <!-- Apply the saved matn font size before first paint (shared with the Arabic
-       reader): 14–32px, default 20. -->
-  <script is:inline slot="head">
-    (function () {
-      var s = parseInt(localStorage.getItem("tawheed:bookFontSize") || "20", 10);
-      if (isNaN(s)) s = 20;
-      s = Math.max(14, Math.min(32, s));
-      document.documentElement.style.setProperty("--matn-font", s + "px");
-    })();
-  </script>
 
   <article
-    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0 font-urdu"
+    class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0 font-urdu"
     dir="rtl"
     lang="ur"
   >
@@ -103,7 +102,7 @@ const ogTitle = isOpening
       <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2" dir="ltr">
         {ui.chapter} {toUrduDigits(String(position))} / {toUrduDigits(String(total))}
       </p>
-      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold leading-loose text-balance">
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold leading-[1.7] text-balance">
         {chapter.title}
       </h1>
     </div>
@@ -153,8 +152,22 @@ const ogTitle = isOpening
       </div>
     </div>
 
-    <!-- Matn -->
+    <!-- Matn (āyāt + aḥādīth) -->
     <div class="book-matn text-fg" set:html={bodyHtml} />
+
+    <!-- Masāʾil — the author's summary points, set apart from the matn -->
+    {
+      masail && (
+        <section class="masail-section">
+          <h2 class="masail-title">{masail.heading}</h2>
+          <div class="masail-body">
+            {masail.items.map((item) => (
+              <p set:html={bookInlineHtml(toUrduDigits(item))} />
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     <!-- Get App CTA -->
     <div class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-4 my-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -222,25 +235,22 @@ const ogTitle = isOpening
 
     <script is:inline>
       (function () {
-        var MIN = 14, MAX = 32, STEP = 2, KEY = "tawheed:bookFontSize";
+        var MIN = 14, MAX = 32, STEP = 2, DEFAULT = 22;
         var root = document.documentElement;
         var dec = document.getElementById("font-dec");
         var inc = document.getElementById("font-inc");
         if (!dec || !inc) return;
-        function current() {
-          var s = parseInt(localStorage.getItem(KEY) || "20", 10);
-          if (isNaN(s)) s = 20;
-          return Math.max(MIN, Math.min(MAX, s));
-        }
-        function apply(size) {
+        // Per-view only — intentionally NOT persisted, so a refresh resets it.
+        var size = DEFAULT;
+        function apply(next) {
+          size = Math.max(MIN, Math.min(MAX, next));
           root.style.setProperty("--matn-font", size + "px");
-          localStorage.setItem(KEY, String(size));
           dec.disabled = size <= MIN;
           inc.disabled = size >= MAX;
         }
-        apply(current());
-        dec.addEventListener("click", function () { apply(Math.max(MIN, current() - STEP)); });
-        inc.addEventListener("click", function () { apply(Math.min(MAX, current() + STEP)); });
+        apply(size);
+        dec.addEventListener("click", function () { apply(size - STEP); });
+        inc.addEventListener("click", function () { apply(size + STEP); });
       })();
     </script>
   </article>
@@ -252,11 +262,22 @@ const ogTitle = isOpening
     line-height: 2.4;
   }
   .book-matn {
-    font-size: var(--matn-font, 20px);
+    font-size: var(--matn-font, 22px);
     line-height: 2.6;
   }
   .book-matn :global(p) {
     margin-bottom: 1.5rem;
+  }
+  /* Urdu translation of the āyah directly above it: subtly set off, and pulled
+     up so the pair reads as one unit (āyah → its translation). */
+  .book-matn :global(p.tr) {
+    color: var(--fg-2);
+    border-right: 2px solid color-mix(in srgb, var(--book-verse) 45%, transparent);
+    padding-right: 0.9rem;
+    font-size: 0.94em;
+  }
+  .book-matn :global(p:has(+ p.tr)) {
+    margin-bottom: 0.5rem;
   }
   /* Qur'anic āyāt and surah citations are Arabic — render them in Naskh so they
      sit distinct from the Nastaliq Urdu prose, exactly as the mobile reader
@@ -267,13 +288,49 @@ const ogTitle = isOpening
     font-weight: 500;
     line-height: 2;
   }
+  /* Citation stays in the Urdu (Nastaliq) font so its numerals render as Urdu
+     digit forms (Naskh would give Persian-style glyphs). */
   .book-matn :global(.citation) {
-    font-family: "Noto Naskh Arabic", serif;
     color: var(--book-citation);
-    font-size: 0.85em;
+    font-size: 0.9em;
   }
   /* Hadith/narration is Urdu here → keep Nastaliq (inherit), just recolor. */
   .book-matn :global(.hadith) {
     color: var(--book-hadith);
+  }
+
+  /* Masāʾil — the summary points, which are outside the core matn. Set apart in
+     a quieter card so the reader can tell matn from the author's points. */
+  .masail-section {
+    margin-top: 2.75rem;
+    padding: 1.4rem 1.4rem 0.5rem;
+    border: 1px solid var(--divider);
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--surface) 90%, transparent);
+  }
+  .masail-title {
+    color: var(--accent);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--divider);
+  }
+  .masail-body {
+    font-size: calc(var(--matn-font, 22px) * 0.9);
+    line-height: 2.35;
+  }
+  .masail-body :global(p) {
+    margin-bottom: 1rem;
+    color: var(--fg-2);
+  }
+  .masail-body :global(.ayah) {
+    font-family: "Noto Naskh Arabic", serif;
+    color: var(--book-verse);
+    font-weight: 500;
+  }
+  .masail-body :global(.citation) {
+    color: var(--book-citation);
+    font-size: 0.92em;
   }
 </style>

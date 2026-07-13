@@ -92,19 +92,9 @@ const ogDescription = `${chapter.title} من كتاب التوحيد لمحمد 
     set:html={JSON.stringify(jsonLdBreadcrumb)}
     slot="head"
   />
-  <!-- Apply the saved matn font size before first paint (no flash), same range
-       as the app: 14–32px, default 20. -->
-  <script is:inline slot="head">
-    (function () {
-      var s = parseInt(localStorage.getItem("tawheed:bookFontSize") || "20", 10);
-      if (isNaN(s)) s = 20;
-      s = Math.max(14, Math.min(32, s));
-      document.documentElement.style.setProperty("--matn-font", s + "px");
-    })();
-  </script>
 
   <article
-    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0 font-arabic"
+    class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0 font-arabic"
     dir="rtl"
     lang="ar"
     data-pagefind-body
@@ -242,30 +232,22 @@ const ogDescription = `${chapter.title} من كتاب التوحيد لمحمد 
 
     <script is:inline>
       (function () {
-        var MIN = 14, MAX = 32, STEP = 2, KEY = "tawheed:bookFontSize";
+        var MIN = 14, MAX = 32, STEP = 2, DEFAULT = 22;
         var root = document.documentElement;
         var dec = document.getElementById("font-dec");
         var inc = document.getElementById("font-inc");
         if (!dec || !inc) return;
-
-        function current() {
-          var s = parseInt(localStorage.getItem(KEY) || "20", 10);
-          if (isNaN(s)) s = 20;
-          return Math.max(MIN, Math.min(MAX, s));
-        }
-        function apply(size) {
+        // Per-view only — intentionally NOT persisted, so a refresh resets it.
+        var size = DEFAULT;
+        function apply(next) {
+          size = Math.max(MIN, Math.min(MAX, next));
           root.style.setProperty("--matn-font", size + "px");
-          localStorage.setItem(KEY, String(size));
           dec.disabled = size <= MIN;
           inc.disabled = size >= MAX;
         }
-        apply(current());
-        dec.addEventListener("click", function () {
-          apply(Math.max(MIN, current() - STEP));
-        });
-        inc.addEventListener("click", function () {
-          apply(Math.min(MAX, current() + STEP));
-        });
+        apply(size);
+        dec.addEventListener("click", function () { apply(size - STEP); });
+        inc.addEventListener("click", function () { apply(size + STEP); });
       })();
     </script>
   </article>
@@ -277,7 +259,7 @@ const ogDescription = `${chapter.title} من كتاب التوحيد لمحمد 
     line-height: 1.8;
   }
   .book-matn {
-    font-size: var(--matn-font, 20px);
+    font-size: var(--matn-font, 22px);
     line-height: 2;
   }
   .book-matn :global(p) {

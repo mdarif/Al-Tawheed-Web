@@ -22,9 +22,32 @@ const here = dirname(fileURLToPath(import.meta.url));
 const webRoot = resolve(here, '..');
 const appRepo = process.env.APP_REPO ?? resolve(webRoot, '..', 'Al-Tawheed');
 
-const BOOKS = ['book_tawheed-ar.json', 'book_tawheed-ur.json'];
+// The app ships each chapter's content as one `text` blob (matn + masāʾil). The
+// Urdu edition includes the masāʾil ("…اہم مسائل:"), which sit OUTSIDE the core
+// matn — so we split them into a structured `masail` field at sync time. The
+// reader then just renders `text` and `masail` from the JSON (no render-time
+// parsing). Deterministic; matn-only chapters (the Arabic book) are untouched.
+function structureMasail(chapter) {
+  const lines = chapter.text.split('\n');
+  const i = lines.findIndex((l) => /مسائل\s*[:：]\s*$/.test(l.trim()));
+  if (i === -1) return chapter;
+  return {
+    ...chapter,
+    text: lines.slice(0, i).join('\n').replace(/\n+$/, ''),
+    masail: {
+      heading: lines[i].trim().replace(/[:：]\s*$/, ''),
+      items: lines.slice(i + 1).map((l) => l.trim()).filter(Boolean),
+    },
+  };
+}
 
-for (const file of BOOKS) {
+// Each book: [source file, whether to structure the masāʾil out of the matn].
+const BOOKS = [
+  { file: 'book_tawheed-ar.json', structure: false },
+  { file: 'book_tawheed-ur.json', structure: true },
+];
+
+for (const { file, structure } of BOOKS) {
   const src = join(appRepo, 'assets', 'content', file);
   const dest = join(webRoot, 'src', 'data', file);
 
@@ -45,6 +68,7 @@ for (const file of BOOKS) {
     process.exit(1);
   }
 
-  writeFileSync(dest, raw.endsWith('\n') ? raw : raw + '\n');
+  if (structure) data.chapters = data.chapters.map(structureMasail);
+  writeFileSync(dest, JSON.stringify(data, null, 2) + '\n');
   console.log(`Synced ${count} chapters → src/data/${file}`);
 }
