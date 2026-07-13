@@ -261,6 +261,30 @@ export function getArabicBook(): ArabicBook {
   return bookArData as ArabicBook;
 }
 
+// ── Urdu edition (bilingual) ───────────────────────────────────────────────
+//
+// The Urdu book is the same shape as the Arabic one, but each Qur'anic {āyah}
+// (Arabic) is followed by its Urdu translation, then Urdu sharah/masāʾil. Only
+// a proofed 2-chapter sample exists so far. Synced by `npm run sync:book`.
+import bookUrData from '../data/book_tawheed-ur.json';
+
+/** The bundled bilingual Urdu edition (currently ch-00 + ch-01, a sample). */
+export function getUrduBook(): ArabicBook {
+  return bookUrData as ArabicBook;
+}
+
+const URDU_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+/**
+ * Localise Western digits (0-9) to Urdu numerals (۰-۹), mirroring the mobile
+ * reader, which renders every digit in the *book's* language — so an Urdu book
+ * shows Urdu numerals everywhere, even inside Arabic āyāt and citations. Apply
+ * to the raw matn BEFORE `bookChapterHtml` so HTML entities stay ASCII.
+ */
+export function toUrduDigits(s: string): string {
+  return s.replace(/[0-9]/g, (d) => URDU_DIGITS[+d]);
+}
+
 const HTML_ESCAPE: Record<string, string> = {
   '&': '&amp;',
   '<': '&lt;',

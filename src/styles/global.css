@@ -1,5 +1,25 @@
 @import "tailwindcss";
 
+/* ── Self-hosted scripture fonts ─────────────────────────────────────────────
+ * Book pages mix two scripts: Qur'anic āyāt in Naskh, Urdu prose in Nastaliq.
+ * Neither is guaranteed on the visitor's OS (esp. Nastaliq), so we ship the
+ * same TTFs the mobile app bundles. `swap` avoids blocking first paint.
+ */
+@font-face {
+  font-family: "Noto Naskh Arabic";
+  src: url("/fonts/NotoNaskhArabic-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Noto Nastaliq Urdu";
+  src: url("/fonts/NotoNastaliqUrdu-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ── Theme color tokens ──────────────────────────────────────────────────── */
 
 /*

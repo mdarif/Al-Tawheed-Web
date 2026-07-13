@@ -1,0 +1,140 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import {
+  getUrduBook,
+  getAppConfig,
+  playStoreUrl,
+  bookCoverOgUrl,
+  toUrduDigits,
+} from "../../../lib/catalog";
+
+// Standalone Urdu labels for the book pages (mirrors arUI.book, in Urdu).
+const ui = {
+  eyebrow: "کتاب التوحید · اردو",
+  fullBook: "کتاب التوحید — مکمل اردو متن",
+  readBook: "کتاب پڑھیں",
+  chapters: "ابواب",
+  audioSeries: "← اردو دروس سنیں",
+  getApp: "ایپ حاصل کریں",
+  intro:
+    "کتاب التوحید کا مکمل اردو ترجمہ و شرح، باب بہ باب۔ قرآنی آیات عربی متن میں اور ترجمہ و مسائل اردو میں — بعینہٖ اردو مطبوعہ نسخے کے مطابق۔",
+  sampleNote:
+    "نوٹ: فی الحال صرف ابتدائی دو ابواب دستیاب ہیں (نمونہ برائے پروف ریڈنگ)۔",
+};
+
+const [{ book, chapters }, appConfig] = await Promise.all([
+  Promise.resolve(getUrduBook()),
+  getAppConfig(),
+]);
+const storeUrl = playStoreUrl(appConfig);
+const coverUrl = bookCoverOgUrl();
+const sorted = chapters.slice().sort((a, b) => a.number - b.number);
+const babs = sorted.filter((c) => c.number > 0);
+---
+
+<Layout
+  title="کتاب التوحید — مکمل اردو متن | محمد بن عبد الوہاب"
+  description="کتاب التوحید کا مکمل اردو ترجمہ و شرح — قرآنی آیات، احادیث اور مسائل کے ساتھ۔ مفت آن لائن پڑھیں۔"
+  {appConfig}
+  ogImage={coverUrl}
+  ogImageAlt="کتاب التوحید — اردو متن"
+  lang="ur"
+  dir="rtl"
+>
+  <!-- Sample content pending scholarly proof — keep it out of the index. -->
+  <meta name="robots" content="noindex, nofollow" slot="head" />
+
+  <div
+    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-12 font-urdu"
+    dir="rtl"
+    lang="ur"
+  >
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-fg-3 mb-6" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-[#C9A84C]" dir="ltr">Home</a>
+      <span class="mx-1">←</span>
+      <span class="text-fg-2">{ui.fullBook}</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-8">
+      <p
+        class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-3"
+        dir="ltr"
+      >
+        Kitab at-Tawheed · Urdu · Full Text
+      </p>
+      <h1 class="text-2xl sm:text-3xl font-bold leading-loose mb-3">
+        {book.title}
+      </h1>
+      <p class="text-fg-2 text-sm mb-1">{book.author}</p>
+      <p class="text-fg-3 text-xs">
+        {toUrduDigits(String(babs.length))} {ui.chapters}
+      </p>
+
+      <p class="text-fg-2 text-sm leading-loose mt-4">{ui.intro}</p>
+      <p
+        class="text-[#C9A84C] text-xs leading-loose mt-3 bg-surface-gold border border-[#C9A84C]/25 rounded-lg px-3 py-2"
+      >
+        {ui.sampleNote}
+      </p>
+
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a
+          href={`/urdu/book/${sorted[0].id}/`}
+          class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C] transition-colors"
+        >
+          {ui.readBook}
+        </a>
+        <a
+          href="/lectures/urdu/"
+          class="border border-[var(--divider)] text-fg-2 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover transition-colors"
+        >
+          {ui.audioSeries}
+        </a>
+        <a
+          href={storeUrl}
+          target="_blank"
+          rel="noopener"
+          class="border border-[var(--divider)] text-fg-2 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover transition-colors"
+        >
+          {ui.getApp}
+        </a>
+      </div>
+    </div>
+
+    <!-- Chapter index -->
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-sm font-bold text-fg-2 uppercase tracking-widest">
+        {ui.chapters}
+      </h2>
+      <span class="text-xs text-fg-3">{toUrduDigits(String(babs.length))}</span>
+    </div>
+
+    <div class="space-y-1.5">
+      {
+        sorted.map((c) => (
+          <a
+            href={`/urdu/book/${c.id}/`}
+            class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm hover:bg-surface-hover transition-all border border-transparent hover:border-[#C9A84C]/20"
+          >
+            <span
+              class="text-[#C9A84C] text-xs font-bold shrink-0 w-8 text-left"
+              dir="ltr"
+            >
+              {c.number === 0 ? "—" : toUrduDigits(String(c.number).padStart(2, "0"))}
+            </span>
+            <span class="block min-w-0 text-fg leading-loose">{c.title}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .font-urdu {
+    font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", serif;
+    line-height: 2.4;
+  }
+</style>

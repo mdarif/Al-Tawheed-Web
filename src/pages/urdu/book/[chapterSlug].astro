@@ -1,0 +1,213 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import {
+  getUrduBook,
+  getAppConfig,
+  bookChapterHtml,
+  playStoreUrl,
+  bookCoverOgUrl,
+  toUrduDigits,
+} from "../../../lib/catalog";
+
+export async function getStaticPaths() {
+  const { chapters } = getUrduBook();
+  return chapters.map((chapter) => ({
+    params: { chapterSlug: chapter.id },
+    props: { chapterId: chapter.id },
+  }));
+}
+
+// Standalone Urdu labels for the book pages.
+const ui = {
+  chapter: "باب",
+  chapters: "ابواب",
+  backToBook: "فہرست کتاب",
+  preamble: "مقدمہ",
+  prevChapter: "← پچھلا باب",
+  nextChapter: "اگلا باب →",
+  keyVerse: "آیت",
+  keyHadith: "حدیث",
+  keyCitation: "حوالہ",
+  getApp: "ایپ حاصل کریں",
+  continueOnApp: "مفت ایپ میں بھی",
+  offlineFeatures: "آف لائن ڈاؤن لوڈ · مکمل کتاب · آڈیو دروس",
+};
+
+const { chapterId } = Astro.props;
+const [{ chapters }, appConfig] = await Promise.all([
+  Promise.resolve(getUrduBook()),
+  getAppConfig(),
+]);
+const storeUrl = playStoreUrl(appConfig);
+const coverUrl = bookCoverOgUrl();
+const sorted = chapters.slice().sort((a, b) => a.number - b.number);
+const idx = sorted.findIndex((c) => c.id === chapterId);
+const chapter = sorted[idx];
+const prev = sorted[idx - 1];
+const next = sorted[idx + 1];
+// "کتاب التوحید" (number 0) is the opening, not a numbered bab; babs count from 1.
+const babCount = sorted.filter((c) => c.number > 0).length;
+
+// Urdu numerals everywhere (matches the mobile reader for the Urdu book).
+const bodyHtml = bookChapterHtml(toUrduDigits(chapter.text));
+const isOpening = chapter.number === 0;
+const label = isOpening
+  ? chapter.title
+  : `${ui.chapter} ${toUrduDigits(String(chapter.number))}: ${chapter.title}`;
+---
+
+<Layout
+  title={`${label} — کتاب التوحید (اردو)`}
+  description={`${chapter.title} — کتاب التوحید کا اردو ترجمہ و شرح۔`}
+  {appConfig}
+  ogImage={coverUrl}
+  ogImageAlt={`${chapter.title} — کتاب التوحید`}
+  ogType="article"
+  lang="ur"
+  dir="rtl"
+>
+  <!-- Sample content pending scholarly proof — keep it out of the index. -->
+  <meta name="robots" content="noindex, nofollow" slot="head" />
+
+  <article
+    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0 font-urdu"
+    dir="rtl"
+    lang="ur"
+  >
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-fg-3 mb-6 leading-loose" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-[#C9A84C]" dir="ltr">Home</a>
+      <span class="mx-1">←</span>
+      <a href="/urdu/book/" class="hover:text-[#C9A84C]">{ui.backToBook}</a>
+      <span class="mx-1">←</span>
+      <span class="text-fg-2">{chapter.title}</span>
+    </nav>
+
+    <!-- Title -->
+    <div class="mb-5">
+      <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2" dir="ltr">
+        {isOpening
+          ? `${ui.preamble} · کتاب التوحید`
+          : `${ui.chapter} ${toUrduDigits(String(chapter.number))} / ${toUrduDigits(String(babCount))}`}
+      </p>
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold leading-loose text-balance">
+        {chapter.title}
+      </h1>
+    </div>
+
+    <!-- Color-key legend -->
+    <div class="flex flex-wrap gap-x-5 gap-y-1 text-xs text-fg-3 mb-6 pb-4 border-b border-[var(--divider)]">
+      <span class="inline-flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full" style="background: var(--book-verse)"></span>
+        {ui.keyVerse}
+      </span>
+      <span class="inline-flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full" style="background: var(--book-hadith)"></span>
+        {ui.keyHadith}
+      </span>
+      <span class="inline-flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full" style="background: var(--book-citation)"></span>
+        {ui.keyCitation}
+      </span>
+    </div>
+
+    <!-- Matn -->
+    <div class="book-matn text-fg" set:html={bodyHtml} />
+
+    <!-- Get App CTA -->
+    <div class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-4 my-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="min-w-0">
+        <p class="text-sm font-semibold text-[#C9A84C]">{ui.continueOnApp}</p>
+        <p class="text-xs text-fg-2">{ui.offlineFeatures}</p>
+      </div>
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener"
+        class="shrink-0 w-full sm:w-auto text-center bg-[#C9A84C] text-black font-bold px-4 py-3 sm:py-2 rounded-lg text-sm sm:text-xs hover:bg-[#D4B55C] transition-colors min-h-[44px] sm:min-h-0 flex items-center justify-center"
+      >
+        {ui.getApp}
+      </a>
+    </div>
+
+    <!-- Prev / Next -->
+    <div class="flex flex-col sm:flex-row gap-3 mb-8">
+      {
+        next && (
+          <a
+            href={`/urdu/book/${next.id}/`}
+            class="flex-1 bg-surface border border-[var(--divider)] rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all text-right min-w-0"
+          >
+            <p class="text-xs text-fg-3 mb-1">{ui.nextChapter}</p>
+            <p class="text-sm font-semibold truncate leading-loose">{next.title}</p>
+          </a>
+        )
+      }
+      {
+        prev && (
+          <a
+            href={`/urdu/book/${prev.id}/`}
+            class="flex-1 bg-surface border border-[var(--divider)] rounded-xl p-3 hover:border-[#C9A84C]/40 transition-all text-left min-w-0"
+          >
+            <p class="text-xs text-fg-3 mb-1">{ui.prevChapter}</p>
+            <p class="text-sm font-semibold truncate leading-loose">{prev.title}</p>
+          </a>
+        )
+      }
+    </div>
+
+    <!-- All chapters -->
+    <div>
+      <h2 class="text-sm font-bold text-fg-2 uppercase tracking-widest mb-3">
+        {ui.chapters}
+      </h2>
+      <div class="space-y-1.5">
+        {
+          sorted.map((c) => (
+            <a
+              href={`/urdu/book/${c.id}/`}
+              class={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all ${c.id === chapter.id ? "bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C]" : "hover:bg-surface-hover text-fg-2"}`}
+            >
+              <span class="text-xs font-bold shrink-0 w-6 text-left" dir="ltr">
+                {c.number === 0 ? "—" : toUrduDigits(String(c.number).padStart(2, "0"))}
+              </span>
+              <span class="block min-w-0 truncate leading-loose">{c.title}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .font-urdu {
+    font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", serif;
+    line-height: 2.4;
+  }
+  .book-matn {
+    font-size: 1.2rem;
+    line-height: 2.6;
+  }
+  .book-matn :global(p) {
+    margin-bottom: 1.5rem;
+  }
+  /* Qur'anic āyāt and surah citations are Arabic — render them in Naskh so they
+     sit distinct from the Nastaliq Urdu prose, exactly as the mobile reader
+     switches font per script. */
+  .book-matn :global(.ayah) {
+    font-family: "Noto Naskh Arabic", serif;
+    color: var(--book-verse);
+    font-weight: 500;
+    line-height: 2;
+  }
+  .book-matn :global(.citation) {
+    font-family: "Noto Naskh Arabic", serif;
+    color: var(--book-citation);
+    font-size: 0.85em;
+  }
+  /* Hadith/narration is Urdu here → keep Nastaliq (inherit), just recolor. */
+  .book-matn :global(.hadith) {
+    color: var(--book-hadith);
+  }
+</style>
