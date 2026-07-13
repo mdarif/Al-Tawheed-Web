@@ -28,6 +28,9 @@ const ui = {
   keyVerse: "آیت",
   keyHadith: "حدیث",
   keyCitation: "حوالہ",
+  textSize: "حروف کا سائز",
+  decreaseText: "حروف چھوٹے کریں",
+  increaseText: "حروف بڑے کریں",
   getApp: "ایپ حاصل کریں",
   continueOnApp: "مفت ایپ میں بھی",
   offlineFeatures: "آف لائن ڈاؤن لوڈ · مکمل کتاب · آڈیو دروس",
@@ -45,19 +48,21 @@ const idx = sorted.findIndex((c) => c.id === chapterId);
 const chapter = sorted[idx];
 const prev = sorted[idx - 1];
 const next = sorted[idx + 1];
-// "کتاب التوحید" (number 0) is the opening, not a numbered bab; babs count from 1.
-const babCount = sorted.filter((c) => c.number > 0).length;
+// Chapters are numbered sequentially from the first entry (کتاب التوحید = 1),
+// matching the Arabic reader.
+const position = idx + 1;
+const total = sorted.length;
 
 // Urdu numerals everywhere (matches the mobile reader for the Urdu book).
 const bodyHtml = bookChapterHtml(toUrduDigits(chapter.text));
 const isOpening = chapter.number === 0;
-const label = isOpening
-  ? chapter.title
-  : `${ui.chapter} ${toUrduDigits(String(chapter.number))}: ${chapter.title}`;
+const ogTitle = isOpening
+  ? "کتاب التوحید — مکمل اردو متن"
+  : `${chapter.title} — کتاب التوحید (اردو)`;
 ---
 
 <Layout
-  title={`${label} — کتاب التوحید (اردو)`}
+  title={ogTitle}
   description={`${chapter.title} — کتاب التوحید کا اردو ترجمہ و شرح۔`}
   {appConfig}
   ogImage={coverUrl}
@@ -68,6 +73,16 @@ const label = isOpening
 >
   <!-- Sample content pending scholarly proof — keep it out of the index. -->
   <meta name="robots" content="noindex, nofollow" slot="head" />
+  <!-- Apply the saved matn font size before first paint (shared with the Arabic
+       reader): 14–32px, default 20. -->
+  <script is:inline slot="head">
+    (function () {
+      var s = parseInt(localStorage.getItem("tawheed:bookFontSize") || "20", 10);
+      if (isNaN(s)) s = 20;
+      s = Math.max(14, Math.min(32, s));
+      document.documentElement.style.setProperty("--matn-font", s + "px");
+    })();
+  </script>
 
   <article
     class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0 font-urdu"
@@ -86,29 +101,56 @@ const label = isOpening
     <!-- Title -->
     <div class="mb-5">
       <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2" dir="ltr">
-        {isOpening
-          ? `${ui.preamble} · کتاب التوحید`
-          : `${ui.chapter} ${toUrduDigits(String(chapter.number))} / ${toUrduDigits(String(babCount))}`}
+        {ui.chapter} {toUrduDigits(String(position))} / {toUrduDigits(String(total))}
       </p>
       <h1 class="text-xl sm:text-2xl md:text-3xl font-bold leading-loose text-balance">
         {chapter.title}
       </h1>
     </div>
 
-    <!-- Color-key legend -->
-    <div class="flex flex-wrap gap-x-5 gap-y-1 text-xs text-fg-3 mb-6 pb-4 border-b border-[var(--divider)]">
-      <span class="inline-flex items-center gap-1.5">
-        <span class="w-2.5 h-2.5 rounded-full" style="background: var(--book-verse)"></span>
-        {ui.keyVerse}
-      </span>
-      <span class="inline-flex items-center gap-1.5">
-        <span class="w-2.5 h-2.5 rounded-full" style="background: var(--book-hadith)"></span>
-        {ui.keyHadith}
-      </span>
-      <span class="inline-flex items-center gap-1.5">
-        <span class="w-2.5 h-2.5 rounded-full" style="background: var(--book-citation)"></span>
-        {ui.keyCitation}
-      </span>
+    <!-- Color-key legend + font-size control -->
+    <div class="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-[var(--divider)]">
+      <div class="flex flex-wrap gap-x-5 gap-y-1 text-xs text-fg-3">
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full" style="background: var(--book-verse)"></span>
+          {ui.keyVerse}
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full" style="background: var(--book-hadith)"></span>
+          {ui.keyHadith}
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full" style="background: var(--book-citation)"></span>
+          {ui.keyCitation}
+        </span>
+      </div>
+      <div
+        class="flex items-center gap-1.5 shrink-0"
+        dir="ltr"
+        role="group"
+        aria-label={ui.textSize}
+      >
+        <button
+          id="font-dec"
+          type="button"
+          aria-label={ui.decreaseText}
+          title={ui.decreaseText}
+          class="inline-flex items-center gap-0.5 h-9 px-2.5 rounded-lg border border-[var(--divider)] text-fg-2 hover:text-fg hover:border-[var(--divider-md)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <span class="text-xs font-bold" aria-hidden="true">A</span>
+          <span class="text-sm leading-none" aria-hidden="true">−</span>
+        </button>
+        <button
+          id="font-inc"
+          type="button"
+          aria-label={ui.increaseText}
+          title={ui.increaseText}
+          class="inline-flex items-center gap-0.5 h-9 px-2.5 rounded-lg border border-[var(--divider)] text-fg-2 hover:text-fg hover:border-[var(--divider-md)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <span class="text-base font-bold" aria-hidden="true">A</span>
+          <span class="text-sm leading-none" aria-hidden="true">+</span>
+        </button>
+      </div>
     </div>
 
     <!-- Matn -->
@@ -163,13 +205,13 @@ const label = isOpening
       </h2>
       <div class="space-y-1.5">
         {
-          sorted.map((c) => (
+          sorted.map((c, i) => (
             <a
               href={`/urdu/book/${c.id}/`}
               class={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-all ${c.id === chapter.id ? "bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C]" : "hover:bg-surface-hover text-fg-2"}`}
             >
               <span class="text-xs font-bold shrink-0 w-6 text-left" dir="ltr">
-                {c.number === 0 ? "—" : toUrduDigits(String(c.number).padStart(2, "0"))}
+                {toUrduDigits(String(i + 1).padStart(2, "0"))}
               </span>
               <span class="block min-w-0 truncate leading-loose">{c.title}</span>
             </a>
@@ -177,6 +219,30 @@ const label = isOpening
         }
       </div>
     </div>
+
+    <script is:inline>
+      (function () {
+        var MIN = 14, MAX = 32, STEP = 2, KEY = "tawheed:bookFontSize";
+        var root = document.documentElement;
+        var dec = document.getElementById("font-dec");
+        var inc = document.getElementById("font-inc");
+        if (!dec || !inc) return;
+        function current() {
+          var s = parseInt(localStorage.getItem(KEY) || "20", 10);
+          if (isNaN(s)) s = 20;
+          return Math.max(MIN, Math.min(MAX, s));
+        }
+        function apply(size) {
+          root.style.setProperty("--matn-font", size + "px");
+          localStorage.setItem(KEY, String(size));
+          dec.disabled = size <= MIN;
+          inc.disabled = size >= MAX;
+        }
+        apply(current());
+        dec.addEventListener("click", function () { apply(Math.max(MIN, current() - STEP)); });
+        inc.addEventListener("click", function () { apply(Math.min(MAX, current() + STEP)); });
+      })();
+    </script>
   </article>
 </Layout>
 
@@ -186,7 +252,7 @@ const label = isOpening
     line-height: 2.4;
   }
   .book-matn {
-    font-size: 1.2rem;
+    font-size: var(--matn-font, 20px);
     line-height: 2.6;
   }
   .book-matn :global(p) {

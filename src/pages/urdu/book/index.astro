@@ -29,7 +29,8 @@ const [{ book, chapters }, appConfig] = await Promise.all([
 const storeUrl = playStoreUrl(appConfig);
 const coverUrl = bookCoverOgUrl();
 const sorted = chapters.slice().sort((a, b) => a.number - b.number);
-const babs = sorted.filter((c) => c.number > 0);
+// Chapters numbered sequentially from the first entry (کتاب التوحید = 1).
+const chapterCount = sorted.length;
 ---
 
 <Layout
@@ -69,7 +70,7 @@ const babs = sorted.filter((c) => c.number > 0);
       </h1>
       <p class="text-fg-2 text-sm mb-1">{book.author}</p>
       <p class="text-fg-3 text-xs">
-        {toUrduDigits(String(babs.length))} {ui.chapters}
+        {toUrduDigits(String(chapterCount))} {ui.chapters}
       </p>
 
       <p class="text-fg-2 text-sm leading-loose mt-4">{ui.intro}</p>
@@ -108,12 +109,12 @@ const babs = sorted.filter((c) => c.number > 0);
       <h2 class="text-sm font-bold text-fg-2 uppercase tracking-widest">
         {ui.chapters}
       </h2>
-      <span class="text-xs text-fg-3">{toUrduDigits(String(babs.length))}</span>
+      <span class="text-xs text-fg-3">{toUrduDigits(String(chapterCount))}</span>
     </div>
 
     <div class="space-y-1.5">
       {
-        sorted.map((c) => (
+        sorted.map((c, i) => (
           <a
             href={`/urdu/book/${c.id}/`}
             class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm hover:bg-surface-hover transition-all border border-transparent hover:border-[#C9A84C]/20"
@@ -122,7 +123,7 @@ const babs = sorted.filter((c) => c.number > 0);
               class="text-[#C9A84C] text-xs font-bold shrink-0 w-8 text-left"
               dir="ltr"
             >
-              {c.number === 0 ? "—" : toUrduDigits(String(c.number).padStart(2, "0"))}
+              {toUrduDigits(String(i + 1).padStart(2, "0"))}
             </span>
             <span class="block min-w-0 text-fg leading-loose">{c.title}</span>
           </a>

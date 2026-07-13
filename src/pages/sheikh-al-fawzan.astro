@@ -1,0 +1,246 @@
+---
+import Layout from "../layouts/Layout.astro";
+import FaqSection from "../components/FaqSection.astro";
+import { getArabicCatalog, getAppConfig, ar, SITE_URL } from "../lib/catalog";
+
+const [catalog, appConfig] = await Promise.all([
+  getArabicCatalog(),
+  getAppConfig(),
+]);
+const arabicCount = catalog.book.lectureCount;
+const arabicHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
+const speakerAr = ar(catalog.book.speaker) || "الشيخ صالح الفوزان";
+
+// Quick-facts strip — scannable, and good for SEO featured snippets.
+const facts = [
+  { label: "Office", value: "Grand Mufti of Saudi Arabia (since 2025)" },
+  { label: "Born", value: "1354 AH (c. 1935 CE), al-Qassim, Saudi Arabia" },
+  { label: "Also", value: "Council of Senior Scholars; Permanent Committee for Ifta" },
+  { label: "On this site", value: `Arabic explanation of Kitab at-Tawheed — ${arabicCount} duroos` },
+];
+
+const teachers = [
+  "Shaikh Abdul-Aziz ibn Baz",
+  "Shaikh Abdullah ibn Humaid",
+  "Shaikh Muhammad al-Amin ash-Shinqiti",
+  "Shaikh Abdur-Razzaq al-Afifi",
+  "Shaikh Hamud ibn Sulayman at-Talal",
+];
+
+const works = [
+  "I‘anat al-Mustafid bi-Sharh Kitab at-Tawheed (2 vols.)",
+  "al-Mulakhkhas al-Fiqhi (2 vols.)",
+  "Sharh al-Aqidah al-Wasitiyyah",
+  "al-Irshad ila Sahih al-I‘tiqad",
+  "Ahkam al-At‘imah fish-Shari‘ah al-Islamiyyah (doctoral thesis)",
+  "Majmu‘ Fatawa fil-Aqidah wal-Fiqh (multi-volume)",
+];
+
+const faq = [
+  {
+    question: "Who is Shaikh Salih al-Fawzan?",
+    answer:
+      "Shaikh Salih ibn Fawzan ibn Abdullah al-Fawzan Hafizahullah is a senior Saudi scholar and, since 2025, the Grand Mufti of Saudi Arabia. He is a member of the Council of Senior Scholars and the Permanent Committee for Scholarly Research and Ifta, and one of the best-known contemporary teachers of aqeedah (Islamic creed) and fiqh, grounded in the Quran and Sunnah.",
+  },
+  {
+    question: "Is Shaikh Salih al-Fawzan the Grand Mufti of Saudi Arabia?",
+    answer:
+      "Yes. On 22 October 2025, King Salman appointed him the fourth Grand Mufti of Saudi Arabia, succeeding the late Shaikh Abdulaziz Al ash-Sheikh. He continues to serve on the Council of Senior Scholars and the Permanent Committee for Ifta.",
+  },
+  {
+    question: "Where and when was Shaikh al-Fawzan born?",
+    answer:
+      "He was born in 1354 AH (around 1935 CE) in ash-Shamasiyyah in the al-Qassim region of Saudi Arabia, and was raised after his father died in his childhood.",
+  },
+  {
+    question: "Who were Shaikh al-Fawzan's teachers?",
+    answer:
+      "He studied under leading scholars including Shaikh Abdul-Aziz ibn Baz, Shaikh Abdullah ibn Humaid, Shaikh Muhammad al-Amin ash-Shinqiti, and Shaikh Abdur-Razzaq al-Afifi.",
+  },
+  {
+    question: "What are Shaikh al-Fawzan's most famous books?",
+    answer:
+      "Among his well-known works are I‘anat al-Mustafid (his explanation of Kitab at-Tawheed), al-Mulakhkhas al-Fiqhi, Sharh al-Aqidah al-Wasitiyyah, al-Irshad ila Sahih al-I‘tiqad, and his multi-volume collections of fatawa.",
+  },
+  {
+    question: "Where can I listen to Shaikh al-Fawzan's explanation of Kitab at-Tawheed?",
+    answer: `Free on this website: his complete Arabic explanation runs to ${arabicCount} audio duroos, and you can also read the full Arabic text of the book. Both stream free, and the Android app adds offline listening and Study Mode.`,
+  },
+];
+
+const jsonLdPerson = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Shaikh Salih al-Fawzan",
+  alternateName: [speakerAr, "Salih ibn Fawzan al-Fawzan", "Saleh Al-Fawzan"],
+  honorificPrefix: "Shaikh",
+  jobTitle: "Grand Mufti of Saudi Arabia",
+  hasOccupation: {
+    "@type": "Role",
+    roleName: "Grand Mufti of Saudi Arabia",
+    startDate: "2025-10-22",
+  },
+  nationality: "Saudi Arabian",
+  birthDate: "1935",
+  birthPlace: { "@type": "Place", name: "ash-Shamasiyyah, al-Qassim, Saudi Arabia" },
+  description:
+    "Grand Mufti of Saudi Arabia (since 2025); member of the Council of Senior Scholars and the Permanent Committee for Scholarly Research and Ifta; teacher of the Arabic explanation of Kitab at-Tawheed hosted on kitabattawheed.com.",
+  knowsAbout: ["Aqeedah (Islamic creed)", "Fiqh (Islamic jurisprudence)", "Tawheed", "Kitab at-Tawheed"],
+  image: `${SITE_URL}/sheikh-fawzan.png`,
+  url: `${SITE_URL}/sheikh-al-fawzan/`,
+};
+---
+
+<Layout
+  title="Shaikh Salih al-Fawzan — Grand Mufti of Saudi Arabia | Biography & Kitab at-Tawheed Duroos"
+  description={`Biography of Shaikh Salih al-Fawzan Hafizahullah — Grand Mufti of Saudi Arabia (2025): his birth, education, teachers, positions, and famous books, plus his complete Arabic explanation of Kitab at-Tawheed (${arabicCount} duroos) free online.`}
+  appConfig={appConfig}
+  faqItems={faq}
+  ogType="article"
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLdPerson)}
+    slot="head"
+  />
+
+  <article
+    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0"
+    data-pagefind-body
+  >
+    <nav class="text-xs text-fg-3 mb-6">
+      <a href="/" class="hover:text-[#C9A84C]">Home</a> → Shaikh al-Fawzan
+    </nav>
+
+    <div class="flex items-start gap-4 sm:gap-5 mb-6">
+      <img
+        src="/sheikh-fawzan.png"
+        alt="Shaikh Salih al-Fawzan Hafizahullah"
+        width="96"
+        height="96"
+        class="w-16 h-16 sm:w-24 sm:h-24 rounded-full object-cover shrink-0 border-2 border-[#C9A84C]/25"
+        loading="eager"
+      />
+      <div class="min-w-0">
+        <h1 class="text-2xl sm:text-3xl font-bold mb-1">Shaikh Salih al-Fawzan</h1>
+        <p class="text-[#C9A84C] text-lg" dir="rtl" lang="ar">{speakerAr} حفظه الله</p>
+        <p class="text-fg-3 text-sm mt-1">Grand Mufti of Saudi Arabia · Council of Senior Scholars</p>
+      </div>
+    </div>
+
+    <p class="text-fg-2 leading-relaxed mb-5">
+      <strong class="text-fg">Shaikh Salih ibn Fawzan ibn Abdullah al-Fawzan
+        Hafizahullah</strong> is among the most prominent scholars of Saudi Arabia
+      today. In 2025 he was appointed the <strong class="text-fg">Grand Mufti of
+        Saudi Arabia</strong>, and he is a longstanding member of the
+      <strong class="text-fg">Council of Senior Scholars</strong> and the
+      <strong class="text-fg">Permanent Committee for Scholarly Research and
+        Ifta</strong>. He is widely studied for his clear teaching in <em>aqeedah</em>
+      (Islamic creed) and <em>fiqh</em>, always built on evidence from the Quran and
+      authentic Sunnah. This site hosts his complete Arabic explanation of
+      <a href="/kitab-al-tawheed/" class="text-[#C9A84C] hover:underline">Kitab
+        at-Tawheed</a>.
+    </p>
+
+    <!-- Quick facts -->
+    <dl class="grid sm:grid-cols-2 gap-px bg-[var(--divider)] border border-[var(--divider)] rounded-xl overflow-hidden mb-8">
+      {
+        facts.map((f) => (
+          <div class="bg-surface p-4">
+            <dt class="text-[11px] font-bold uppercase tracking-widest text-fg-3 mb-1">
+              {f.label}
+            </dt>
+            <dd class="text-sm text-fg-2 leading-snug">{f.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <h2 class="text-xl font-bold mb-3">Early life & education</h2>
+    <p class="text-fg-2 leading-relaxed mb-3">
+      Shaikh al-Fawzan was born in <strong class="text-fg">1354 AH (around 1935
+        CE)</strong> in ash-Shamasiyyah in the al-Qassim region, of the tribe of
+      ad-Dawasir. Orphaned young, he first learned the Quran and basic literacy from
+      the imam of his town's mosque, Shaikh Hamud ibn Sulayman at-Talal.
+    </p>
+    <p class="text-fg-2 leading-relaxed mb-6">
+      He studied at the Faisaliyyah School in Buraydah, then the Educational
+      Institute in Buraydah (1373–1377 AH), and graduated from the
+      <strong class="text-fg">Faculty of Shari‘ah in Riyadh in 1381 AH</strong>. He
+      went on to earn a <strong class="text-fg">Master's degree and a Doctorate in
+        Islamic jurisprudence (fiqh)</strong> from the same faculty.
+    </p>
+
+    <h2 class="text-xl font-bold mb-3">His teachers</h2>
+    <p class="text-fg-2 leading-relaxed mb-3">
+      He took knowledge from a generation of leading scholars, among them:
+    </p>
+    <ul class="list-disc pl-5 mb-6 space-y-1.5 text-fg-2 marker:text-[#C9A84C]">
+      {teachers.map((t) => <li>{t}</li>)}
+    </ul>
+
+    <h2 class="text-xl font-bold mb-3">Positions & appointments</h2>
+    <ul class="list-disc pl-5 mb-6 space-y-1.5 text-fg-2 marker:text-[#C9A84C]">
+      <li>
+        <strong class="text-fg">Grand Mufti of Saudi Arabia</strong> — appointed by
+        King Salman on 22 October 2025 (the fourth to hold the office), succeeding
+        Shaikh Abdulaziz Al ash-Sheikh
+      </li>
+      <li>Teacher at the Educational Institute and the Faculty of Shari‘ah, Riyadh</li>
+      <li>Director of the Higher Institute of Judiciary (1396 AH)</li>
+      <li>Member of the Council of Senior Scholars (since 1407 AH)</li>
+      <li>Member of the Permanent Committee for Scholarly Research and Ifta</li>
+      <li>Member of the Islamic Fiqh Academy (Muslim World League, Makkah)</li>
+      <li>Imam, khatib, and teacher at Prince Mut‘ib ibn Abdulaziz Mosque, al-Malaz, Riyadh</li>
+      <li>Longtime voice on the radio program <em>Nur ala ad-Darb</em> ("Light upon the Path")</li>
+    </ul>
+
+    <h2 class="text-xl font-bold mb-3">Notable works</h2>
+    <p class="text-fg-2 leading-relaxed mb-3">
+      Shaikh al-Fawzan has authored more than twenty works in creed, jurisprudence,
+      and fatawa. Among the best known:
+    </p>
+    <ul class="list-disc pl-5 mb-3 space-y-1.5 text-fg-2 marker:text-[#C9A84C]">
+      {works.map((w) => <li>{w}</li>)}
+    </ul>
+    <p class="text-fg-3 text-sm leading-relaxed mb-8">
+      His written commentary on Kitab at-Tawheed, <em>I‘anat al-Mustafid</em>, is a
+      companion to the audio explanation you can hear on this site.
+    </p>
+
+    <!-- Funnel: listen / read -->
+    <section class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-5 mb-8">
+      <h2 class="text-lg font-bold text-[#C9A84C] mb-1">
+        Kitab at-Tawheed on this site
+      </h2>
+      <p class="text-sm text-fg-2 mb-4">
+        His complete Arabic sharah — {arabicCount} duroos, over {arabicHours} hours —
+        free, with the full Arabic text of the book alongside it, plus a complete
+        Urdu sharah by Shaikh Abdullah Nasir Rahmani.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href="/arabic/"
+          class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]"
+        >
+          Browse the Arabic series →
+        </a>
+        <a
+          href="/arabic/book/"
+          class="border border-[var(--divider)] text-fg-2 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover"
+        >
+          Read the book (Arabic text)
+        </a>
+        <a
+          href="/lectures/urdu/"
+          class="border border-[var(--divider)] text-fg-2 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover"
+        >
+          Urdu series
+        </a>
+      </div>
+    </section>
+
+    <FaqSection items={faq} />
+  </article>
+</Layout>

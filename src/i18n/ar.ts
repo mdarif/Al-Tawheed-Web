@@ -5,6 +5,7 @@ export const arUI = {
     listenNow: 'استمع الآن',
     totalDuration: 'المدة الإجمالية',
     lessons: 'دروس',
+    aboutShaikh: 'نبذة عن الشيخ',
   },
   player: {
     getApp: 'احصل على التطبيق',

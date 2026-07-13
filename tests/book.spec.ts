@@ -151,12 +151,38 @@ test.describe("Chapter reader — /arabic/book/ch-*", () => {
   });
 });
 
+test.describe("Urdu book sample — /urdu/book/", () => {
+  // A 2-chapter bilingual sample, deliberately kept out of search until the full
+  // text is proofed. These guard the behaviours, not the (still-changing) content.
+  test("hub and chapter render RTL and are noindexed", async ({ page }) => {
+    for (const path of ["/urdu/book/", "/urdu/book/ch-00/"]) {
+      await page.goto(path);
+      const html = page.locator("html");
+      await expect(html).toHaveAttribute("dir", "rtl");
+      await expect(html).toHaveAttribute("lang", "ur");
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+        "content",
+        /noindex/
+      );
+    }
+  });
+
+  test("chapter has the shared font-size control", async ({ page }) => {
+    await page.goto("/urdu/book/ch-00/");
+    await page.locator("#font-inc").click();
+    const size = await page
+      .locator(".book-matn")
+      .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+    expect(size).toBe(22);
+  });
+});
+
 test.describe("Book cross-links", () => {
-  test("header links to the Arabic book", async ({ page }) => {
+  test("book is not a top-level header link (kept in footer + hubs)", async ({ page }) => {
     await page.goto("/");
-    await expect(
-      page.locator("header a[href='/arabic/book/']").first()
-    ).toBeVisible();
+    // Deliberately removed from the header to declutter; discoverable elsewhere.
+    await expect(page.locator("header a[href='/arabic/book/']")).toHaveCount(0);
+    await expect(page.locator("footer a[href='/arabic/book/']")).toHaveCount(1);
   });
 
   test("footer links to the Arabic book", async ({ page }) => {

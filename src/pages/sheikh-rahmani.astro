@@ -1,60 +1,200 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import FaqSection from '../components/FaqSection.astro';
-import { getCatalog, getAppConfig, en } from '../lib/catalog';
+import Layout from "../layouts/Layout.astro";
+import FaqSection from "../components/FaqSection.astro";
+import { getCatalog, getAppConfig, SITE_URL } from "../lib/catalog";
 
 const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const urduCount = catalog.book.lectureCount;
+const urduHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
+
+// Quick-facts strip — scannable, and good for SEO featured snippets.
+const facts = [
+  { label: "Based in", value: "Karachi, Pakistan" },
+  { label: "Role", value: "Ameer (President), Jamiat Ahle Hadith Sindh" },
+  { label: "Founded", value: "Al-Mahad us-Salafi lit-Ta‘leem wat-Tarbiyah (1999)" },
+  { label: "On this site", value: `Complete Urdu sharah of Kitab at-Tawheed — ${urduCount} lectures` },
+];
+
+const teachers = [
+  "Shaikh Abdul-Aziz ibn Baz",
+  "Shaikh Muhammad ibn Salih al-Uthaymeen",
+  "Shaikh Badi-ud-Din Shah ar-Rashidi as-Sindhi",
+];
+
+const works = [
+  "Al-Manhaj al-As‘ad fi Tarteeb Ahadith Musnad al-Imam Ahmad",
+  "Sharh al-Arba‘in an-Nawawiyyah",
+  "Sharh Hadith Jibril",
+  "Khutbaat-e-Rahmani (collected sermons)",
+];
 
 const faq = [
   {
-    question: 'Who is Shaikh Abdullah Nasir Rahmani?',
+    question: "Who is Shaikh Abdullah Nasir Rahmani?",
     answer:
-      'Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah is a respected Indian scholar known for clear Urdu explanations of classical Islamic texts, rooted in Quran and Sunnah.',
+      "Fazilat Professor Shaikh Abdullah Nasir Rahmani Hafizahullah is a Pakistani Ahle Hadith scholar based in Karachi. He is the Ameer (president) of Jamiat Ahle Hadith Sindh and is well known for his clear Urdu teaching of hadith and aqeedah, rooted in the Quran and authentic Sunnah.",
   },
   {
-    question: 'What lectures by Shaikh Rahmani are available here?',
-    answer: `This site hosts his complete sharah of Kitab at-Tawheed — ${catalog.book.lectureCount} Urdu audio lectures in 15 classes, totalling over ${Math.floor(catalog.book.totalDurationSeconds / 3600)} hours.`,
+    question: "Where is Shaikh Rahmani from?",
+    answer:
+      "He is from Karachi, Pakistan. He completed his Islamic studies (the Dars-e-Nizami) in Karachi and then studied hadith at Imam Muhammad ibn Saud Islamic University in Riyadh.",
+  },
+  {
+    question: "What lectures by Shaikh Rahmani are available here?",
+    answer: `This site hosts his complete sharah of Kitab at-Tawheed — ${urduCount} Urdu audio lectures in 15 classes, totalling over ${urduHours} hours.`,
   },
   {
     question: "Are Shaikh Rahmani's lectures free?",
     answer:
-      'Yes. All lectures stream free on this website. The Android app adds offline downloads, progress tracking, and Study Mode — also free, with no ads.',
+      "Yes. All lectures stream free on this website. The Android app adds offline downloads, progress tracking, and Study Mode — also free, with no ads.",
   },
   {
-    question: 'In which language are the lectures?',
+    question: "In which language are the lectures?",
     answer:
-      'The audio is in Urdu. The website shows English titles; the app has a native Arabic & Urdu interface and also carries the Arabic series by Shaikh Salih al-Fawzan.',
+      "The audio is in Urdu. This site also carries the full Arabic text (matn) of Kitab at-Tawheed and an Arabic explanation by Shaikh Salih al-Fawzan.",
   },
 ];
+
+const jsonLdPerson = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Shaikh Abdullah Nasir Rahmani",
+  alternateName: "عبد الله ناصر الرحماني",
+  honorificPrefix: "Shaikh",
+  jobTitle: "Islamic scholar",
+  nationality: "Pakistani",
+  homeLocation: { "@type": "Place", name: "Karachi, Pakistan" },
+  alumniOf: { "@type": "CollegeOrUniversity", name: "Imam Muhammad ibn Saud Islamic University" },
+  affiliation: { "@type": "Organization", name: "Jamiat Ahle Hadith Sindh" },
+  knowsAbout: ["Hadith", "Usul al-Hadith", "Aqeedah (Islamic creed)", "Kitab at-Tawheed"],
+  description:
+    "Pakistani Ahle Hadith scholar based in Karachi; Ameer of Jamiat Ahle Hadith Sindh; teacher of the complete Urdu sharah of Kitab at-Tawheed on kitabattawheed.com.",
+  image: `${SITE_URL}/sheikh-abdullah-nasir-rahmani.jpg`,
+  url: `${SITE_URL}/sheikh-rahmani/`,
+};
 ---
 
 <Layout
-  title="Shaikh Abdullah Nasir Rahmani — Kitab at-Tawheed Lectures"
-  description={`Listen to free Urdu lectures by Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah — complete sharah of Kitab at-Tawheed, ${catalog.book.lectureCount} parts online.`}
+  title="Shaikh Abdullah Nasir Rahmani — Biography & Free Kitab at-Tawheed Urdu Sharah"
+  description={`Biography of Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah — Pakistani Ahle Hadith scholar and Ameer of Jamiat Ahle Hadith Sindh — plus his complete Urdu sharah of Kitab at-Tawheed (${urduCount} lectures) free online.`}
   appConfig={appConfig}
   faqItems={faq}
+  ogType="article"
 >
-  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLdPerson)}
+    slot="head"
+  />
+
+  <article
+    class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0"
+    data-pagefind-body
+  >
     <nav class="text-xs text-fg-3 mb-6">
       <a href="/" class="hover:text-[#C9A84C]">Home</a> → Shaikh Rahmani
     </nav>
 
-    <h1 class="text-3xl font-bold mb-4">Fazilat Shaikh Abdullah Nasir Rahmani</h1>
-    <p class="text-[#C9A84C] text-lg mb-6" dir="rtl" lang="ur">فضیلت شیخ عبداللہ ناصر رحمانی حفظہ اللہ</p>
+    <div class="flex items-start gap-4 sm:gap-5 mb-6">
+      <img
+        src="/sheikh-abdullah-nasir-rahmani.jpg"
+        alt="Fazilat Shaikh Abdullah Nasir Rahmani Hafizahullah"
+        width="96"
+        height="96"
+        class="w-16 h-16 sm:w-24 sm:h-24 rounded-full object-cover shrink-0 border-2 border-[#C9A84C]/25"
+        loading="eager"
+      />
+      <div class="min-w-0">
+        <h1 class="text-2xl sm:text-3xl font-bold mb-1">Fazilat Shaikh Abdullah Nasir Rahmani</h1>
+        <p class="text-[#C9A84C] text-lg" dir="rtl" lang="ur">فضیلت شیخ عبداللہ ناصر رحمانی حفظہ اللہ</p>
+        <p class="text-fg-3 text-sm mt-1">Ahle Hadith scholar · Ameer, Jamiat Ahle Hadith Sindh</p>
+      </div>
+    </div>
 
-    <p class="text-fg-2 leading-relaxed mb-4">
-      <strong class="text-fg">Shaikh Abdullah Nasir Rahmani Hafizahullah</strong> is a scholar based in India whose accessible Urdu teaching has benefited students across South Asia and beyond. His method emphasises evidence from the Quran and authentic Sunnah rather than opinion without proof.
-    </p>
-    <p class="text-fg-2 leading-relaxed mb-4">
-      On <strong class="text-fg">kitabattawheed.com</strong> you can hear his complete explanation of <a href="/kitab-al-tawheed/" class="text-[#C9A84C] hover:underline">Kitab at-Tawheed</a> — {en(catalog.book.title)} — organised into 15 classes with {catalog.book.lectureCount} parts.
+    <p class="text-fg-2 leading-relaxed mb-5">
+      <strong class="text-fg">Fazilat Professor Shaikh Abdullah Nasir Rahmani
+        Hafizahullah</strong> is a Pakistani Ahle Hadith scholar based in
+      <strong class="text-fg">Karachi</strong>. He is the <strong class="text-fg"
+        >Ameer (president) of Jamiat Ahle Hadith Sindh</strong> and the founder of
+      the Al-Mahad us-Salafi teaching institute. His accessible Urdu teaching of
+      hadith and <em>aqeedah</em> has benefited students across South Asia and
+      beyond, always built on evidence from the Quran and authentic Sunnah. This
+      site hosts his complete explanation of <a
+        href="/kitab-al-tawheed/"
+        class="text-[#C9A84C] hover:underline">Kitab at-Tawheed</a>.
     </p>
 
-    <section class="bg-surface border border-[var(--divider)] rounded-xl p-5 mb-8">
-      <h2 class="text-lg font-bold text-[#C9A84C] mb-2">Start listening</h2>
-      <p class="text-sm text-fg-2 mb-4">Class 01 is the recommended starting point for new listeners.</p>
-      <a href="/lectures/class-01/" class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">
-        Class 01 →
-      </a>
+    <!-- Quick facts -->
+    <dl class="grid sm:grid-cols-2 gap-px bg-[var(--divider)] border border-[var(--divider)] rounded-xl overflow-hidden mb-8">
+      {
+        facts.map((f) => (
+          <div class="bg-surface p-4">
+            <dt class="text-[11px] font-bold uppercase tracking-widest text-fg-3 mb-1">
+              {f.label}
+            </dt>
+            <dd class="text-sm text-fg-2 leading-snug">{f.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <h2 class="text-xl font-bold mb-3">Education</h2>
+    <p class="text-fg-2 leading-relaxed mb-6">
+      Shaikh Rahmani was raised in Karachi, where he completed the traditional
+      <strong class="text-fg">Dars-e-Nizami</strong> curriculum. He then travelled
+      to Saudi Arabia and studied hadith and its sciences at the
+      <strong class="text-fg">Imam Muhammad ibn Saud Islamic University</strong> in
+      Riyadh, and received <em>ijazah</em> (licences to narrate) from a number of
+      senior scholars.
+    </p>
+
+    <h2 class="text-xl font-bold mb-3">His teachers</h2>
+    <p class="text-fg-2 leading-relaxed mb-3">Among the scholars he studied with or took ijazah from:</p>
+    <ul class="list-disc pl-5 mb-6 space-y-1.5 text-fg-2 marker:text-[#C9A84C]">
+      {teachers.map((t) => <li>{t}</li>)}
+    </ul>
+
+    <h2 class="text-xl font-bold mb-3">Positions & work</h2>
+    <ul class="list-disc pl-5 mb-6 space-y-1.5 text-fg-2 marker:text-[#C9A84C]">
+      <li><strong class="text-fg">Ameer (president) of Jamiat Ahle Hadith Sindh</strong></li>
+      <li>Founder of Al-Mahad us-Salafi lit-Ta‘leem wat-Tarbiyah, Karachi (established 1999)</li>
+      <li>Teacher of hadith, the sciences of hadith (usul al-hadith), and aqeedah</li>
+      <li>Khatib and lecturer at mosques in Karachi</li>
+    </ul>
+
+    <h2 class="text-xl font-bold mb-3">Notable works</h2>
+    <ul class="list-disc pl-5 mb-8 space-y-1.5 text-fg-2 marker:text-[#C9A84C]">
+      {works.map((w) => <li>{w}</li>)}
+    </ul>
+
+    <section class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-5 mb-8">
+      <h2 class="text-lg font-bold text-[#C9A84C] mb-1">Kitab at-Tawheed on this site</h2>
+      <p class="text-sm text-fg-2 mb-4">
+        Hear the Shaikh's complete Urdu sharah — Class 01 is the recommended
+        starting point — read the full Arabic text of the book, or explore the
+        Arabic series by Shaikh Salih al-Fawzan.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href="/lectures/urdu/"
+          class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]"
+        >
+          Browse the Urdu series →
+        </a>
+        <a
+          href="/arabic/book/"
+          class="border border-[var(--divider)] text-fg-2 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover"
+        >
+          Read the book (Arabic text)
+        </a>
+        <a
+          href="/arabic/"
+          class="border border-[var(--divider)] text-fg-2 font-semibold px-5 py-2.5 rounded-lg text-sm hover:bg-surface-hover"
+        >
+          Arabic series
+        </a>
+      </div>
     </section>
 
     <FaqSection items={faq} />
