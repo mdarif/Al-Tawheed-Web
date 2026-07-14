@@ -6,6 +6,7 @@ import {
   playStoreUrl,
   bookCoverOgUrl,
   toUrduDigits,
+  SITE_URL,
 } from "../../../lib/catalog";
 
 // Standalone Urdu labels for the book pages (mirrors arUI.book, in Urdu).
@@ -18,8 +19,6 @@ const ui = {
   getApp: "ایپ حاصل کریں",
   intro:
     "کتاب التوحید کا مکمل اردو ترجمہ و شرح، باب بہ باب۔ قرآنی آیات عربی متن میں اور ترجمہ و مسائل اردو میں — بعینہٖ اردو مطبوعہ نسخے کے مطابق۔",
-  sampleNote:
-    "نوٹ: فی الحال صرف ابتدائی دو ابواب دستیاب ہیں (نمونہ برائے پروف ریڈنگ)۔",
 };
 
 const [{ book, chapters }, appConfig] = await Promise.all([
@@ -31,6 +30,28 @@ const coverUrl = bookCoverOgUrl();
 const sorted = chapters.slice().sort((a, b) => a.number - b.number);
 // Chapters numbered sequentially from the first entry (کتاب التوحید = 1).
 const chapterCount = sorted.length;
+
+// Book structured data, mirroring the Arabic hub, so the complete Urdu edition
+// is eligible for rich results. inLanguage "ur"; each chapter is a hasPart.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Book",
+  name: book.title,
+  alternateName: "Kitab at-Tawheed (Urdu)",
+  author: { "@type": "Person", name: book.author },
+  inLanguage: "ur",
+  url: `${SITE_URL}/urdu/book/`,
+  image: coverUrl,
+  numberOfPages: chapterCount,
+  about: "Islamic monotheism (Tawheed)",
+  publisher: { "@type": "Organization", name: "Al Marfa Duroos" },
+  hasPart: sorted.map((c, i) => ({
+    "@type": "Chapter",
+    name: c.title,
+    position: i + 1,
+    url: `${SITE_URL}/urdu/book/${c.id}/`,
+  })),
+};
 ---
 
 <Layout
@@ -42,13 +63,18 @@ const chapterCount = sorted.length;
   lang="ur"
   dir="rtl"
 >
-  <!-- Sample content pending scholarly proof — keep it out of the index. -->
-  <meta name="robots" content="noindex, nofollow" slot="head" />
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+    slot="head"
+  />
 
   <div
     class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-12 font-urdu"
     dir="rtl"
     lang="ur"
+    data-pagefind-body
   >
     <!-- Breadcrumb -->
     <nav class="text-xs text-fg-3 mb-6" aria-label="Breadcrumb">
@@ -74,11 +100,6 @@ const chapterCount = sorted.length;
       </p>
 
       <p class="text-fg-2 text-sm leading-loose mt-4">{ui.intro}</p>
-      <p
-        class="text-[#C9A84C] text-xs leading-loose mt-3 bg-surface-gold border border-[#C9A84C]/25 rounded-lg px-3 py-2"
-      >
-        {ui.sampleNote}
-      </p>
 
       <div class="mt-5 flex flex-wrap gap-3">
         <a

@@ -66,6 +66,13 @@ test.describe("Homepage", () => {
     await expect(page.locator('text=Requires internet')).toHaveCount(0);
   });
 
+  test("Read the Book section links to both readers", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("h2", { hasText: "Read the Book" })).toBeVisible();
+    await expect(page.locator("main a[href='/arabic/book/']").first()).toBeVisible();
+    await expect(page.locator("main a[href='/urdu/book/']").first()).toBeVisible();
+  });
+
   test("ContinueListening card is hidden on fresh visit", async ({ page }) => {
     await page.goto("/");
     // No localStorage playback data → card must be hidden

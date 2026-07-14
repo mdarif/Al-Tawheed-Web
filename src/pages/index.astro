@@ -5,12 +5,25 @@ import DailyBenefitCard from "../components/DailyBenefitCard.astro";
 import HeroStats from "../components/HeroStats.astro";
 import AlQuranPromo from "../components/AlQuranPromo.astro";
 import AppDownloadBadge from "../components/AppDownloadBadge.astro";
-import { getCatalog, getArabicCatalog, getAppConfig, en, playStoreUrl } from "../lib/catalog";
+import { getCatalog, getArabicCatalog, getArabicBook, getUrduBook, getAppConfig, en, playStoreUrl, bookChapterHtml, toUrduDigits } from "../lib/catalog";
 
 const [catalog, arabicCatalog, appConfig] = await Promise.all([getCatalog(), getArabicCatalog(), getAppConfig()]);
 const storeUrl = playStoreUrl(appConfig);
 const totalHours = Math.floor(catalog.book.totalDurationSeconds / 3600);
 const arabicCount = arabicCatalog.book.lectureCount;
+
+const arabicBook = getArabicBook();
+const urduBook = getUrduBook();
+const arabicBookChapters = arabicBook.chapters.length;
+const urduBookChapters = urduBook.chapters.length;
+
+// A short peek at the opening matn, rendered in the reader's own style (green
+// āyah, cyan citation) so each card previews the real reading experience — the
+// Arabic card shows the bare matn, the Urdu card the same āyah + its rendering.
+const firstLines = (text: string, n: number) =>
+  text.split("\n").map((l) => l.trim()).filter(Boolean).slice(0, n).join("\n");
+const arabicPeek = bookChapterHtml(firstLines(arabicBook.chapters[0].text, 2));
+const urduPeek = bookChapterHtml(toUrduDigits(firstLines(urduBook.chapters[0].text, 3)));
 ---
 
 <Layout
@@ -89,7 +102,7 @@ const arabicCount = arabicCatalog.book.lectureCount;
           { icon: "📊", label: "Progress Tracking" },
           { icon: "📚", label: "Study Mode" },
           { icon: "🌐", label: "Arabic & Urdu UI" },
-          { icon: "📖", label: "In-App Book" },
+          { icon: "🔄", label: "Cross-Device Progress" },
         ].map(({ icon, label }) => (
           <div class="flex items-center gap-2.5 bg-surface border border-[var(--divider)] rounded-xl px-3 py-2.5 hover:border-[#C9A84C]/40 transition-colors">
             <span class="text-lg leading-none">{icon}</span>
@@ -140,6 +153,106 @@ const arabicCount = arabicCatalog.book.lectureCount;
         Browse the Arabic series →
       </span>
     </a>
+  </section>
+
+  <!-- Read the Book -->
+  <section class="mx-auto max-w-5xl px-4 sm:px-6 py-6 sm:py-8">
+    <div class="text-center mb-8">
+      <p
+        class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2"
+      >
+        Read Online
+      </p>
+      <h2 class="text-2xl sm:text-3xl font-bold mb-3">Read the Book</h2>
+      <p class="text-fg-2 text-sm sm:text-base max-w-md mx-auto">
+        Prefer reading to listening? The full matn is free online — in
+        Arabic, and in Urdu translation.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+      <!-- Arabic: the reference matn, complete -->
+      <a
+        href="/arabic/book/"
+        class="book-card group flex flex-col bg-surface border border-[var(--divider)] rounded-2xl overflow-hidden hover:border-[#C9A84C]/50 transition-colors"
+      >
+        <div class="flex items-baseline justify-between px-6 pt-5">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-fg-3">
+            Arabic · Full Text
+          </p>
+          <p class="text-[11px] font-semibold text-[#C9A84C] whitespace-nowrap">
+            {arabicBookChapters} chapters
+          </p>
+        </div>
+
+        <p
+          class="text-4xl sm:text-[2.75rem] font-bold text-fg leading-none text-center mt-4 mb-5"
+          dir="rtl"
+          lang="ar"
+          style="font-family:'Noto Naskh Arabic',system-ui,sans-serif"
+        >
+          كتاب التوحيد
+        </p>
+
+        <!-- Peek at the opening matn, in the reader's own style -->
+        <div class="book-peek relative flex-1 px-6" aria-hidden="true">
+          <div
+            class="book-peek-text text-sm leading-loose text-fg-2"
+            dir="rtl"
+            lang="ar"
+            style="font-family:'Noto Naskh Arabic',system-ui,sans-serif"
+            set:html={arabicPeek}
+          />
+        </div>
+
+        <div class="px-6 pb-5 pt-3">
+          <span class="text-sm font-semibold text-[#C9A84C] group-hover:underline">
+            Read the full matn →
+          </span>
+        </div>
+      </a>
+
+      <!-- Urdu: the bilingual translation -->
+      <a
+        href="/urdu/book/"
+        class="book-card group relative flex flex-col bg-surface-gold border border-[#C9A84C]/30 rounded-2xl overflow-hidden hover:border-[#C9A84C]/70 transition-colors"
+      >
+        <div class="flex items-baseline justify-between px-6 pt-5">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-fg-3">
+            Urdu · Translation
+          </p>
+          <p class="text-[11px] font-semibold text-[#C9A84C] whitespace-nowrap">
+            {urduBookChapters} chapters
+          </p>
+        </div>
+
+        <p
+          class="text-4xl sm:text-[2.75rem] font-bold text-fg leading-none text-center mt-4 mb-5"
+          dir="rtl"
+          lang="ur"
+          style="font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',serif"
+        >
+          کتاب التوحید
+        </p>
+
+        <!-- Peek: same āyah, now with its Urdu rendering -->
+        <div class="book-peek relative flex-1 px-6" aria-hidden="true">
+          <div
+            class="book-peek-text text-sm leading-loose text-fg-2"
+            dir="rtl"
+            lang="ur"
+            style="font-family:'Noto Nastaliq Urdu','Noto Naskh Arabic',serif"
+            set:html={urduPeek}
+          />
+        </div>
+
+        <div class="px-6 pb-5 pt-3">
+          <span class="text-sm font-semibold text-[#C9A84C] group-hover:underline">
+            Read the translation →
+          </span>
+        </div>
+      </a>
+    </div>
   </section>
 
   <ContinueListening />
@@ -314,6 +427,7 @@ const arabicCount = arabicCatalog.book.lectureCount;
           <li>✓ Lock-screen & background controls</li>
           <li>✓ Resume where you left off</li>
           <li>✓ Adjustable speed (0.75×–2×)</li>
+          <li>✓ Read the full book (Arabic + Urdu)</li>
         </ul>
       </div>
       <div
@@ -328,7 +442,7 @@ const arabicCount = arabicCatalog.book.lectureCount;
           <li>✓ <strong>Everything on the web, plus:</strong></li>
           <li>✓ <strong>True offline downloads</strong></li>
           <li>✓ <strong>Study Mode (Urdu series)</strong></li>
-          <li>✓ <strong>In-app Book (full Arabic text)</strong></li>
+          <li>✓ <strong>Offline book (read without data)</strong></li>
           <li>✓ <strong>Cross-device progress</strong></li>
           <li>✓ <strong>Native Arabic & Urdu UI</strong></li>
         </ul>
@@ -371,6 +485,12 @@ const arabicCount = arabicCatalog.book.lectureCount;
         >.{" "}
         <a href="/arabic/" class="text-[#C9A84C] hover:underline">Browse →</a>
       </li>
+      <li>
+        <strong class="text-fg">Read the book</strong> — the full{" "}
+        <a href="/arabic/book/" class="text-[#C9A84C] hover:underline">Arabic matn ({arabicBookChapters} chapters)</a
+        >, and the{" "}
+        <a href="/urdu/book/" class="text-[#C9A84C] hover:underline">Urdu translation ({urduBookChapters} chapters)</a>.
+      </li>
     </ul>
     <p class="text-fg-2 leading-relaxed mb-3">
       Presented by <a
@@ -388,3 +508,29 @@ const arabicCount = arabicCatalog.book.lectureCount;
 
   <AlQuranPromo />
 </Layout>
+
+<style>
+  /* "Read the Book" peek — a few opening lines of the matn, fading out so the
+     card reads as a window into the reader. Height-capped and masked; the real
+     text lives on the reader pages. */
+  .book-peek {
+    max-height: 5.5rem;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 35%, transparent 100%);
+  }
+  .book-peek-text :global(p) {
+    margin: 0 0 0.4rem;
+  }
+  /* Mirror the reader's token colours so the peek looks like the real page. */
+  .book-peek-text :global(.ayah) {
+    color: var(--book-verse);
+  }
+  .book-peek-text :global(.hadith) {
+    color: var(--book-hadith);
+  }
+  .book-peek-text :global(.citation) {
+    color: var(--book-citation);
+    font-size: 0.85em;
+  }
+</style>

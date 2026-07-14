@@ -274,11 +274,12 @@ export function getArabicBook(): ArabicBook {
 // ── Urdu edition (bilingual) ───────────────────────────────────────────────
 //
 // The Urdu book is the same shape as the Arabic one, but each Qur'anic {āyah}
-// (Arabic) is followed by its Urdu translation, then Urdu sharah/masāʾil. Only
-// a proofed 2-chapter sample exists so far. Synced by `npm run sync:book`.
+// (Arabic) is followed by its Urdu translation, then Urdu sharah/masāʾil. The
+// app's Urdu edition is complete — all 67 chapters, aligned 1:1 with the Arabic
+// matn. Synced by `npm run sync:book`.
 import bookUrData from '../data/book_tawheed-ur.json';
 
-/** The bundled bilingual Urdu edition (currently ch-00 + ch-01, a sample). */
+/** The bundled bilingual Urdu edition (complete — 67 chapters). */
 export function getUrduBook(): ArabicBook {
   return bookUrData as ArabicBook;
 }

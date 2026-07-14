@@ -10,7 +10,7 @@
 // Two books are synced:
 //   • book_tawheed-ar.json  — the Arabic matn (67 chapters)
 //   • book_tawheed-ur.json  — the bilingual Urdu edition (Arabic āyah + Urdu),
-//     currently a proofed 2-chapter sample; the rest is pending.
+//     complete at all 67 chapters, aligned 1:1 with the Arabic matn.
 //
 // Same spirit as syncing "What's New" with mobile releases — run it whenever the
 // app updates the matn, then eyeball a chapter against the app and re-run tests.
@@ -41,6 +41,18 @@ function structureMasail(chapter) {
   };
 }
 
+// Normalize chapter ids/numbers to a stable 0-based scheme (ch-00, ch-01, …),
+// in reading order, regardless of what base the app uses internally. The web's
+// chapter URLs (/…/book/ch-NN/) are public and indexed, so they must NOT move
+// when the app renumbers its source (e.g. it switched 0-based → 1-based when a
+// chapter was inserted). Reading order comes from the source `number`.
+function normalizeIds(chapters) {
+  return chapters
+    .slice()
+    .sort((a, b) => a.number - b.number)
+    .map((c, i) => ({ ...c, number: i, id: `ch-${String(i).padStart(2, '0')}` }));
+}
+
 // Each book: [source file, whether to structure the masāʾil out of the matn].
 const BOOKS = [
   { file: 'book_tawheed-ar.json', structure: false },
@@ -68,6 +80,7 @@ for (const { file, structure } of BOOKS) {
     process.exit(1);
   }
 
+  data.chapters = normalizeIds(data.chapters);
   if (structure) data.chapters = data.chapters.map(structureMasail);
   writeFileSync(dest, JSON.stringify(data, null, 2) + '\n');
   console.log(`Synced ${count} chapters → src/data/${file}`);

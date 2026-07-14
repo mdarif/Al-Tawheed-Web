@@ -150,19 +150,18 @@ test.describe("Chapter reader — /arabic/book/ch-*", () => {
   });
 });
 
-test.describe("Urdu book sample — /urdu/book/", () => {
-  // A 2-chapter bilingual sample, deliberately kept out of search until the full
-  // text is proofed. These guard the behaviours, not the (still-changing) content.
-  test("hub and chapter render RTL and are noindexed", async ({ page }) => {
+test.describe("Urdu book — /urdu/book/", () => {
+  // The complete bilingual Urdu edition (67 chapters, aligned 1:1 with the
+  // Arabic matn). These guard the behaviours, not the content.
+  test("hub and chapter render RTL and are indexable", async ({ page }) => {
     for (const path of ["/urdu/book/", "/urdu/book/ch-00/"]) {
       await page.goto(path);
       const html = page.locator("html");
       await expect(html).toHaveAttribute("dir", "rtl");
       await expect(html).toHaveAttribute("lang", "ur");
-      await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
-        "content",
-        /noindex/
-      );
+      // Now the matn is complete, the reader is allowed into the index
+      // (no robots noindex, matching the Arabic book).
+      await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
     }
   });
 
@@ -180,6 +179,43 @@ test.describe("Urdu book sample — /urdu/book/", () => {
     // Green Arabic āyah spans, plus the tagged Urdu translation paragraphs.
     expect(await page.locator(".book-matn .ayah").count()).toBeGreaterThan(0);
     expect(await page.locator(".book-matn p.tr").count()).toBeGreaterThan(0);
+  });
+
+  test("chapter has unique canonical + Article and BreadcrumbList JSON-LD", async ({ page }) => {
+    // ch-17 = the al-Qasas:56 chapter added to complete the edition.
+    await page.goto("/urdu/book/ch-17/");
+    const canonical = await page
+      .locator('link[rel="canonical"]')
+      .getAttribute("href");
+    expect(canonical).toMatch(/\/urdu\/book\/ch-17\/$/);
+    const types = (
+      await page.locator('script[type="application/ld+json"]').allTextContents()
+    ).map((s) => {
+      try {
+        return JSON.parse(s)["@type"];
+      } catch {
+        return null;
+      }
+    });
+    expect(types).toContain("Article");
+    expect(types).toContain("BreadcrumbList");
+  });
+
+  test("hub exposes Book JSON-LD covering every chapter", async ({ page }) => {
+    await page.goto("/urdu/book/");
+    const book = (
+      await page.locator('script[type="application/ld+json"]').allTextContents()
+    )
+      .map((s) => {
+        try {
+          return JSON.parse(s);
+        } catch {
+          return null;
+        }
+      })
+      .find((j) => j?.["@type"] === "Book");
+    expect(book).toBeTruthy();
+    expect(book.hasPart.length).toBe(67);
   });
 });
 

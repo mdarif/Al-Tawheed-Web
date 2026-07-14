@@ -8,6 +8,7 @@ import {
   playStoreUrl,
   bookCoverOgUrl,
   toUrduDigits,
+  SITE_URL,
 } from "../../../lib/catalog";
 
 export async function getStaticPaths() {
@@ -38,7 +39,7 @@ const ui = {
 };
 
 const { chapterId } = Astro.props;
-const [{ chapters }, appConfig] = await Promise.all([
+const [{ book, chapters }, appConfig] = await Promise.all([
   Promise.resolve(getUrduBook()),
   getAppConfig(),
 ]);
@@ -68,6 +69,35 @@ const isOpening = chapter.number === 0;
 const ogTitle = isOpening
   ? "کتاب التوحید — مکمل اردو متن"
   : `${chapter.title} — کتاب التوحید (اردو)`;
+const chapterPath = `/urdu/book/${chapter.id}/`;
+
+// Structured data (mirrors the Arabic reader) so the Urdu edition earns rich
+// results too: each chapter is an Article that isPartOf the Book, plus a
+// breadcrumb trail. inLanguage "ur" — the sharah/masāʾil are Urdu.
+const jsonLdArticle = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: chapter.title,
+  inLanguage: "ur",
+  image: coverUrl,
+  author: { "@type": "Person", name: book.author },
+  publisher: { "@type": "Organization", name: "Al Marfa Duroos" },
+  isPartOf: {
+    "@type": "Book",
+    name: book.title,
+    url: `${SITE_URL}/urdu/book/`,
+  },
+};
+
+const jsonLdBreadcrumb = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+    { "@type": "ListItem", position: 2, name: book.title, item: `${SITE_URL}/urdu/book/` },
+    { "@type": "ListItem", position: 3, name: chapter.title, item: `${SITE_URL}${chapterPath}` },
+  ],
+};
 ---
 
 <Layout
@@ -80,13 +110,24 @@ const ogTitle = isOpening
   lang="ur"
   dir="rtl"
 >
-  <!-- Sample content pending scholarly proof — keep it out of the index. -->
-  <meta name="robots" content="noindex, nofollow" slot="head" />
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLdArticle)}
+    slot="head"
+  />
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLdBreadcrumb)}
+    slot="head"
+  />
 
   <article
     class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0 font-urdu"
     dir="rtl"
     lang="ur"
+    data-pagefind-body
   >
     <!-- Breadcrumb -->
     <nav class="text-xs text-fg-3 mb-6 leading-loose" aria-label="Breadcrumb">

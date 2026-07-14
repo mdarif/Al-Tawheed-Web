@@ -55,8 +55,19 @@ lists) and Arabic-only, matching the app.
       re-run tests. Same discipline as syncing "What's New" with app releases.
 - [ ] Optional SEO: per-chapter OG social cards (currently all book pages reuse
       the site-wide `og-image.png`) — extend `scripts/make-og-lectures.mjs`.
-- [ ] Optional: an Urdu matn reader — the app also ships
-      `book_tawheed-ur.json`, but it's a 2-chapter stub today.
+- [x] Bilingual Urdu reader at `/urdu/book/` (Arabic āyah + Urdu translation &
+      masāʾil), synced from the app's `book_tawheed-ur.json`. *Shipped the
+      complete 67-chapter edition ~2026-07-14.*
+- [x] **Urdu book missing chapter — fixed at source.** The app's Urdu edition had
+      only 66 of 67 chapters (al-Qasas:56, the death of Abu Talib, was absent
+      with numbering closed up). Added to the app repo at ch-18 and re-synced;
+      the Urdu edition is now 67/67, aligned 1:1 with the Arabic matn.
+      *~2026-07-14.*
+- [x] Urdu reader allowed into the index now the matn is complete — `noindex`
+      dropped from `src/pages/urdu/book/index.astro` + `[chapterSlug].astro`.
+      Added SEO parity with the Arabic reader: `Book` JSON-LD on the hub,
+      `Article` + `BreadcrumbList` JSON-LD per chapter, and `data-pagefind-body`
+      so it's in on-site search too. *~2026-07-14.*
 
 ## Smaller items
 
