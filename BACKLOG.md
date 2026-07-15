@@ -69,10 +69,51 @@ lists) and Arabic-only, matching the app.
       `Article` + `BreadcrumbList` JSON-LD per chapter, and `data-pagefind-body`
       so it's in on-site search too. *~2026-07-14.*
 
+## Urdu book narration — built, flagged OFF
+
+Browser-voice ("Web Speech") narration of the Urdu reader: a **سنیں** button that
+reads the chapter aloud and highlights each block. Built and tested, but shipped
+**disabled** behind `NARRATION_ENABLED` in `src/lib/flags.ts`.
+
+- **Why it's off:** the 2026-07-15 pilot on `ch-00` ran correctly end-to-end on
+  Android Chrome, but the Google Urdu TTS voice **mispronounces too much of the
+  text** to be acceptable for a religious book. Reach is poor by nature too:
+  macOS, iOS and desktop Chrome ship **no Urdu voice at all** (verified — this
+  Mac has 180 system voices, zero Urdu), so the control simply never appears.
+- **What's there:** `src/scripts/narration/` (engine abstraction, Web Speech
+  engine, DOM extraction, voice ranking, controller), the
+  `src/components/UrduNarration.astro` control, and `tests/narration.spec.ts`.
+  The 11 behavioural tests **re-arm automatically** when the flag flips; while
+  it's off, one test asserts the feature is genuinely absent from the build.
+- **Guarantees already encoded:** Arabic Qur'anic āyāt are never spoken (a test
+  asserts no `﴿` reaches the voice); the `«…»` hadith spans **are** spoken —
+  they're Urdu in this edition, not Arabic; and a device with no Urdu voice gets
+  a note pointing at `/lectures/urdu/` rather than an English-voiced mess.
+
+- [ ] **The likely real fix is not a better browser voice — it's dropping the
+      browser out of it.** Implement the `NarrationEngine` interface
+      (`src/scripts/narration/types.ts`) over pre-generated audio: run the book
+      text through a good Urdu TTS (or a human narrator) once, host the MP3s on
+      the existing R2 bucket alongside the lectures, and play them with
+      `<audio>`. That fixes pronunciation, works on every device, and restores
+      MediaSession/lock-screen controls. Sizing: ~187k chars ≈ **3.7 hours**,
+      ~50–100 MB, one-off TTS cost ≈ $3–5. The controller and all UI survive
+      untouched — only the engine changes.
+- [ ] When re-enabling, note `NARRATION_PILOT_IDS` in
+      `src/pages/urdu/book/[chapterSlug].astro` scopes it to `ch-00`; widen once
+      quality is judged good.
+- [ ] Minor: while the flag is off, Astro still emits an ~8 KB
+      `UrduNarration.astro_astro_type_script…js` chunk into `dist/_astro/`.
+      **No page references it**, so no visitor downloads it — it's dead build
+      output only, not a payload cost.
+
 ## Smaller items
 
 - [ ] `AudioObject` JSON-LD lacks `uploadDate` (Google-recommended) — needs
       per-lecture dates in the catalog first.
+- [ ] App-side proofing nit: the Urdu book's masāʾil headings vary — `ch-17` and
+      `ch-20` read `ان باب` where the rest read `اس باب`, and one variant has a
+      trailing space. Cosmetic; fix at the app source, then `npm run sync:book`.
 - [ ] Optional: pass `i18n` config to `@astrojs/sitemap` for `xhtml:link`
       hreflang annotations on the 5 translated pairs (on-page hreflang already
       covers this).

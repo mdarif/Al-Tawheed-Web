@@ -1,0 +1,124 @@
+---
+// Browser-voice Urdu narration control for the book reader.
+//
+// Rendered only when `NARRATION_ENABLED` is on (see src/lib/flags.ts) — keeping
+// the markup AND the hoisted script out of the build entirely while it's off.
+//
+// The control ships hidden and is revealed by the controller only once an Urdu
+// voice is confirmed on the device. If there is none, a note points at the real
+// recorded lectures instead — we never narrate Urdu with a wrong-language voice.
+
+// Standalone Urdu labels, matching the reader's other inline `ui` object.
+const ui = {
+  listen: "سنیں",
+  pause: "روکیں",
+  stop: "بند کریں",
+  speed: "رفتار",
+  playing: "پڑھا جا رہا ہے",
+  paused: "روک دیا گیا",
+  done: "باب مکمل ہوا",
+  noVoice: "اس براؤزر میں اردو آواز دستیاب نہیں۔",
+  noVoiceCta: "اردو آڈیو دروس سنیں ←",
+};
+---
+
+<div class="flex items-center gap-1.5 shrink-0" data-pagefind-ignore>
+  <div
+    class="flex items-center gap-1.5"
+    dir="ltr"
+    role="group"
+    aria-label={ui.listen}
+    data-narration
+    data-label-play={ui.listen}
+    data-label-pause={ui.pause}
+    data-label-playing={ui.playing}
+    data-label-paused={ui.paused}
+    data-label-done={ui.done}
+    hidden
+  >
+    <button
+      type="button"
+      data-narration-play
+      aria-label={ui.listen}
+      title={ui.listen}
+      aria-pressed="false"
+      class="narration-play inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-[#C9A84C] text-black font-bold text-xs hover:bg-[#D4B55C] transition-colors"
+    >
+      <span class="narration-icon" aria-hidden="true"></span>
+      <span class="font-urdu" data-narration-label>{ui.listen}</span>
+    </button>
+    <button
+      type="button"
+      data-narration-stop
+      aria-label={ui.stop}
+      title={ui.stop}
+      disabled
+      class="inline-flex items-center justify-center h-9 w-9 rounded-lg border border-[var(--divider)] text-fg-2 hover:text-fg hover:border-[var(--divider-md)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+    >
+      <span class="text-[10px]" aria-hidden="true">■</span>
+    </button>
+    <select
+      data-narration-speed
+      aria-label={ui.speed}
+      title={ui.speed}
+      class="h-9 px-1.5 rounded-lg border border-[var(--divider)] bg-surface text-fg-2 text-xs hover:text-fg transition-colors"
+    >
+      <option value="0.75">0.75×</option>
+      <option value="1">1×</option>
+      <option value="1.25">1.25×</option>
+      <option value="1.5">1.5×</option>
+      <option value="2">2×</option>
+    </select>
+    <p class="sr-only" role="status" aria-live="polite" data-narration-status></p>
+  </div>
+
+  <!-- Shown instead when the device has no Urdu voice at all. -->
+  <p class="text-xs text-fg-3 font-urdu leading-loose" data-narration-fallback hidden>
+    {ui.noVoice}{" "}
+    <a href="/lectures/urdu/" class="text-[#C9A84C] hover:underline">{ui.noVoiceCta}</a>
+  </p>
+</div>
+
+<script>
+  import { initNarration } from "../scripts/narration/controller";
+
+  initNarration(document);
+</script>
+
+<style>
+  /* Play/pause glyph drawn in CSS, not typed: the Nastaliq/Naskh stack has no
+     pause character, so a literal "❚❚" renders as tofu. Shapes always render. */
+  .narration-icon {
+    position: relative;
+    display: inline-block;
+    width: 0.7em;
+    height: 0.75em;
+  }
+  /* Idle → a play triangle (the group is dir="ltr", so it points right). */
+  .narration-icon::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0.05em;
+    border-style: solid;
+    border-width: 0.375em 0 0.375em 0.6em;
+    border-color: transparent transparent transparent currentColor;
+  }
+  /* Playing → two bars. */
+  [data-narration-play][data-state="playing"] .narration-icon::before,
+  [data-narration-play][data-state="playing"] .narration-icon::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    border: 0;
+    width: 0.22em;
+    height: 0.75em;
+    background: currentColor;
+  }
+  [data-narration-play][data-state="playing"] .narration-icon::before {
+    left: 0;
+  }
+  [data-narration-play][data-state="playing"] .narration-icon::after {
+    right: 0;
+  }
+</style>

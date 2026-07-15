@@ -1,5 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import UrduNarration from "../../../components/UrduNarration.astro";
+import { NARRATION_ENABLED } from "../../../lib/flags";
 import {
   getUrduBook,
   getAppConfig,
@@ -70,6 +72,13 @@ const ogTitle = isOpening
   ? "کتاب التوحید — مکمل اردو متن"
   : `${chapter.title} — کتاب التوحید (اردو)`;
 const chapterPath = `/urdu/book/${chapter.id}/`;
+
+// Browser-voice narration is behind NARRATION_ENABLED (off — the pilot showed
+// the Urdu TTS voice mispronounces too much; see src/lib/flags.ts). When it's
+// switched back on it returns as a pilot on the first chapter only, until the
+// voice quality is judged good enough to widen.
+const NARRATION_PILOT_IDS = new Set(["ch-00"]);
+const showNarration = NARRATION_ENABLED && NARRATION_PILOT_IDS.has(chapter.id);
 
 // Structured data (mirrors the Arabic reader) so the Urdu edition earns rich
 // results too: each chapter is an Article that isPartOf the Book, plus a
@@ -164,6 +173,7 @@ const jsonLdBreadcrumb = {
           {ui.keyCitation}
         </span>
       </div>
+      {showNarration && <UrduNarration />}
       <div
         class="flex items-center gap-1.5 shrink-0"
         dir="ltr"
@@ -335,9 +345,25 @@ const jsonLdBreadcrumb = {
     color: var(--book-citation);
     font-size: 0.9em;
   }
-  /* Hadith/narration is Urdu here → keep Nastaliq (inherit), just recolor. */
+  /* Hadith/narration is Urdu here → keep Nastaliq (inherit), just recolor.
+     (The narration reads these aloud — they're the sentence, not Arabic.) */
   .book-matn :global(.hadith) {
     color: var(--book-hadith);
+  }
+
+  /* The block currently being read aloud. :global() because the matn's
+     paragraphs come from set:html and carry no scope attribute. A start-edge
+     bar, not p.tr's right border, which already means "āyah → translation". */
+  .book-matn :global(p.narrating),
+  .masail-body :global(p.narrating),
+  h1.narrating,
+  .masail-title.narrating {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border-inline-start: 3px solid var(--accent);
+    padding-inline-start: 0.7rem;
+    border-radius: 0.25rem;
+    /* Clear the sticky site header when scrolled into view. */
+    scroll-margin-block: 6rem;
   }
 
   /* Masāʾil — the summary points, which are outside the core matn. Set apart in
