@@ -35,7 +35,10 @@ function structureMasail(chapter) {
     ...chapter,
     text: lines.slice(0, i).join('\n').replace(/\n+$/, ''),
     masail: {
-      heading: lines[i].trim().replace(/[:：]\s*$/, ''),
+      // Trim again after dropping the colon: some source headings read
+      // "…اہم مسائل :" (space before the colon), which would otherwise leave a
+      // trailing space on the heading.
+      heading: lines[i].trim().replace(/[:：]\s*$/, '').trim(),
       items: lines.slice(i + 1).map((l) => l.trim()).filter(Boolean),
     },
   };
