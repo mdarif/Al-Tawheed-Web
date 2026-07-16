@@ -29,7 +29,14 @@ const appRepo = process.env.APP_REPO ?? resolve(webRoot, '..', 'Al-Tawheed');
 // parsing). Deterministic; matn-only chapters (the Arabic book) are untouched.
 function structureMasail(chapter) {
   const lines = chapter.text.split('\n');
-  const i = lines.findIndex((l) => /مسائل\s*[:：]\s*$/.test(l.trim()));
+  // Match the app reader's own heading rule (book_reader_screen.dart
+  // `_isMasailHeading`): the plural مسائل, and NOT the singular مسئلہ that
+  // numbered items use mid-sentence. This isolates exactly one heading in each
+  // of the 67 chapters and absorbs the print's heading variants — the earlier
+  // `/مسائل\s*[:：]\s*$/` (must END in "مسائل:") silently missed ch-06's long
+  // variant ("…مندرجہ ذیل ہیں:") and ch-36's colon-less heading, so those
+  // chapters' masāʾil rendered stuck inside the matn.
+  const i = lines.findIndex((l) => l.includes('مسائل') && !l.includes('مسئلہ'));
   if (i === -1) return chapter;
   return {
     ...chapter,
