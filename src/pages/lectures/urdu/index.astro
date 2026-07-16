@@ -6,6 +6,7 @@ import {
   en,
   formatDuration,
   chapterSlug,
+  lectureSlug,
   playStoreUrl,
 } from "../../../lib/catalog";
 
@@ -59,6 +60,19 @@ const classCount = catalog.chapters.length;
       </a>
     </div>
 
+    <a
+      href="/urdu/book/"
+      class="block mb-8 bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-4 hover:border-[#C9A84C]/60 transition-colors"
+    >
+      <div class="flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-[#C9A84C]">Read the book</p>
+          <p class="text-xs text-fg-2">Kitab at-Tawheed — full Urdu text</p>
+        </div>
+        <span class="text-[#C9A84C] shrink-0 text-lg" aria-hidden="true">→</span>
+      </div>
+    </a>
+
     <div class="mb-8">
       <div class="relative max-w-md">
         <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-fg-3 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -81,35 +95,56 @@ const classCount = catalog.chapters.length;
     <div class="space-y-3">
       {
         catalog.chapters.map((chapter) => {
-          const parts = catalog.lectures.filter(
-            (l) => l.chapterId === chapter.id
-          );
+          const parts = catalog.lectures
+            .filter((l) => l.chapterId === chapter.id)
+            .sort((a, b) => a.number - b.number);
           const totalSecs = parts.reduce((s, l) => s + l.durationSeconds, 0);
+          const titleWords = [
+            `class ${String(chapter.number).padStart(2, "0")} ${en(chapter.title)}`,
+            ...parts.map((l) => en(l.title)),
+          ].join(" ").toLowerCase();
           return (
-            <a
-              href={`/lectures/${chapterSlug(chapter.id)}/`}
-              class="class-card group flex items-center justify-between bg-surface border border-[var(--divider)] rounded-xl px-5 py-4 hover:border-[#C9A84C]/40 hover:bg-surface-hover transition-all"
-              data-title={`class ${String(chapter.number).padStart(2, '0')} ${en(chapter.title)}`.toLowerCase()}
+            <div
+              class="class-card bg-surface border border-[var(--divider)] rounded-xl overflow-hidden hover:border-[#C9A84C]/40 transition-colors"
+              data-title={titleWords}
             >
-              <div class="flex items-center gap-4">
-                <span class="w-9 h-9 flex items-center justify-center bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-bold rounded-lg shrink-0">
-                  {String(chapter.number).padStart(2, "0")}
-                </span>
-                <div>
-                  <p class="font-semibold group-hover:text-[#C9A84C] transition-colors">
-                    {en(chapter.title)}
-                  </p>
-                  <p class="text-xs text-fg-3">
-                    {chapter.lectureCount}{" "}
-                    {chapter.lectureCount === 1 ? "part" : "parts"} ·{" "}
-                    {formatDuration(totalSecs)}
-                  </p>
+              <a
+                href={`/lectures/${chapterSlug(chapter.id)}/`}
+                class="group flex items-center justify-between px-5 py-4 hover:bg-surface-hover transition-colors"
+              >
+                <div class="flex items-center gap-4 min-w-0">
+                  <span class="w-9 h-9 flex items-center justify-center bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-bold rounded-lg shrink-0">
+                    {String(chapter.number).padStart(2, "0")}
+                  </span>
+                  <div class="min-w-0">
+                    <p class="font-semibold group-hover:text-[#C9A84C] transition-colors truncate">
+                      {en(chapter.title)}
+                    </p>
+                    <p class="text-xs text-fg-3">
+                      {chapter.lectureCount}{" "}
+                      {chapter.lectureCount === 1 ? "part" : "parts"} ·{" "}
+                      {formatDuration(totalSecs)}
+                    </p>
+                  </div>
                 </div>
+                <span class="text-fg-3 group-hover:text-[#C9A84C] transition-colors text-sm shrink-0 ml-2">
+                  →
+                </span>
+              </a>
+              <div class="border-t border-[var(--divider)] divide-y divide-[var(--divider)]">
+                {parts.map((lecture) => (
+                  <a
+                    href={`/lectures/${chapterSlug(chapter.id)}/${lectureSlug(lecture)}/`}
+                    class="flex items-center justify-between gap-3 pl-16 pr-5 py-2.5 text-sm hover:bg-surface-hover hover:text-[#C9A84C] transition-colors"
+                  >
+                    <span class="truncate">{en(lecture.title)}</span>
+                    <span class="text-xs text-fg-3 shrink-0">
+                      {formatDuration(lecture.durationSeconds)}
+                    </span>
+                  </a>
+                ))}
               </div>
-              <span class="text-fg-3 group-hover:text-[#C9A84C] transition-colors text-sm">
-                →
-              </span>
-            </a>
+            </div>
           );
         })
       }
