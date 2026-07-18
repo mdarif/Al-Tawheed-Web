@@ -41,5 +41,9 @@ export const arUI = {
     textSize: 'حجم الخط',
     decreaseText: 'تصغير الخط',
     increaseText: 'تكبير الخط',
+    // Share + report-a-mistake (mirrors the app reader's ⋮ menu).
+    shareChapter: 'مشاركة هذا الباب',
+    linkCopied: 'تم نسخ الرابط!',
+    reportMistake: 'الإبلاغ عن خطأ',
   },
 };

@@ -1,11 +1,13 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import ShareButton from "../../../components/ShareButton.astro";
 import {
   getArabicBook,
   getAppConfig,
   bookChapterHtml,
   playStoreUrl,
   bookCoverOgUrl,
+  buildMailto,
   SITE_URL,
 } from "../../../lib/catalog";
 import { arUI } from "../../../i18n/ar";
@@ -38,6 +40,17 @@ const coverUrl = bookCoverOgUrl();
 
 const bodyHtml = bookChapterHtml(chapter.text);
 const isOpening = chapter.number === 0;
+
+// "Report a mistake" — mirrors the app reader's ⋮ → report_mistake.dart:
+// same contact address (appConfig.contact.email, CDN-driven) and the same
+// localized subject/intro (lib/l10n/app_ar.arb), with a diagnostic block
+// swapping the app's "App: version" for a page URL (the detail a web
+// maintainer needs instead).
+const reportSubject = "كتاب التوحيد — تصويب في الكتاب";
+const reportIntro =
+  "يُرجى وصف الخطأ أدناه، مع نقل الكلمات المحيطة به إن أمكن. أبقِ التفاصيل في الأسفل — فهي تدلّنا على الصفحة المقصودة بالضبط.";
+const reportBody = `${reportIntro}\n\n\n————————————————\nChapter: ${position} — ${chapter.title}\nPage: ${SITE_URL}${chapterPath}`;
+const reportMailto = buildMailto(appConfig.contact.email, reportSubject, reportBody);
 
 const jsonLdArticle = {
   "@context": "https://schema.org",
@@ -116,6 +129,20 @@ const ogDescription = `${chapter.title} من كتاب التوحيد لمحمد 
       <h1 class="text-xl sm:text-2xl md:text-3xl font-bold leading-snug text-balance">
         {chapter.title}
       </h1>
+      <div class="flex items-center gap-3 flex-wrap mt-2">
+        <ShareButton
+          label={arUI.player.share}
+          ariaLabel={arUI.book.shareChapter}
+          toastMessage={arUI.book.linkCopied}
+          class="font-arabic"
+        />
+        <a
+          href={reportMailto}
+          class="flex items-center gap-1.5 text-xs text-fg-3 border border-[var(--divider)] rounded-lg px-3 py-1.5 hover:text-fg hover:border-[var(--divider-md)] transition-colors shrink-0 font-arabic"
+        >
+          {arUI.book.reportMistake}
+        </a>
+      </div>
     </div>
 
     <!-- Color-key legend + font-size control -->

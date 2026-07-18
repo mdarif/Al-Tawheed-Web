@@ -148,6 +148,20 @@ test.describe("Chapter reader — /arabic/book/ch-*", () => {
     expect(types).toContain("Article");
     expect(types).toContain("BreadcrumbList");
   });
+
+  test("has a share button and a report-a-mistake mailto link", async ({ page }) => {
+    await page.goto("/arabic/book/ch-03/");
+    await expect(page.locator("#share-btn")).toBeVisible();
+
+    const reportLink = page.locator('main a[href^="mailto:"]');
+    await expect(reportLink).toHaveCount(1);
+    const href = await reportLink.getAttribute("href");
+    expect(href).toContain("subject=");
+    const decoded = decodeURIComponent(href!);
+    expect(decoded).toContain("تصويب في الكتاب");
+    expect(decoded).toContain("Chapter:");
+    expect(decoded).toContain("/arabic/book/ch-03/");
+  });
 });
 
 test.describe("Urdu book — /urdu/book/", () => {
@@ -216,6 +230,20 @@ test.describe("Urdu book — /urdu/book/", () => {
       .find((j) => j?.["@type"] === "Book");
     expect(book).toBeTruthy();
     expect(book.hasPart.length).toBe(67);
+  });
+
+  test("chapter has a share button and a report-a-mistake mailto link", async ({ page }) => {
+    await page.goto("/urdu/book/ch-03/");
+    await expect(page.locator("#share-btn")).toBeVisible();
+
+    const reportLink = page.locator('main a[href^="mailto:"]');
+    await expect(reportLink).toHaveCount(1);
+    const href = await reportLink.getAttribute("href");
+    expect(href).toContain("subject=");
+    const decoded = decodeURIComponent(href!);
+    expect(decoded).toContain("کتاب میں تصحیح");
+    expect(decoded).toContain("Chapter:");
+    expect(decoded).toContain("/urdu/book/ch-03/");
   });
 });
 

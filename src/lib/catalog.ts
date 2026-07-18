@@ -211,6 +211,16 @@ export function arabicLectureSlug(lecture: Lecture): string {
   return `dars-${String(lecture.number).padStart(2, '0')}`;
 }
 
+/**
+ * Build a `mailto:` link. Percent-encode via `encodeURIComponent`, not
+ * query-string encoding (`URLSearchParams`), which turns spaces into `+` —
+ * correct for form bodies, but mail clients show the `+` literally in a
+ * prefilled subject/body. Mirrors the app's `buildMistakeReportUri`.
+ */
+export function buildMailto(email: string, subject: string, body: string): string {
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
 export function playStoreUrl(appConfig: AppConfig): string {
   return (
     appConfig.links.playStore ??

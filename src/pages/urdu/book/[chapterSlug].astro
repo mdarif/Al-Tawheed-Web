@@ -1,6 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import UrduNarration from "../../../components/UrduNarration.astro";
+import ShareButton from "../../../components/ShareButton.astro";
 import { NARRATION_ENABLED } from "../../../lib/flags";
 import {
   getUrduBook,
@@ -9,6 +10,7 @@ import {
   bookInlineHtml,
   playStoreUrl,
   bookCoverOgUrl,
+  buildMailto,
   toUrduDigits,
   SITE_URL,
 } from "../../../lib/catalog";
@@ -38,6 +40,11 @@ const ui = {
   getApp: "ایپ حاصل کریں",
   continueOnApp: "مفت ایپ میں بھی",
   offlineFeatures: "آف لائن ڈاؤن لوڈ · مکمل کتاب · آڈیو دروس",
+  // Share + report-a-mistake (mirrors the app reader's ⋮ menu).
+  share: "شیئر کریں",
+  shareChapter: "اس باب کو شیئر کریں",
+  linkCopied: "لنک کاپی ہو گیا!",
+  reportMistake: "غلطی کی نشاندہی کریں",
 };
 
 const { chapterId } = Astro.props;
@@ -72,6 +79,17 @@ const ogTitle = isOpening
   ? "کتاب التوحید — مکمل اردو متن"
   : `${chapter.title} — کتاب التوحید (اردو)`;
 const chapterPath = `/urdu/book/${chapter.id}/`;
+
+// "Report a mistake" — mirrors the app reader's ⋮ → report_mistake.dart:
+// same contact address (appConfig.contact.email, CDN-driven) and the same
+// localized subject/intro (lib/l10n/app_ur.arb), with a diagnostic block
+// swapping the app's "App: version" for a page URL (the detail a web
+// maintainer needs instead).
+const reportSubject = "کتاب التوحید — کتاب میں تصحیح";
+const reportIntro =
+  "براہِ کرم نیچے غلطی کی وضاحت کریں، اور اگر ممکن ہو تو اُس کے آس پاس کے الفاظ بھی نقل کر دیں۔ نیچے دی گئی تفصیلات رہنے دیں — اُنہی سے ہمیں معلوم ہوتا ہے کہ کون سا صفحہ دیکھنا ہے۔";
+const reportBody = `${reportIntro}\n\n\n————————————————\nChapter: ${position} — ${chapter.title}\nPage: ${SITE_URL}${chapterPath}`;
+const reportMailto = buildMailto(appConfig.contact.email, reportSubject, reportBody);
 
 // Browser-voice narration is behind NARRATION_ENABLED (off — the pilot showed
 // the Urdu TTS voice mispronounces too much; see src/lib/flags.ts). When it's
@@ -155,6 +173,19 @@ const jsonLdBreadcrumb = {
       <h1 class="text-xl sm:text-2xl md:text-3xl font-bold leading-[1.7] text-balance">
         {chapter.title}
       </h1>
+      <div class="flex items-center gap-3 flex-wrap mt-2">
+        <ShareButton
+          label={ui.share}
+          ariaLabel={ui.shareChapter}
+          toastMessage={ui.linkCopied}
+        />
+        <a
+          href={reportMailto}
+          class="flex items-center gap-1.5 text-xs text-fg-3 border border-[var(--divider)] rounded-lg px-3 py-1.5 hover:text-fg hover:border-[var(--divider-md)] transition-colors shrink-0"
+        >
+          {ui.reportMistake}
+        </a>
+      </div>
     </div>
 
     <!-- Color-key legend + font-size control -->
