@@ -3,21 +3,29 @@
 /* ── Self-hosted scripture fonts ─────────────────────────────────────────────
  * Book pages mix two scripts: Qur'anic āyāt in Naskh, Urdu prose in Nastaliq.
  * Neither is guaranteed on the visitor's OS (esp. Nastaliq), so we ship the
- * same TTFs the mobile app bundles. `swap` avoids blocking first paint.
+ * same TTFs the mobile app bundles.
+ *
+ * `optional`, not `swap`: the book matn is a full page of body text, so a
+ * swap-triggered reflow after first paint moves everything below it (the
+ * "Get the app" card, chapter nav) — measured at ~0.24 CLS (well past the
+ * 0.1 "good" threshold) on a fresh load before this change. `optional` lets
+ * the browser skip the swap entirely if the font isn't ready in time for
+ * first paint, trading "may render in the fallback serif on a cold cache"
+ * for "never reflows" — and it's still used from cache on every later nav.
  */
 @font-face {
   font-family: "Noto Naskh Arabic";
   src: url("/fonts/NotoNaskhArabic-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 @font-face {
   font-family: "Noto Nastaliq Urdu";
   src: url("/fonts/NotoNastaliqUrdu-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 /* ── Theme color tokens ──────────────────────────────────────────────────── */

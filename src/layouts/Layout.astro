@@ -53,6 +53,13 @@ const resolvedOgImageWidth =
   ogImageWidth ?? (Astro.props.ogImage ? undefined : 1200);
 const resolvedOgImageHeight =
   ogImageHeight ?? (Astro.props.ogImage ? undefined : 630);
+// Per-lecture social cards are .jpg (scripts/make-og-lectures.mjs); the
+// site-wide default and the book cover are .png — declare whichever is true,
+// since some crawlers reject a mismatched og:image:type instead of falling
+// back to sniffing the real content-type.
+const resolvedOgImageType = resolvedOgImage.endsWith(".jpg")
+  ? "image/jpeg"
+  : "image/png";
 
 const canonicalUrl = new URL(Astro.url.pathname, SITE_URL).toString();
 const locale = Astro.currentLocale ?? "en";
@@ -137,7 +144,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=optional"
         />
       </>
     )}
@@ -151,7 +158,7 @@ const absoluteOgImage = resolvedOgImage.startsWith("http")
     <meta property="og:locale" content={ogLocale} />
     {hasUrdu && <meta property="og:locale:alternate" content={ogLocaleAlternate} />}
     <meta property="og:image" content={absoluteOgImage} />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:type" content={resolvedOgImageType} />
     {
       resolvedOgImageWidth && (
         <meta
