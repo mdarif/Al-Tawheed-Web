@@ -66,7 +66,16 @@ const links = [
       </a>
     </nav>
 
-    <div class="flex md:hidden items-center gap-2 shrink-0">
+    <div class="flex md:hidden items-center gap-1.5 shrink-0">
+      <!-- Download funnel from the native app is mostly mobile traffic, so
+           this stays in the always-visible bar rather than behind the
+           hamburger — a tap to open a menu just to find it costs conversions. -->
+      <a
+        href={downloadHref}
+        class="bg-[#C9A84C] text-black font-semibold px-2.5 py-1.5 rounded-lg text-xs hover:bg-[#D4B55C] transition-colors whitespace-nowrap"
+      >
+        Get app
+      </a>
       <LangSelector />
       <!-- Theme toggle — mobile -->
       <button
@@ -104,12 +113,6 @@ const links = [
           {label}
         </a>
       ))}
-      <a
-        href={downloadHref}
-        class="mt-2 text-center bg-[#C9A84C] text-black font-bold py-3 rounded-xl hover:bg-[#D4B55C]"
-      >
-        Get the app
-      </a>
     </nav>
   </div>
 </header>
