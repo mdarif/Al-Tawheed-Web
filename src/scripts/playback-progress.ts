@@ -10,7 +10,9 @@ export interface PlaybackProgress {
 const STORAGE_KEY = 'tawheed:lastPlayback';
 const SAVE_INTERVAL_MS = 5000;
 const RESUME_MIN_SECONDS = 5;
-const RESUME_MAX_FRACTION = 0.95;
+// Also doubles as the "counts as finished" threshold (chapter-complete.ts) —
+// a listener who stopped in the last few seconds has effectively finished.
+export const RESUME_MAX_FRACTION = 0.95;
 
 export function loadProgress(): PlaybackProgress | null {
   try {

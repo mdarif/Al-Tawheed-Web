@@ -3,7 +3,12 @@
  * Tests that sections, widgets, and key text are actually rendered.
  */
 import { test, expect } from "@playwright/test";
-import { getFirstChapterHref, getFirstLectureHref } from "./helpers";
+import {
+  getFirstChapterHref,
+  getFirstLectureHref,
+  getLastLectureHref,
+  getLastLectureOfLastChapterHref,
+} from "./helpers";
 
 // ── Homepage ──────────────────────────────────────────────────────────────────
 
@@ -196,6 +201,91 @@ test.describe("Lecture player", () => {
     // Overview renders links to every lecture in the chapter, so > 2 internal lecture links
     const lectureLinks = page.locator('main a[href*="/lectures/"]');
     expect(await lectureLinks.count()).toBeGreaterThan(2);
+  });
+});
+
+// ── Chapter complete card ─────────────────────────────────────────────────────
+// Regression coverage: the card must only appear once the listener has
+// actually finished the audio — not merely because they navigated to the
+// last-part URL (see ChapterCompleteCard.astro + chapter-complete.ts).
+
+test.describe("Chapter complete card", () => {
+  test("is NOT visible on load on the last-part page with no saved progress", async ({ page }) => {
+    const href = await getLastLectureHref(page);
+    await page.goto(href);
+    await expect(page.locator("[data-chapter-complete-card]")).toBeHidden();
+  });
+
+  test("reveals once the audio fires 'ended'", async ({ page }) => {
+    // Use the very last lecture of the whole series: it has no nextHref, so
+    // autoplay-next.ts doesn't also fire on 'ended' and navigate away —
+    // isolates the reveal from that unrelated behavior.
+    const href = await getLastLectureOfLastChapterHref(page);
+    await page.goto(href);
+
+    const card = page.locator("[data-chapter-complete-card]");
+    await expect(card).toBeHidden();
+
+    await page.locator("audio[data-lecture-id]").evaluate((el) => {
+      el.dispatchEvent(new Event("ended"));
+    });
+
+    await expect(card).toBeVisible();
+  });
+
+  test("reveals on a later visit when saved progress already shows this lecture finished", async ({ page }) => {
+    const href = await getLastLectureHref(page);
+    await page.goto(href);
+
+    const audio = page.locator("audio[data-lecture-id]");
+    const lectureId = await audio.getAttribute("data-lecture-id");
+    const lecturePath = await audio.getAttribute("data-lecture-path");
+    const durationSeconds = Number(await audio.getAttribute("data-duration-seconds"));
+    expect(lectureId).toBeTruthy();
+
+    // Simulate a previous session where this exact lecture was finished —
+    // mirrors what playback-progress.ts would have persisted on 'ended'.
+    await page.evaluate(
+      ({ lectureId, lecturePath, durationSeconds }) => {
+        localStorage.setItem(
+          "tawheed:lastPlayback",
+          JSON.stringify({
+            lectureId,
+            path: lecturePath,
+            title: "test",
+            seconds: durationSeconds,
+            durationSeconds,
+            updatedAt: Date.now(),
+          })
+        );
+      },
+      { lectureId, lecturePath, durationSeconds }
+    );
+
+    await page.reload();
+    await expect(page.locator("[data-chapter-complete-card]")).toBeVisible();
+  });
+
+  test("stays hidden on a later visit when saved progress is for a different lecture", async ({ page }) => {
+    const href = await getLastLectureHref(page);
+    await page.goto(href);
+
+    await page.evaluate(() => {
+      localStorage.setItem(
+        "tawheed:lastPlayback",
+        JSON.stringify({
+          lectureId: "some-other-lecture",
+          path: "/lectures/class-01/part-01/",
+          title: "test",
+          seconds: 999,
+          durationSeconds: 1000,
+          updatedAt: Date.now(),
+        })
+      );
+    });
+
+    await page.reload();
+    await expect(page.locator("[data-chapter-complete-card]")).toBeHidden();
   });
 });
 

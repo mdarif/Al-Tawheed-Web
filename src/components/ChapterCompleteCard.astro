@@ -12,7 +12,11 @@ interface Props {
 const { chapter, nextChapter, nextChapterHref, playStoreUrl } = Astro.props;
 ---
 
-<div class="mt-8 bg-surface-gold border border-[#C9A84C]/30 rounded-2xl p-6">
+<div
+  id="chapter-complete-card"
+  data-chapter-complete-card
+  class="hidden mt-8 bg-surface-gold border border-[#C9A84C]/30 rounded-2xl p-6"
+>
   <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2">Class complete</p>
   <h2 class="text-xl font-bold mb-2">You finished {en(chapter.title)}</h2>
   <p class="text-sm text-fg-2 mb-5">
@@ -52,3 +56,12 @@ const { chapter, nextChapter, nextChapterHref, playStoreUrl } = Astro.props;
     </p>
   )}
 </div>
+
+<script>
+  import { initChapterCompleteCard } from '../scripts/chapter-complete';
+
+  const audio = document.querySelector('audio[data-lecture-id]');
+  if (audio instanceof HTMLAudioElement) {
+    initChapterCompleteCard(audio, 'chapter-complete-card');
+  }
+</script>
