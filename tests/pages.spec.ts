@@ -10,6 +10,7 @@ const EN_PAGES = [
   "/lectures/",
   "/about/",
   "/download/",
+  "/privacy-policy/",
   "/tawheed/",
   "/kitab-al-tawheed/",
   "/search/",
