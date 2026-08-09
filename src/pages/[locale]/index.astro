@@ -87,7 +87,7 @@ const i18n = t(locale);
 
     <!-- App feature chips stay English -->
     <p class="text-xs text-fg-3 mb-4 max-w-md mx-auto" dir="ltr">
-      Stream all 141 lessons free here — the <a
+      Stream all 141 audio lessons and read the full Arabic &amp; Urdu books free here — the <a
         href={`/${locale}/download/`}
         class="text-[#C9A84C] hover:underline">Android app</a
       > adds even more:
@@ -102,8 +102,8 @@ const i18n = t(locale);
           { icon: "🎵", label: "Background Playback" },
           { icon: "📊", label: "Progress Tracking" },
           { icon: "📚", label: "Study Mode" },
-          { icon: "🌐", label: "Urdu Interface" },
-          { icon: "📖", label: "In-App Book" },
+          { icon: "📖", label: "Full Arabic & Urdu Books" },
+          { icon: "🚫", label: "No Ads" },
         ].map(({ icon, label }) => (
           <div class="flex items-center gap-2.5 bg-surface border border-[var(--divider)] rounded-xl px-3 py-2.5 hover:border-[#C9A84C]/40 transition-colors">
             <span class="text-lg leading-none">{icon}</span>
@@ -193,7 +193,7 @@ const i18n = t(locale);
           {
             src: "/app-screenshots/04-book-ar.png",
             label: "Read the Book",
-            detail: "Full Arabic text, in-app",
+            detail: "Full Arabic & Urdu books, in-app",
           },
           {
             src: "/app-screenshots/06-lectures-ur.png",
@@ -347,8 +347,8 @@ const i18n = t(locale);
               <li>✓ <strong>ویب کی ہر چیز، مزید کے ساتھ:</strong></li>
               <li>✓ <strong>حقیقی آف لائن ڈاؤنلوڈ</strong></li>
               <li>✓ <strong>اسٹڈی موڈ (اردو سلسلہ)</strong></li>
-              <li>✓ <strong>ان-ایپ کتاب (مکمل عربی متن)</strong></li>
-              <li>✓ <strong>آلات کے درمیان پیشرفت</strong></li>
+              <li>✓ <strong>مکمل عربی اور اردو کتابیں، آف لائن</strong></li>
+              <li>✓ <strong>اشتہارات کے بغیر</strong></li>
               <li>✓ <strong>مقامی اردو اور عربی انٹرفیس</strong></li>
             </>
           ) : (
@@ -356,8 +356,8 @@ const i18n = t(locale);
               <li>✓ <strong>Everything on the web, plus:</strong></li>
               <li>✓ <strong>True offline downloads</strong></li>
               <li>✓ <strong>Study Mode (Urdu series)</strong></li>
-              <li>✓ <strong>In-app Book (full Arabic text)</strong></li>
-              <li>✓ <strong>Cross-device progress</strong></li>
+              <li>✓ <strong>Offline Arabic & Urdu books</strong></li>
+              <li>✓ <strong>No ads</strong></li>
               <li>✓ <strong>Native Arabic & Urdu UI</strong></li>
             </>
           )}

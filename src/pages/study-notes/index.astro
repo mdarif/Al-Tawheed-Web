@@ -1,0 +1,66 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getAppConfig, SITE_URL } from "../../lib/catalog";
+
+const appConfig = await getAppConfig();
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Study Guides for Kitab at-Tawheed",
+  description:
+    "Source-based study companions and reading guides for Kitab at-Tawheed and its free Urdu audio explanation.",
+  url: `${SITE_URL}/study-notes/`,
+  isPartOf: { "@type": "WebSite", name: "Al Marfa Duroos", url: SITE_URL },
+};
+---
+
+<Layout
+  title="Study Guides for Kitab at-Tawheed | Urdu Audio Series"
+  description="Source-based reading guides and study companions for Kitab at-Tawheed, its original Arabic text, Urdu translation, and free Urdu audio series."
+  {appConfig}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
+    <nav class="text-xs text-fg-3 mb-6" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-[#C9A84C]">Home</a>
+      <span class="mx-1">→</span>
+      <span class="text-fg-2">Study Guides</span>
+    </nav>
+
+    <h1 class="text-3xl font-bold mb-3">Study Guides for Kitab at-Tawheed</h1>
+    <p class="text-fg-2 leading-relaxed mb-8">
+      These source-based companions help you navigate the original text and the
+      Urdu audio series. They are not transcripts or independent rulings: use
+      them alongside the book, the lessons, and a qualified teacher.
+    </p>
+
+    <div class="space-y-4">
+      <a href="/study-notes/class-01-part-01/" class="block bg-surface border border-[var(--divider)] rounded-xl p-5 hover:border-[#C9A84C]/40 transition-colors">
+        <p class="text-xs font-bold uppercase tracking-widest text-[#C9A84C] mb-1">Urdu audio companion</p>
+        <h2 class="text-lg font-bold mb-2">How to Start Studying Kitab at-Tawheed</h2>
+        <p class="text-sm text-fg-2 leading-relaxed">
+          A practical companion for Class 01, Part 01: the original text, the
+          Urdu sharah, and how to continue the first class in order.
+        </p>
+      </a>
+
+      <a href="/guides/allahs-right-over-his-servants/" class="block bg-surface border border-[var(--divider)] rounded-xl p-5 hover:border-[#C9A84C]/40 transition-colors">
+        <p class="text-xs font-bold uppercase tracking-widest text-[#C9A84C] mb-1">Opening chapter reading guide</p>
+        <h2 class="text-lg font-bold mb-2">What Is Allah’s Right Upon His Servants?</h2>
+        <p class="text-sm text-fg-2 leading-relaxed">
+          Read the opening chapter with its Arabic original and Urdu translation,
+          then carry focused questions into your lesson or study circle.
+        </p>
+      </a>
+    </div>
+
+    <section class="border-t border-[var(--divider)] pt-7 mt-10">
+      <h2 class="text-xl font-bold mb-3">Read or listen next</h2>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="/urdu/book/" class="text-center border border-[#C9A84C]/50 text-[#C9A84C] font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#C9A84C]/10">Read the Urdu edition</a>
+        <a href="/lectures/urdu/" class="text-center bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">Browse the Urdu series</a>
+      </div>
+    </section>
+  </article>
+</Layout>

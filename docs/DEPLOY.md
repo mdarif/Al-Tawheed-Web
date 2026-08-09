@@ -67,7 +67,7 @@ local `.env`) overrides the default if you ever rotate the token.
 ## Custom domain checklist
 
 - [ ] `kitabattawheed.com` attached to the `al-tawheed-web` Pages project (SSL active)
-- [ ] **`www.kitabattawheed.com` attached to the same Pages project** (not DNS-only — an unattached `www` record causes **522** errors in Search Console), or a Bulk Redirect `www.kitabattawheed.com/*` → `https://kitabattawheed.com/$1` (301)
+- [ ] **Redirect `www.kitabattawheed.com` to `https://kitabattawheed.com` with a 301.** Configure this as a Cloudflare Single Redirect rule (hostname equals `www.kitabattawheed.com`; destination `https://kitabattawheed.com${http.request.uri.path}`; preserve query string). Do not attach `www` to Pages without this rule: serving both hosts as `200` creates a duplicate URL variant.
 - [ ] Astro `site` in `astro.config.mjs` is `https://kitabattawheed.com` (canonical URLs)
 - [ ] After deploy, confirm unknown URLs return **404** (not the homepage): e.g. `/no-such-page/` → 404
 

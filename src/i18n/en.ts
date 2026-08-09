@@ -29,7 +29,7 @@ export const en = {
     },
     app: {
       title: "The App",
-      p1: "provides the best experience for studying both series — switch between the Urdu and Arabic series anytime, with offline downloads, progress tracking, Study Mode (Urdu series), an in-app Book tab with the full Arabic text, and background playback.",
+      p1: "provides the best experience for studying both series — switch between the Urdu and Arabic series anytime, with offline downloads, progress tracking, Study Mode (Urdu series), complete Arabic and Urdu book editions in-app, and background playback.",
     },
     contact: {
       title: "Contact",
@@ -124,7 +124,7 @@ export const en = {
       { desc: "Both the Urdu series (Shaikh Abdullah Nasir Rahmani) and the Arabic series (Shaikh Salih al-Fawzan) — switch anytime." },
       { desc: "Save lessons for travel or poor connectivity. Wi-Fi-only mode and one-tap cleanup keep storage tidy." },
       { desc: "Dedicated Study tab for the Urdu series — work through each class in order with completion tracking." },
-      { desc: "The Arabic series includes an in-app Book tab with the full Kitab at-Tawheed text." },
+      { desc: "Read the complete Kitab at-Tawheed in Arabic or Urdu inside the app, alongside both audio series." },
       { desc: "Resume exactly where you stopped on each lesson." },
       { desc: "Listen while using other apps or with screen off, at 0.75×–2× speed." },
     ],

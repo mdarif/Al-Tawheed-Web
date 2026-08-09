@@ -43,6 +43,7 @@ const prev = allChapterLectures[currentIdx - 1];
 const next = allChapterLectures[currentIdx + 1];
 const storeUrl = playStoreUrl(appConfig);
 const lecturePath = `/lectures/${chapterSlug(chapter.id)}/${lectureSlug(lecture)}/`;
+const studyNoteHref = lecture.id === "lec-001" ? "/study-notes/class-01-part-01/" : undefined;
 
 const followingChapter = nextChapter(catalog, chapter);
 const followingChapterHref = followingChapter
@@ -208,6 +209,22 @@ const articleTags = [
       {nextHref}
       {prevHref}
     />
+
+    {
+      studyNoteHref && (
+        <aside class="bg-surface border border-[var(--divider)] rounded-xl p-5 mb-6">
+          <p class="text-xs font-bold uppercase tracking-widest text-[#C9A84C] mb-1">Study companion</p>
+          <h2 class="font-bold mb-1">New to Kitab at-Tawheed?</h2>
+          <p class="text-sm text-fg-2 leading-relaxed mb-3">
+            Use the Class 01, Part 01 study guide to understand the original text,
+            the Urdu sharah, and how to continue the series in order.
+          </p>
+          <a href={studyNoteHref} class="text-sm font-semibold text-[#C9A84C] hover:underline">
+            Open the study guide →
+          </a>
+        </aside>
+      )
+    }
 
     <div
       class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3"

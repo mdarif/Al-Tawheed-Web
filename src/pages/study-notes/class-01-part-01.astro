@@ -1,0 +1,140 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { formatDuration, getAppConfig, getCatalog, SITE_URL } from "../../lib/catalog";
+
+const [catalog, appConfig] = await Promise.all([getCatalog(), getAppConfig()]);
+const lecture = catalog.lectures.find((item) => item.id === "lec-001");
+const duration = lecture ? formatDuration(lecture.durationSeconds) : "36 minutes";
+const lessonHref = "/lectures/class-01/part-01/";
+const noteUrl = `${SITE_URL}/study-notes/class-01-part-01/`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      headline: "How to Start Studying Kitab at-Tawheed — Class 01, Part 01",
+      description:
+        "A study companion for the first Urdu lesson in Sharah Kitab at-Tawheed: how to use the original text, the explanation, and the next lesson.",
+      mainEntityOfPage: noteUrl,
+      inLanguage: "en",
+      publisher: { "@type": "Organization", name: "Al Marfa Duroos" },
+      isPartOf: {
+        "@type": "Course",
+        name: "Sharah Kitab at-Tawheed",
+        url: `${SITE_URL}/lectures/urdu/`,
+      },
+      about: {
+        "@type": "Book",
+        name: "Kitab at-Tawheed",
+        alternateName: "كتاب التوحيد",
+        author: { "@type": "Person", name: "Muhammad ibn Abd al-Wahhab" },
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Study Guides", item: `${SITE_URL}/study-notes/` },
+        { "@type": "ListItem", position: 3, name: "Class 01, Part 01", item: noteUrl },
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title="How to Start Studying Kitab at-Tawheed | Class 01, Part 01"
+  description={`A study companion for Class 01, Part 01 of the free Urdu Sharah Kitab at-Tawheed series. Listen, read the source text, and continue with the next lesson.`}
+  {appConfig}
+  ogType="article"
+  articleTags={["Kitab at-Tawheed", "Urdu Islamic lectures", "Tawheed", "Islamic study"]}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
+    <nav class="text-xs text-fg-3 mb-6" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-[#C9A84C]">Home</a>
+      <span class="mx-1">→</span>
+      <a href="/kitab-al-tawheed/" class="hover:text-[#C9A84C]">Kitab at-Tawheed</a>
+      <span class="mx-1">→</span>
+      <a href="/lectures/urdu/" class="hover:text-[#C9A84C]">Urdu Series</a>
+      <span class="mx-1">→</span>
+      <span class="text-fg-2">Class 01, Part 01 Study Guide</span>
+    </nav>
+
+    <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2">Study companion · Urdu series</p>
+    <h1 class="text-3xl font-bold mb-3 text-balance">How to Start Studying Kitab at-Tawheed</h1>
+    <p class="text-fg-2 leading-relaxed mb-7">
+      This is a companion to <strong class="text-fg">Class 01 — Part 01</strong>
+      in the Urdu <em>Sharah Kitab at-Tawheed</em> series. It is not a transcript
+      or a substitute for the lesson; use it to approach the {duration} audio
+      lesson with a clear route through the original book and the explanation.
+    </p>
+
+    <section class="bg-surface-gold border border-[#C9A84C]/30 rounded-xl p-5 mb-10">
+      <h2 class="text-lg font-bold text-[#C9A84C] mb-2">Start with the lesson</h2>
+      <p class="text-sm text-fg-2 leading-relaxed mb-4">
+        Listen to Part 01 in full before treating this note as a revision aid.
+        The lesson is the primary teaching; this page simply helps you navigate
+        the text and continue in sequence.
+      </p>
+      <a href={lessonHref} class="inline-block bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">
+        Listen to Class 01 — Part 01
+      </a>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">Three terms to know before you listen</h2>
+      <dl class="space-y-4 text-fg-2 leading-relaxed">
+        <div>
+          <dt class="font-semibold text-fg">Kitab</dt>
+          <dd>The book itself: <em>Kitab at-Tawheed</em>.</dd>
+        </div>
+        <div>
+          <dt class="font-semibold text-fg">Matn (<span lang="ar" dir="rtl">المتن</span>)</dt>
+          <dd>The concise original Arabic text. Its chapters bring together the book’s headings and evidences.</dd>
+        </div>
+        <div>
+          <dt class="font-semibold text-fg">Sharah (<span lang="ar" dir="rtl">شرح</span>)</dt>
+          <dd>An explanation of the original text. This Urdu series is a sharah, not a replacement for the book.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">A practical way to use Part 01</h2>
+      <ol class="list-decimal pl-5 space-y-3 text-fg-2 leading-relaxed">
+        <li>
+          Open the <a href="/arabic/book/ch-00/" class="text-[#C9A84C] hover:underline">opening text of the book</a>
+          or the <a href="/urdu/book/ch-00/" class="text-[#C9A84C] hover:underline">Urdu reading edition</a> before you begin.
+        </li>
+        <li>Listen without trying to write down everything. Mark only the terms or evidences you need to revisit.</li>
+        <li>After listening, return to the cited text and read it slowly in the edition you use.</li>
+        <li>Continue to Part 02 when you are ready; the two parts form Class 01 and are intended to be studied in order.</li>
+      </ol>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">What to keep in your notes</h2>
+      <p class="text-fg-2 leading-relaxed mb-3">
+        Keep your notes small and tied to the lesson: unfamiliar Arabic terms,
+        the evidence you want to review, and one question to ask a qualified
+        teacher. This makes the next listening session more useful than copying
+        a long summary without understanding it.
+      </p>
+      <p class="text-fg-2 leading-relaxed">
+        For a wider introduction to the book, its original text, and the two
+        available explanations, read <a href="/kitab-al-tawheed/" class="text-[#C9A84C] hover:underline">What is Kitab at-Tawheed?</a>.
+        For the opening chapter specifically, see <a href="/guides/allahs-right-over-his-servants/" class="text-[#C9A84C] hover:underline">Allah’s Right Upon His Servants</a>.
+      </p>
+    </section>
+
+    <section class="border-t border-[var(--divider)] pt-7">
+      <h2 class="text-xl font-bold mb-3">Continue Class 01</h2>
+      <a href="/lectures/class-01/part-02/" class="block bg-surface border border-[var(--divider)] rounded-xl p-4 hover:border-[#C9A84C]/40 transition-colors">
+        <p class="text-xs text-fg-3 mb-1">Next lesson</p>
+        <p class="font-semibold">Class 01 — Part 02 <span class="text-[#C9A84C]">→</span></p>
+      </a>
+    </section>
+  </article>
+</Layout>

@@ -1,0 +1,130 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getAppConfig, SITE_URL } from "../../lib/catalog";
+
+const appConfig = await getAppConfig();
+const pageUrl = `${SITE_URL}/guides/allahs-right-over-his-servants/`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      headline: "What Is Allah’s Right Upon His Servants?",
+      description:
+        "A reading guide to the opening chapter of Kitab at-Tawheed: its focus on worship, Tawheed, and studying the original text with an explanation.",
+      mainEntityOfPage: pageUrl,
+      inLanguage: "en",
+      publisher: { "@type": "Organization", name: "Al Marfa Duroos" },
+      about: {
+        "@type": "Book",
+        name: "Kitab at-Tawheed",
+        alternateName: "كتاب التوحيد الذي هو حق الله على العبيد",
+        author: { "@type": "Person", name: "Muhammad ibn Abd al-Wahhab" },
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Kitab at-Tawheed", item: `${SITE_URL}/kitab-al-tawheed/` },
+        { "@type": "ListItem", position: 3, name: "Allah’s Right Upon His Servants", item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title="What Is Allah’s Right Upon His Servants? | Kitab at-Tawheed Guide"
+  description="Read a source-based guide to the opening chapter of Kitab at-Tawheed: worship, Tawheed, and how to study the original Arabic text with the Urdu explanation."
+  {appConfig}
+  ogType="article"
+  articleTags={["Kitab at-Tawheed", "Tawheed", "Islamic creed", "Islamic study"]}
+>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+
+  <article class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-body>
+    <nav class="text-xs text-fg-3 mb-6" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-[#C9A84C]">Home</a>
+      <span class="mx-1">→</span>
+      <a href="/kitab-al-tawheed/" class="hover:text-[#C9A84C]">Kitab at-Tawheed</a>
+      <span class="mx-1">→</span>
+      <span class="text-fg-2">Allah’s Right Upon His Servants</span>
+    </nav>
+
+    <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-2">Opening chapter reading guide</p>
+    <h1 class="text-3xl font-bold mb-4 text-balance">What Is Allah’s Right Upon His Servants?</h1>
+    <p class="text-[#C9A84C] text-lg mb-6" lang="ar" dir="rtl">كتاب التوحيد الذي هو حق الله على العبيد</p>
+
+    <p class="text-fg-2 leading-relaxed mb-4">
+      The opening chapter of <strong class="text-fg">Kitab at-Tawheed</strong>
+      frames the book around a central question: what is due to Allah from His
+      servants? In the chapter’s wording and collected evidences, the answer is
+      connected to worshipping Allah alone. This is why the opening is a useful
+      place to begin before moving into the later, more specific chapters.
+    </p>
+    <p class="text-fg-2 leading-relaxed mb-8">
+      This page is a reading guide, not an independent religious ruling or a
+      replacement for the text and its explanation. Read the cited source text,
+      listen to the lesson in sequence, and take questions to a qualified teacher.
+    </p>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">What the opening chapter brings together</h2>
+      <div class="space-y-4 text-fg-2 leading-relaxed">
+        <p>
+          <strong class="text-fg">Worship and Tawheed.</strong> The chapter treats
+          worship of Allah alone as the practical meaning of Tawheed, rather than
+          as an abstract term to memorise.
+        </p>
+        <p>
+          <strong class="text-fg">The message of the prophets.</strong> Its
+          evidences connect this call to the mission of the prophets, giving the
+          reader a framework for why the subject is foundational in the book.
+        </p>
+        <p>
+          <strong class="text-fg">Rights and responsibility.</strong> The chapter
+          asks the reader to consider worship as a duty owed to Allah, then points
+          to the texts that explain this duty and its place in a believer’s life.
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-surface border border-[var(--divider)] rounded-xl p-5 mb-10">
+      <h2 class="text-xl font-bold mb-3">Read the source text alongside this guide</h2>
+      <p class="text-sm text-fg-2 leading-relaxed mb-4">
+        The best way to use a reading guide is to keep the source open. The site
+        provides the opening chapter in its original Arabic and in the bilingual
+        Urdu reading edition, including the chapter’s own summary points.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="/arabic/book/ch-00/" class="text-center bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]">Read the Arabic text</a>
+        <a href="/urdu/book/ch-00/" class="text-center border border-[#C9A84C]/50 text-[#C9A84C] font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#C9A84C]/10">Read with Urdu translation</a>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">Questions to carry into your study</h2>
+      <ul class="list-disc pl-5 space-y-2 text-fg-2 leading-relaxed">
+        <li>How does the chapter connect Tawheed with worship?</li>
+        <li>Which evidences does it place at the beginning, and what does each add to the topic?</li>
+        <li>How does the chapter describe the shared call of the prophets?</li>
+        <li>Which point from the chapter’s summary needs further explanation from a teacher?</li>
+      </ul>
+    </section>
+
+    <section class="border-t border-[var(--divider)] pt-7">
+      <h2 class="text-xl font-bold mb-3">Continue studying</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <a href="/study-notes/class-01-part-01/" class="block bg-surface border border-[var(--divider)] rounded-xl p-4 hover:border-[#C9A84C]/40 transition-colors">
+          <p class="text-xs text-fg-3 mb-1">Urdu audio companion</p>
+          <p class="font-semibold">Start with Class 01, Part 01 <span class="text-[#C9A84C]">→</span></p>
+        </a>
+        <a href="/kitab-al-tawheed/" class="block bg-surface border border-[var(--divider)] rounded-xl p-4 hover:border-[#C9A84C]/40 transition-colors">
+          <p class="text-xs text-fg-3 mb-1">Series overview</p>
+          <p class="font-semibold">What is Kitab at-Tawheed? <span class="text-[#C9A84C]">→</span></p>
+        </a>
+      </div>
+    </section>
+  </article>
+</Layout>

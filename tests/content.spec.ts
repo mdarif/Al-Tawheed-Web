@@ -45,6 +45,13 @@ test.describe("Homepage", () => {
     await page.goto("/");
     await expect(page.locator('text=Offline Downloads').first()).toBeVisible();
     await expect(page.locator('text=Progress Tracking').first()).toBeVisible();
+    await expect(page.getByText("Full Arabic & Urdu Books", { exact: true })).toBeVisible();
+  });
+
+  test("app features do not promise unavailable cross-device sync", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByText("Cross-Device Progress")).toHaveCount(0);
+    await expect(page.getByText("No Ads").first()).toBeVisible();
   });
 
   test("app screenshots carousel has images", async ({ page }) => {
@@ -76,6 +83,7 @@ test.describe("Homepage", () => {
     await expect(page.locator("h2", { hasText: "Read the Book" })).toBeVisible();
     await expect(page.locator("main a[href='/arabic/book/']").first()).toBeVisible();
     await expect(page.locator("main a[href='/urdu/book/']").first()).toBeVisible();
+    await expect(page.getByText("Major Update · Read Online", { exact: true })).toBeVisible();
   });
 
   test("ContinueListening card is hidden on fresh visit", async ({ page }) => {
@@ -355,7 +363,7 @@ test.describe("Download page", () => {
     ).toBeVisible();
     await expect(section.getByText("Study Mode", { exact: true })).toBeVisible();
     await expect(
-      section.getByText("Read the Book", { exact: true })
+      section.getByText("Arabic & Urdu Books", { exact: true })
     ).toBeVisible();
     await expect(
       section.getByText("Progress Tracking", { exact: true })
@@ -429,9 +437,56 @@ test.describe("Kitab at-Tawheed page", () => {
     await expect(page.locator('main a[href="/lectures/urdu/"]').first()).toBeVisible();
   });
 
+  test("distinguishes the original text from its explanations and cites a source", async ({ page }) => {
+    await page.goto("/kitab-al-tawheed/");
+    await expect(page.getByRole("heading", { name: "The book and its explanation are different" })).toBeVisible();
+    await expect(page.locator('main a[href="/arabic/book/"]').first()).toBeVisible();
+    await expect(page.locator('main a[href="/study-notes/class-01-part-01/"]')).toBeVisible();
+    await expect(page.locator('main a[href="https://islamhouse.com/en/books/1898/"]')).toHaveAttribute("rel", "noopener");
+  });
+
   test("FAQ section is present", async ({ page }) => {
     await page.goto("/kitab-al-tawheed/");
     expect(await page.locator("details").count()).toBeGreaterThan(0);
+  });
+});
+
+test.describe("Class 01, Part 01 study note", () => {
+  test("is indexable content with links to the lesson, source text, and next part", async ({ page }) => {
+    await page.goto("/study-notes/class-01-part-01/");
+    await expect(page.locator("h1")).toContainText("How to Start Studying Kitab at-Tawheed");
+    await expect(page.locator('main a[href="/lectures/class-01/part-01/"]').first()).toBeVisible();
+    await expect(page.locator('main a[href="/arabic/book/ch-00/"]')).toBeVisible();
+    await expect(page.locator('main a[href="/lectures/class-01/part-02/"]')).toBeVisible();
+  });
+
+  test("is linked prominently from its lecture page", async ({ page }) => {
+    await page.goto("/lectures/class-01/part-01/");
+    await expect(page.locator('main a[href="/study-notes/class-01-part-01/"]')).toBeVisible();
+  });
+});
+
+test.describe("Opening chapter guide", () => {
+  test("is source-based and connects the Arabic, Urdu, and audio study paths", async ({ page }) => {
+    await page.goto("/guides/allahs-right-over-his-servants/");
+    await expect(page.locator("h1")).toContainText("What Is Allah’s Right Upon His Servants?");
+    await expect(page.locator('main a[href="/arabic/book/ch-00/"]')).toBeVisible();
+    await expect(page.locator('main a[href="/urdu/book/ch-00/"]')).toBeVisible();
+    await expect(page.locator('main a[href="/study-notes/class-01-part-01/"]')).toBeVisible();
+  });
+
+  test("is linked from the canonical Kitab guide", async ({ page }) => {
+    await page.goto("/kitab-al-tawheed/");
+    await expect(page.locator('main a[href="/guides/allahs-right-over-his-servants/"]')).toBeVisible();
+  });
+});
+
+test.describe("Study Guides hub", () => {
+  test("lists the available source-based guides", async ({ page }) => {
+    await page.goto("/study-notes/");
+    await expect(page.locator("h1")).toContainText("Study Guides for Kitab at-Tawheed");
+    await expect(page.locator('main a[href="/study-notes/class-01-part-01/"]')).toBeVisible();
+    await expect(page.locator('main a[href="/guides/allahs-right-over-his-servants/"]')).toBeVisible();
   });
 });
 

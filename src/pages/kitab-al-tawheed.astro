@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import FaqSection from "../components/FaqSection.astro";
-import { getCatalog, getArabicCatalog, getAppConfig } from "../lib/catalog";
+import { getCatalog, getArabicCatalog, getAppConfig, SITE_URL } from "../lib/catalog";
 
 const [catalog, arabicCatalog, appConfig] = await Promise.all([
   getCatalog(),
@@ -10,6 +10,33 @@ const [catalog, arabicCatalog, appConfig] = await Promise.all([
 ]);
 const urduCount = catalog.book.lectureCount;
 const arabicCount = arabicCatalog.book.lectureCount;
+const guideJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      headline: "What is Kitab at-Tawheed?",
+      description:
+        "A guide to Kitab at-Tawheed, its original Arabic text, and the free Urdu and Arabic audio explanations available on this site.",
+      mainEntityOfPage: `${SITE_URL}/kitab-al-tawheed/`,
+      inLanguage: "en",
+      publisher: { "@type": "Organization", name: "Al Marfa Duroos" },
+      about: {
+        "@type": "Book",
+        name: "Kitab at-Tawheed",
+        alternateName: "كتاب التوحيد",
+        author: { "@type": "Person", name: "Muhammad ibn Abd al-Wahhab" },
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "What is Kitab at-Tawheed?", item: `${SITE_URL}/kitab-al-tawheed/` },
+      ],
+    },
+  ],
+};
 
 const faq = [
   {
@@ -44,6 +71,9 @@ const faq = [
   {appConfig}
   faqItems={faq}
 >
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(guideJsonLd)} />
+  </Fragment>
   <article
     class="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0"
     data-pagefind-body
@@ -56,23 +86,60 @@ const faq = [
     <p class="text-[#C9A84C] text-xl mb-6" dir="rtl" lang="ar">كتاب التوحيد</p>
 
     <p class="text-fg-2 leading-relaxed mb-4">
-      <strong class="text-fg">Kitab at-Tawheed</strong> ("The Book of Islamic
-      Monotheism", also written <em>Kitab al-Tawheed</em>)
-      is among the most important works on <em>aqeedah</em> (Islamic creed). It clarifies
-      the rights of Allah upon His creation: to worship Him alone, avoid shirk (associating
-      partners with Him), and understand Tawheed as the Prophets taught it.
+      <strong class="text-fg">Kitab at-Tawheed</strong> (كتاب التوحيد, also
+      written <em>Kitab al-Tawheed</em>) is a foundational text on
+      <em>aqeedah</em>, or Islamic creed. Its title is commonly rendered as
+      “The Book of Monotheism” or “The Book of Tawheed.” It gathers Quranic
+      verses and prophetic narrations around the worship of Allah alone and the
+      avoidance of shirk (associating partners with Allah).
     </p>
-    <p class="text-fg-2 leading-relaxed mb-4">
-      The author, <strong class="text-fg"
-        >Shaikh ul Islam al-Imam Muhammad ibn Abd al-Wahhab ibn Sulayman
-        al-Tamimi Al Najdi Rahimahullah</strong
-      >, relied exclusively on the Quran and Sunnah. The book is structured for
-      students — each chapter builds understanding of Allah's names, attributes,
-      types of worship, and common errors that contradict Tawheed.
+    <p class="text-fg-2 leading-relaxed mb-8">
+      It was written by <strong class="text-fg">Muhammad ibn Abd al-Wahhab</strong>.
+      The original work is a concise Arabic <em>matn</em> (source text), not a
+      modern textbook: its chapters are deliberately brief and evidence-led.
+      Students commonly study it with a teacher or a <em>sharah</em>—an
+      explanation that expands its wording, context, and evidences.
     </p>
 
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">The book and its explanation are different</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <section class="bg-surface border border-[var(--divider)] rounded-xl p-5">
+          <h3 class="font-bold mb-2">The original text (<span lang="ar" dir="rtl">المتن</span>)</h3>
+          <p class="text-sm text-fg-2 leading-relaxed">
+            The Arabic text is the work itself: short chapter headings followed
+            by its evidences. Read it when you want to follow the book directly.
+          </p>
+        </section>
+        <section class="bg-surface border border-[var(--divider)] rounded-xl p-5">
+          <h3 class="font-bold mb-2">A sharah (<span lang="ar" dir="rtl">شرح</span>)</h3>
+          <p class="text-sm text-fg-2 leading-relaxed">
+            A sharah is a teacher’s explanation of the text. The two complete
+            series below help listeners study the same book in Urdu or Arabic.
+          </p>
+        </section>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">A simple way to study Kitab at-Tawheed</h2>
+      <ol class="list-decimal pl-5 space-y-2 text-fg-2 leading-relaxed">
+        <li>Read the chapter heading and its Arabic text.</li>
+        <li>Listen to the matching lesson in order, rather than jumping between topics.</li>
+        <li>Review the cited verses and narrations with a qualified teacher where possible.</li>
+        <li>Move to the next lesson after understanding the previous one.</li>
+      </ol>
+      <a href="/study-notes/class-01-part-01/" class="inline-block mt-4 text-sm font-semibold text-[#C9A84C] hover:underline">
+        Start with the Class 01, Part 01 study guide →
+      </a>
+      <a href="/guides/allahs-right-over-his-servants/" class="block mt-2 text-sm font-semibold text-[#C9A84C] hover:underline">
+        Read the opening-chapter guide: Allah’s Right Upon His Servants →
+      </a>
+    </section>
+
+    <section class="mb-10">
     <h2 class="text-xl font-bold mb-4">Read & listen free on this site</h2>
-    <div class="grid sm:grid-cols-3 gap-4 mb-8">
+    <div class="grid sm:grid-cols-2 gap-4">
       <section class="bg-surface border border-[var(--divider)] rounded-xl p-5">
         <h3 class="text-lg font-bold text-[#C9A84C] mb-2">Urdu Sharah</h3>
         <p class="text-sm text-fg-2 mb-4">
@@ -118,7 +185,43 @@ const faq = [
           >
         </div>
       </section>
+
+      <section class="bg-surface border border-[var(--divider)] rounded-xl p-5">
+        <h3 class="text-lg font-bold text-[#C9A84C] mb-2">Urdu Translation</h3>
+        <p class="text-sm text-fg-2 mb-4">
+          Read the Arabic verses and narrations alongside the Urdu rendering,
+          chapter by chapter.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="/urdu/book/"
+            class="bg-[#C9A84C] text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-[#D4B55C]"
+            >Read in Urdu</a
+          >
+        </div>
+      </section>
     </div>
+    </section>
+
+    <section class="border-t border-[var(--divider)] pt-7 mb-10">
+      <h2 class="text-xl font-bold mb-3">Sources and further reading</h2>
+      <ul class="list-disc pl-5 space-y-2 text-sm text-fg-2 leading-relaxed">
+        <li>
+          <a href="/arabic/book/" class="text-[#C9A84C] hover:underline"
+            >The complete Arabic text on this site</a
+          >, arranged chapter by chapter.
+        </li>
+        <li>
+          <a
+            href="https://islamhouse.com/en/books/1898/"
+            target="_blank"
+            rel="noopener"
+            class="text-[#C9A84C] hover:underline"
+            >IslamHouse: Book of Monotheism, Allah’s Right over People</a
+          >—a reference edition and description of the work.
+        </li>
+      </ul>
+    </section>
 
     <FaqSection items={faq} />
   </article>

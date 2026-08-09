@@ -13,6 +13,7 @@ const EN_PAGES = [
   "/privacy-policy/",
   "/tawheed/",
   "/kitab-al-tawheed/",
+  "/study-notes/",
   "/search/",
 ];
 
@@ -59,6 +60,17 @@ test("sitemap is accessible", async ({ request }) => {
   // @astrojs/sitemap generates sitemap-index.xml
   const res = await request.get("/sitemap-index.xml");
   expect(res.status()).toBeLessThan(400);
+});
+
+test("sitemap does not claim stale, shared modification dates", async ({ request }) => {
+  const index = await request.get("/sitemap-index.xml");
+  const indexXml = await index.text();
+  const sitemapPath = indexXml.match(/<loc>https:\/\/kitabattawheed\.com([^<]+)<\/loc>/)?.[1];
+  expect(sitemapPath, "sitemap index has no child sitemap").toBeTruthy();
+
+  const sitemap = await request.get(sitemapPath!);
+  expect(sitemap.status()).toBeLessThan(400);
+  expect(await sitemap.text()).not.toContain("<lastmod>");
 });
 
 test("OG image exists", async ({ request }) => {
