@@ -82,6 +82,7 @@ The site ships `404.html` so Cloudflare Pages does **not** serve the homepage
 - [ ] **OG image caches:** social platforms cache the share card by URL. After changing `og-image.png`, force a re-scrape: [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/), X Card Validator, [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/).
 - [ ] **Analytics:** confirm the beacon (`cloudflareinsights.com/beacon.min.js`) is in the live HTML; watch data populate in Web Analytics.
 - [ ] **Search Console:** (re)submit `https://kitabattawheed.com/sitemap-index.xml`. After an IA change, the URLs still resolve (no redirects), but new pages like `/lectures/urdu/` appear in the sitemap.
+- [ ] **Legacy URL check:** confirm `/ur/lectures/class-01/` and `/ur/sheikh-rahmani/` each return a single 301 to their unprefixed canonical URLs.
 
 ---
 

@@ -8,3 +8,8 @@
 /tawheed     /tawheed/     301
 /kitab-al-tawheed  /kitab-al-tawheed/  301
 /sheikh-rahmani    /sheikh-rahmani/    301
+
+# Legacy Urdu-prefixed lecture URLs were published before those routes were
+# removed. The lectures themselves live at their canonical, unprefixed URLs.
+/ur/lectures/*     /lectures/:splat     301
+/ur/sheikh-rahmani/ /sheikh-rahmani/    301
