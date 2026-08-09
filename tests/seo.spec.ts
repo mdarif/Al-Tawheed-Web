@@ -9,6 +9,8 @@ const SEO_PAGES = [
   "/",
   "/about/",
   "/lectures/",
+  "/lectures/urdu/",
+  "/arabic/",
   "/download/",
   "/tawheed/",
   "/kitab-al-tawheed/",
@@ -109,6 +111,14 @@ test("no hreflang on pages without an Urdu version", async ({ page }) => {
   await expect(
     page.locator('link[rel="alternate"][hreflang="ur"]')
   ).toHaveCount(0);
+});
+
+test("language-series titles state the book and language", async ({ page }) => {
+  await page.goto("/lectures/urdu/");
+  await expect(page).toHaveTitle(/Kitab at-Tawheed in Urdu/i);
+
+  await page.goto("/arabic/");
+  await expect(page).toHaveTitle(/Kitab at-Tawheed in Arabic/i);
 });
 
 // ── Per-page OG images ────────────────────────────────────────────────────────

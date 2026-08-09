@@ -17,9 +17,9 @@ const classCount = catalog.chapters.length;
 ---
 
 <Layout
-  title="Urdu Series — Sharah Kitab at-Tawheed"
+  title="Kitab at-Tawheed in Urdu | 50 Free Audio Lectures"
   {appConfig}
-  description={`Browse all ${catalog.book.lectureCount} Urdu lectures across ${classCount} classes — Sharah Kitab at-Tawheed by Shaikh Abdullah Nasir Rahmani Hafizahullah. Free online Urdu audio.`}
+  description={`Study Kitab at-Tawheed in Urdu with ${catalog.book.lectureCount} free audio lectures across ${classCount} classes — a complete Urdu sharah by Shaikh Abdullah Nasir Rahmani Hafizahullah.`}
 >
   <div class="mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-10 min-w-0">
     <nav class="text-xs text-fg-3 mb-6" aria-label="Breadcrumb">
@@ -31,7 +31,8 @@ const classCount = catalog.chapters.length;
     <p class="text-[#C9A84C] text-xs font-bold uppercase tracking-widest mb-1">
       Urdu Series
     </p>
-    <h1 class="text-3xl font-bold mb-2">{en(catalog.book.title)}</h1>
+    <h1 class="text-3xl font-bold mb-2">Kitab at-Tawheed in Urdu</h1>
+    <p class="text-fg-2 text-sm mb-2">{en(catalog.book.title)}</p>
     <p class="text-fg-2 mb-4">
       {catalog.book.lectureCount} Lectures · {classCount} Classes · {urduHours} Hours
       · By {en(catalog.book.speaker)}
