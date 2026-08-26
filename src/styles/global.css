@@ -138,6 +138,16 @@
   overflow-x: clip;
 }
 
+/* The translated header also carries the EN/اردو switcher. At 320px there
+   is not enough room for that switcher, the theme/menu controls, and the full
+   wordmark; hide only the visual label while retaining the labelled home link
+   so the controls never overlap. */
+@media (max-width: 350px) {
+  .mobile-brand-label {
+    display: none;
+  }
+}
+
 @supports not (overflow-x: clip) {
   .site-body {
     overflow-x: hidden;
