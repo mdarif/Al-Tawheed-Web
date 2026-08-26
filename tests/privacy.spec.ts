@@ -15,3 +15,17 @@ test("privacy policy fully discloses Al Quran's anonymous Android analytics", as
   expect(html).not.toContain("Server-side analytics is aggregate-only");
   expect(html).not.toContain("accounts, or accounts");
 });
+
+test("legacy shared policy points Al Quran readers to its dedicated canonical policy", async ({
+  page,
+}) => {
+  await page.goto("/privacy/");
+
+  const dedicatedPolicy = page.getByRole("link", {
+    name: "Al Quran's dedicated privacy policy",
+  });
+  await expect(dedicatedPolicy).toHaveAttribute(
+    "href",
+    "https://alquranreader.com/privacy/",
+  );
+});
