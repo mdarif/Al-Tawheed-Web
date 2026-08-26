@@ -23,6 +23,7 @@ const links = [
   <div class="mx-auto max-w-5xl flex items-center justify-between gap-2 px-4 py-3 min-w-0">
     <a
       href={locale === "ur" ? "/ur/" : "/"}
+      aria-label="Kitab at-Tawheed"
       class="hover:opacity-80 transition-opacity min-w-0 shrink flex items-center gap-2.5"
     >
       <img
@@ -34,7 +35,7 @@ const links = [
       />
       <span class="flex flex-col leading-tight min-w-0">
         <span class="hidden md:block text-[10px] text-fg-3 font-medium tracking-widest uppercase">Al Marfa Duroos</span>
-        <span class="text-[#C9A84C] font-semibold text-sm tracking-wide md:hidden">Kitab at-Tawheed</span>
+        <span class="mobile-brand-label text-[#C9A84C] font-semibold text-sm tracking-wide md:hidden">Kitab at-Tawheed</span>
         <span class="text-[#C9A84C] font-semibold text-sm tracking-wide hidden md:inline">Sharah Kitab at-Tawheed</span>
       </span>
     </a>
