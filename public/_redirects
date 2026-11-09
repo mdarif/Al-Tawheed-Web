@@ -8,6 +8,11 @@
 /tawheed     /tawheed/     301
 /kitab-al-tawheed  /kitab-al-tawheed/  301
 /sheikh-rahmani    /sheikh-rahmani/    301
+/ur          /ur/          301
+
+# The same privacy policy was formerly reachable under two URLs. Keep the
+# footer-linked /privacy/ URL as canonical and consolidate the legacy route.
+/privacy-policy/   /privacy/           301
 
 # Legacy Urdu-prefixed lecture URLs were published before those routes were
 # removed. The lectures themselves live at their canonical, unprefixed URLs.

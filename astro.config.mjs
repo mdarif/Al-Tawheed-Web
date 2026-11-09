@@ -26,15 +26,17 @@ export default defineConfig({
     // so one search box covers both series and all languages.
     pagefind({ indexConfig: { forceLanguage: "en" } }),
     sitemap({
-      // /offline/ is noindex (PWA fallback) — a noindex URL in the sitemap
-      // triggers "Submitted URL marked noindex" errors in Search Console.
+      // Utility pages must not be in the sitemap. /offline/ is the PWA
+      // fallback and /search/ is an internal, client-side search results page;
+      // both are deliberately noindex. Publishing a noindex URL in a sitemap
+      // sends Google contradictory signals and creates avoidable coverage noise.
       // Do not publish a shared catalog timestamp as every page's <lastmod>.
       // Most pages are authored in this repository, and their meaningful
       // modification date is independent of the catalogue. Incorrect dates
       // tell crawlers that July/August page changes happened in May/June;
       // omitting <lastmod> is preferable until we can produce truthful,
       // per-URL values.
-      filter: (page) => !page.includes('/offline/'),
+      filter: (page) => !page.includes('/offline/') && !page.includes('/search/'),
     }),
   ],
   vite: {

@@ -11,6 +11,10 @@ const appConfig = await getAppConfig();
   description="Search the Kitab at-Tawheed audio series — Urdu lectures and Arabic duroos — by class, title, or topic."
   appConfig={appConfig}
 >
+  <!-- Search results are generated in the visitor's browser. Keep this
+       utility route out of Google so query-string variants cannot become
+       thin, duplicate search-result URLs. -->
+  <meta name="robots" content="noindex,follow" slot="head" />
   <article class="search-page mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 min-w-0" data-pagefind-ignore>
     <nav class="text-xs text-fg-3 mb-6">
       <a href="/" class="hover:text-[#C9A84C]">Home</a> → Search
